@@ -4,7 +4,7 @@ using TMPro;
 public class PunchingBag : MonoBehaviour
 {
     int totalDamageTaken = 0;
-    [SerializeField] private float comboWindow = 2.0f;
+    [SerializeField] private float comboWindow = 3.0f;
     bool resetDamage;
     public Material HurtMat;
     public Material IdleMat;
@@ -24,9 +24,9 @@ public class PunchingBag : MonoBehaviour
             // Restart the countdown each hit
             CancelInvoke(nameof(ResetCombo));
             Invoke(nameof(ResetCombo), comboWindow);
+            Destroy(otherGameObject);
         }
         print("Hit");
-        Destroy(otherGameObject);
         rend.material = HurtMat;
         yield return new WaitForSeconds(0.1f);
         rend.material = IdleMat;
