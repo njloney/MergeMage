@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bdf8a70e9d563047b9a4e827302d2a5, type: 3}
   m_Name: Burn
   m_EditorClassIdentifier: 
-  effectId: effect-id
+  effectId: burn
   uniquePerTarget: 1
-  stackingMode: 0
+  stackingMode: 1
+  tickInterval: 1
   scaleDamageWithStacks: 1
+  magnitudeIsDamagePerTick: 0
