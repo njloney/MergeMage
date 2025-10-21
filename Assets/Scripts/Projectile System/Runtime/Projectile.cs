@@ -48,6 +48,27 @@ public class Projectile : MonoBehaviour
             }
         }
 
+        // Spawn explosion if enabled in stats
+        if (cfg.stats.spawnExplosion && cfg.stats.explosion.explosionPrefab)
+        {
+            var data = cfg.stats.explosion;
+            var exp = Instantiate(data.explosionPrefab, transform.position, Quaternion.identity);
+
+            // pass all designer values
+            exp.Init(
+                data.damage,
+                cfg.stats.damageType,
+                data.effects,
+                cfg.owner,
+                data.startRadius,
+                data.maxRadius,
+                data.expandSpeed,
+                data.lifetime,
+                data.startVisualScale,
+                data.maxVisualScale
+            );
+        }
+
         // Remove projectile after collision if set to do so
         if (cfg.stats.destroyOnHit)
             Despawn();

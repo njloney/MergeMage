@@ -1,18 +1,54 @@
+// ProjectileStats.cs
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Combat/Projectile Stats")]
 public class ProjectileStats : ScriptableObject
 {
-    [Header("Travel Stats")]
+    [Header("Projectile Motion")]
     public float speed = 20f;
     public float lifetime = 5f;
 
-    [Header("Damage Stats")]
+    [Header("Direct Hit Damage")]
     public int baseDamage = 10;
     public DamageType damageType = DamageType.Physical;
     public bool destroyOnHit = true;
 
-    [Header("Effects applied on hit")]
+    [Header("Status Effects on Direct Hit")]
     public List<EffectSpec> effects = new();
+
+    [Header("Explosion Settings")]
+    public bool spawnExplosion = false;           // enable/disable explosion
+    public ExplosionSettings explosion;           // holds explosion data
+}
+
+[System.Serializable]
+public struct ExplosionSettings
+{
+    [Tooltip("Prefab containing FireballExplosion script and visuals.")]
+    public FireballExplosion explosionPrefab;
+
+    [Tooltip("Base damage dealt by the explosion.")]
+    public float damage;
+
+    [Tooltip("Extra status effects applied by explosion.")]
+    public List<EffectSpec> effects;
+
+    [Tooltip("Starting trigger radius.")]
+    public float startRadius;
+
+    [Tooltip("Maximum trigger radius reached at end of lifetime.")]
+    public float maxRadius;
+
+    [Tooltip("How fast the radius grows (units per second).")]
+    public float expandSpeed;
+
+    [Tooltip("Lifetime before the explosion despawns.")]
+    public float lifetime;
+
+    [Tooltip("Starting visual scale of the explosion object.")]
+    public float startVisualScale;
+
+    [Tooltip("Maximum visual scale of the explosion object.")]
+    public float maxVisualScale;
 }
