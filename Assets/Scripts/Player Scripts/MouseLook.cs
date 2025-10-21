@@ -2,14 +2,13 @@ using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
-    public float mouseSensitivity = 10000f;
+    public float mouseSensitivity = 1000f;
     public Transform playerBody; 
     private float xRotation = 0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; //Locking the cursor to the center of the screen
-        Cursor.visible = false; //Hiding the cursor
     }
 
     // Update is called once per frame
