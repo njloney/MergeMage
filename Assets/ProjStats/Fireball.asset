@@ -17,18 +17,23 @@ MonoBehaviour:
   baseDamage: 10
   damageType: 1
   destroyOnHit: 1
-  effects: []
-  spawnExplosion: 0
+  effects:
+  - effect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
+    duration: 4
+    magnitude: 8
+  spawnExplosion: 1
   explosion:
-    explosionPrefab: {fileID: 0}
+    explosionPrefab: {fileID: 219149504652278787, guid: aa4b21a1906e51a41ad525e009a6ae4e, type: 3}
     damage: 10
     effects:
     - effect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
       duration: 10
       magnitude: 8
-    startRadius: 0.5
+    startRadius: 1
     maxRadius: 5
-    expandSpeed: 2
-    lifetime: 1000000
+    expandSpeed: 50
+    lifetime: 0.15
     startVisualScale: 1
     maxVisualScale: 5
+  enablePierce: 0
+  pierceCount: 0
