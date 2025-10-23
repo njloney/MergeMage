@@ -20,8 +20,10 @@ public class FirstPersonController : MonoBehaviour
     public float groundDistance = 0.4f;
 
     public LayerMask groundMask;
+    public LayerMask cubeMask;
 
     public bool isGrounded;
+    private bool isOnCube;
 
     Vector3 velocity;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,6 +37,7 @@ public class FirstPersonController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
+        isOnCube = Physics.CheckSphere(groundCheck.position, groundDistance, cubeMask);
 
         if (isGrounded && velocity.y < 0)
         {
@@ -58,7 +61,7 @@ public class FirstPersonController : MonoBehaviour
 
         controller.Move(movement * speed * Time.deltaTime);
 
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        if(Input.GetButtonDown("Jump") && isGrounded && !isOnCube)
         {
             velocity.y = Mathf.Sqrt(jump * -2f * gravity);
         }
