@@ -25,6 +25,7 @@ public class FirstPersonController : MonoBehaviour
     public bool isGrounded;
 
     Vector3 velocity;
+    Vector3 horizontalMovement;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -36,13 +37,33 @@ public class FirstPersonController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-            speed = 12f;
-        }
 
-        //respawn if player went off the map
+        if (isGrounded)
+        {
+
+            float x = Input.GetAxis("Horizontal"); //Getting horizontal input
+            float z = Input.GetAxis("Vertical"); //Getting vertical input
+
+            if (velocity.y < 0)
+            {
+                velocity.y = -2f;
+            }
+
+            horizontalMovement = (transform.right * x + transform.forward * z) * speed;
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                velocity.y = Mathf.Sqrt(jump * -2f * gravity);
+
+            }
+
+        }
+        else
+        {
+            //We are not reading movement here
+
+        }
+        
         if(!isGrounded && transform.position.y < respawnHeight)
         {
             controller.enabled = false;
@@ -51,24 +72,17 @@ public class FirstPersonController : MonoBehaviour
 
             controller.enabled = true;
         }
-;
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        Vector3 movement = transform.right * x + transform.forward * z;
-
-        controller.Move(movement * speed * Time.deltaTime);
-
-        if(Input.GetButtonDown("Jump") && isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(jump * -2f * gravity);
-            speed = 3f;
-        }
-
+        //applying gravity
         velocity.y += gravity * Time.deltaTime;
 
-        controller.Move(velocity * Time.deltaTime);
-    
+        controller.Move((horizontalMovement + velocity) * Time.deltaTime);
+
+        //respawn if player went off the map
+        
+;
+
+        
+       
     }
 }
