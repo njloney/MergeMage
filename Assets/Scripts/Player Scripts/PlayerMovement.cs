@@ -39,8 +39,10 @@ public class FirstPersonController : MonoBehaviour
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
+            speed = 12f;
         }
-        
+
+        //respawn if player went off the map
         if(!isGrounded && transform.position.y < respawnHeight)
         {
             controller.enabled = false;
@@ -61,6 +63,7 @@ public class FirstPersonController : MonoBehaviour
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jump * -2f * gravity);
+            speed = 3f;
         }
 
         velocity.y += gravity * Time.deltaTime;
