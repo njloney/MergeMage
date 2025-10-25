@@ -4,23 +4,17 @@ public class FirstPersonController : MonoBehaviour
 {
     public CharacterController controller;
 
+    public Stats playerStats;
 
     public Transform spawnPoint;
 
     public float respawnHeight = -10f;
-
-    public float speed = 12f;
-
-    public float gravity = -9.81f;
-
-    public float jump = 3f;
 
     public Transform groundCheck;
 
     public float groundDistance = 0.4f;
 
     public LayerMask groundMask;
-    public LayerMask cubeMask;
 
     public bool isGrounded;
 
@@ -35,54 +29,56 @@ public class FirstPersonController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playerStats == null)
+        {
+            Debug.LogError("Player Stats asset is not assigned!");
+            return; // Stop running if stats are missing
+        }
+
+        // Check for ground status
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
+        // Always check for input, whether on ground or in air
+        float x = Input.GetAxis("Horizontal"); //Getting horizontal input
+        float z = Input.GetAxis("Vertical"); //Getting vertical input
+
+        // Calculate horizontal movement based on input
+        horizontalMovement = (transform.right * x + transform.forward * z) * playerStats.speed;
 
         if (isGrounded)
         {
-
-            float x = Input.GetAxis("Horizontal"); //Getting horizontal input
-            float z = Input.GetAxis("Vertical"); //Getting vertical input
-
+            // Reset vertical velocity if we just landed
             if (velocity.y < 0)
             {
                 velocity.y = -2f;
             }
 
-            horizontalMovement = (transform.right * x + transform.forward * z) * speed;
-
+            // Only allow jumping if we are on the ground
             if (Input.GetButtonDown("Jump"))
             {
-                velocity.y = Mathf.Sqrt(jump * -2f * gravity);
-
+                velocity.y = Mathf.Sqrt(playerStats.jump * -2f * playerStats.gravity);
             }
-
         }
+        
         else
         {
-            //We are not reading movement here
-
+           
         }
-        
-        if(!isGrounded && transform.position.y < respawnHeight)
+
+        // Respawn if player went off the map
+        if(transform.position.y < respawnHeight)
         {
             controller.enabled = false;
-
             transform.position = spawnPoint.position;
-
             controller.enabled = true;
+            velocity.y = 0f; // Reset velocity on respawn
         }
 
-        //applying gravity
-        velocity.y += gravity * Time.deltaTime;
+        // Applying gravity 
+        velocity.y += playerStats.gravity * Time.deltaTime;
 
-        controller.Move((horizontalMovement + velocity) * Time.deltaTime);
-
-        //respawn if player went off the map
-        
-;
-
-        
-       
+        // Move the controller
+        // Apply horizontal movement and vertical (gravity/jump) velocity together
+        controller.Move((horizontalMovement + velocity) * Time.deltaTime);       
     }
 }

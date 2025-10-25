@@ -9,6 +9,9 @@ public class ProjectileStats : ScriptableObject
     public float speed = 20f;
     public float lifetime = 5f;
 
+    [Header("Mana Effects")]
+    public float manaCost = 25f;
+
     [Header("Direct Hit Damage")]
     public int baseDamage = 10;
     public DamageType damageType = DamageType.Physical;
@@ -25,6 +28,8 @@ public class ProjectileStats : ScriptableObject
     [Header("Piercing (for things like Wind Bullet)")]
     public bool enablePierce = false;     // if true, the projectile can pass through targets
     public int pierceCount = 0;           // how many distinct targets it can hit before despawning
+
+    
 
 }
 
