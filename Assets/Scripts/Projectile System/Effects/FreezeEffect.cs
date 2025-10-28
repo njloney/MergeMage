@@ -1,27 +1,27 @@
 using UnityEngine;
 
 // Reduces movement to 0 and attack power to 0 while active.
-// Uses placeholder scripts until real enemy logic exists.
 [CreateAssetMenu(menuName = "Combat/Effects/Freeze")]
 public class FreezeEffect : StatusEffect
 {
     [SerializeField] private bool restoreOnExpire = true; // restore original values when done
-
+    int ap = 0;
+    float ms = 0f;
     public override void OnApply(StatusController target, ref EffectRuntime runtime)
     {
-        // Try to freeze movement (placeholder)
+        // Try to freeze movement
         if (target.TryGetComponent<MovementPlaceholder>(out var move))
         {
             // Store original in magnitude if you want; here we just use source to stash a tiny holder
-            // Minimal approach: stash originals in the runtime via a small holder object.
             runtime.source = runtime.source ?? target; // keep non-null
-            // NOTE: In a full system you'd have a safer store, but this keeps it simple.
-            move.moveSpeed = 0f; // freeze movement
+            ms = move.maxSpeed;
+            move.maxSpeed = 0f; // freeze movement
         }
 
-        // Try to disable attacks (placeholder)
+        // Try to disable attacks
         if (target.TryGetComponent<AttackPlaceholder>(out var atk))
         {
+            ap = atk.attackPower;
             atk.attackPower = 0; // disable attacks
         }
     }
@@ -30,15 +30,14 @@ public class FreezeEffect : StatusEffect
     {
         if (!restoreOnExpire) return;
 
-        // Restore placeholders to basic defaults.
-        // NOTE: These are placeholders — replace with your real restore logic later.
+        // Restore placeholders.
         if (target.TryGetComponent<MovementPlaceholder>(out var move))
         {
-            move.moveSpeed = 5f; // placeholder default; replace with your saved/base value later
+            move.maxSpeed = ms;
         }
         if (target.TryGetComponent<AttackPlaceholder>(out var atk))
         {
-            atk.attackPower = 10; // placeholder default; replace later
+            atk.attackPower = ap; 
         }
     }
 }
