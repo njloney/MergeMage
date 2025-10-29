@@ -64,6 +64,37 @@ public class Projectile : MonoBehaviour
             }
         }
 
+        // 2. Spawn explosion
+        if (cfg.stats.spawnExplosion)
+        {
+            var data = cfg.stats.explosion;
+
+            if (data.explosionPrefab != null)
+            {
+                Debug.Log($"[Projectile] Spawning explosion prefab '{data.explosionPrefab.name}' at {transform.position}.", this);
+
+                var exp = Instantiate(data.explosionPrefab, transform.position, Quaternion.identity);
+
+                exp.Init(
+                    data.damage,
+                    cfg.stats.damageType,
+                    data.effects,
+                    cfg.owner,
+                    data.startRadius,
+                    data.maxRadius,
+                    data.expandSpeed,
+                    data.lifetime,
+                    data.startVisualScale,
+                    data.maxVisualScale
+                );
+            }
+            else
+            {
+                Debug.LogWarning($"[Projectile] spawnExplosion is TRUE but no explosionPrefab assigned in '{cfg.stats.name}'.", this);
+            }
+        }
+
+
         // --- 2. Handle piercing projectiles (like Wind Bullet) ---
         // If this projectile can pierce, count how many valid targets it has hit so far.
         if (cfg.stats.enablePierce)
