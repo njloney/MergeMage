@@ -15,7 +15,7 @@ MonoBehaviour:
   spellRecipes:
   - element1: 0
     element2: 0
-    resultingStats: {fileID: 11400000, guid: 75e46bb9c3987e94f982ec2a3663aa95, type: 2}
+    resultingStats: {fileID: 11400000, guid: 67e07e3a704e59d42ba5ab0f6117b454, type: 2}
   - element1: 1
     element2: 1
     resultingStats: {fileID: 11400000, guid: 720346ced65497f4da9f0ca1e5e291bb, type: 2}
