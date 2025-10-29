@@ -185,7 +185,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 165275557}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 200092906}
   - component: {fileID: 200092905}
   - component: {fileID: 200092910}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -382,7 +382,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 229168447}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -398,7 +398,7 @@ Transform:
   m_GameObject: {fileID: 229168446}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.624, y: 0.277, z: 0.889}
+  m_LocalPosition: {x: 0.624, y: 0.277, z: 1.076}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -521,7 +521,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 298407651}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SocketB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +538,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.537, y: 0.141, z: 0.828}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 855475402}
@@ -703,7 +703,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.82, y: 2.19, z: 6.95}
-  m_LocalScale: {x: 3.9224057, y: -0.7655331, z: 4.503209}
+  m_LocalScale: {x: 3.9224057, y: 0.7655331, z: 4.503209}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -811,7 +811,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -16.61, y: 4.23, z: -5.62}
-  m_LocalScale: {x: 3.9224057, y: -0.7655331, z: 4.503209}
+  m_LocalScale: {x: 3.9224057, y: 0.7655331, z: 4.503209}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1239,7 +1239,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -16.61, y: 3.05, z: 1.06}
-  m_LocalScale: {x: 3.9224057, y: -0.7655331, z: 4.503209}
+  m_LocalScale: {x: 3.9224057, y: 0.7655331, z: 4.503209}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1254,7 +1254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 855475402}
   - component: {fileID: 855475403}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1292,7 +1292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25ec4fa17a961654199ad922b9f68a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 608184424722468891, guid: eb55a1210b098844f99e48397721507a, type: 3}
   firePoint: {fileID: 229168447}
   resolver: {fileID: 11400000, guid: 82532d2e40cc3dc4a9e7d404d577e8eb, type: 2}
   socketA: {fileID: 1819208468}
@@ -1316,7 +1316,7 @@ GameObject:
   - component: {fileID: 935252790}
   - component: {fileID: 935252789}
   - component: {fileID: 935252788}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WandModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1823,7 +1823,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.83, y: 1.25, z: 6.95}
-  m_LocalScale: {x: 3.9224057, y: -0.7655331, z: 4.503209}
+  m_LocalScale: {x: 3.9224057, y: 0.7655331, z: 4.503209}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1931,7 +1931,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.17, y: 0.5, z: 6.95}
-  m_LocalScale: {x: 3.9224057, y: -0.7655331, z: 4.503209}
+  m_LocalScale: {x: 3.9224057, y: 0.7655331, z: 4.503209}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1948,7 +1948,7 @@ GameObject:
   - component: {fileID: 1338444849}
   - component: {fileID: 1338444848}
   - component: {fileID: 1338444847}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -2748,7 +2748,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1819208468}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SocketA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2765,7 +2765,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.69, y: 0.218, z: 0.828}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 855475402}

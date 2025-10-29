@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;  // Used for movement
+    [SerializeField] private MeshRenderer visualRenderer;
     private ProjectileConfig cfg;           // Holds projectile data (speed, damage, effects)
     private float elapsed;                  // Tracks how long the projectile has existed
     private readonly HashSet<Collider> _hitThisFrame = new(); // avoid double-hit on same collider this frame
@@ -20,8 +21,14 @@ public class Projectile : MonoBehaviour
     private void OnEnable()
     {
         elapsed = 0f; // Reset lifetime timer
-        if (rb && cfg != null && cfg.stats != null) // Added null checks
+        if (rb && cfg != null && cfg.stats != null)
+        {// Added null checks
             rb.linearVelocity = transform.forward * cfg.stats.speed; // Move forward
+            if (visualRenderer != null && cfg.stats.projectileMaterial != null)
+            {
+                visualRenderer.material = cfg.stats.projectileMaterial;
+            }
+        }
         _hitsSoFar = 0;
         _hitThisFrame.Clear();
     }
@@ -103,9 +110,7 @@ public class Projectile : MonoBehaviour
         //     explosion.owner = cfg.owner;
         // }
 
-        // --- END MINIMAL ADDITION ---
-
-        gameObject.SetActive(false); // Your original line
+        gameObject.SetActive(false);
     }
 
 

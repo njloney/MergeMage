@@ -9,6 +9,9 @@ public class ProjectileStats : ScriptableObject
     public float speed = 20f;
     public float lifetime = 5f;
 
+    [Header("Projectile Visuals")]
+    public Material projectileMaterial;
+
     [Header("Direct Hit Damage")]
     public int baseDamage = 10;
     public DamageType damageType = DamageType.Physical;
