@@ -29,6 +29,23 @@ public class ProjectileStats : ScriptableObject
     public bool enablePierce = false;     // if true, the projectile can pass through targets
     public int pierceCount = 0;           // how many distinct targets it can hit before despawning
 
+    [Header("Spawn Object On Impact (Earth Rupture / Void field, etc.)")]
+    public bool spawnObjectOnHit = false;
+    public GameObject onHitPrefab;   // GroundSpikeField prefab
+
+    [Header("Chain Lightning (Lightning Spell)")]
+    public bool chainOnHit = false;
+    public int chainMaxJumps = 3;
+    public float chainRadius = 6f;
+    public float chainDamagePerJump = 8f;
+    public LayerMask chainMask = ~0;
+
+    [Header("Beam On Hit (Light Ray wrapper)")]
+    public bool spawnBeamOnHit = false;
+    public LightRayBeam beamPrefab;   // prefab with LightRayBeam
+    public float beamDuration = 2f;   // you can also keep this in the prefab
+
+
 }
 
 [System.Serializable]

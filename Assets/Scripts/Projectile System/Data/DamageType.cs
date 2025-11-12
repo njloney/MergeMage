@@ -1,1 +1,1 @@
-public enum DamageType { Physical, Fire, Ice, Poison }
+public enum DamageType { Physical, Fire, Ice, Light, Dark, Earth, Lightning}

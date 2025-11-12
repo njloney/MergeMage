@@ -10,18 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
-  m_Name: FireBolt
+  m_Name: Earth Rupture
   m_EditorClassIdentifier: 
-  speed: 25
+  speed: 20
   lifetime: 5
-  projectileMaterial: {fileID: 2100000, guid: 72cdd9579e347c544a469ecebf7f2c76, type: 2}
+  projectileMaterial: {fileID: 0}
   baseDamage: 10
-  damageType: 1
+  damageType: 5
   destroyOnHit: 1
-  effects:
-  - effect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
-    duration: 4
-    magnitude: 8
+  effects: []
   spawnExplosion: 0
   explosion:
     explosionPrefab: {fileID: 0}
@@ -35,3 +32,15 @@ MonoBehaviour:
     maxVisualScale: 0
   enablePierce: 0
   pierceCount: 0
+  spawnObjectOnHit: 1
+  onHitPrefab: {fileID: 3978694083657473365, guid: 6f43942b1ca8b894ab303d7872a8ffb2, type: 3}
+  chainOnHit: 0
+  chainMaxJumps: 3
+  chainRadius: 6
+  chainDamagePerJump: 8
+  chainMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  spawnBeamOnHit: 0
+  beamPrefab: {fileID: 0}
+  beamDuration: 2

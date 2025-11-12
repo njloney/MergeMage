@@ -108,39 +108,110 @@ public class Projectile : MonoBehaviour
         {
             _hitsSoFar++;  // Increment total hits
 
-            // Example: pierceCount = 2 → projectile disappears after 2 targets hit
             if (_hitsSoFar >= cfg.stats.pierceCount)
                 Despawn();
 
-            // Exit early to allow it to continue flying through other targets
             return;
         }
 
-        // --- 3. Default behavior for non-piercing projectiles ---
-        // If the projectile should be destroyed immediately after any hit,
-        // remove it from play here.
         if (cfg.stats.destroyOnHit)
             Despawn();
+
+        TrySpawnOnHitObject();          // Earth Rupture spikes, or any “place object” spell
+        TryChainLightning(other);       // Lightning chain starting from the first target
+        TrySpawnBeam(other);            // Light Ray: spawn hitscan beam when projectile hits
+
+    }
+
+    // Projectile.cs (add inside class)
+    private void TrySpawnOnHitObject()
+    {
+        if (cfg.stats.spawnObjectOnHit && cfg.stats.onHitPrefab)
+        {
+            Vector3 spawnPos = transform.position;
+            Quaternion spawnRot = Quaternion.identity;
+
+            // Cast straight down, but ONLY against the Ground layer
+            int groundMask = 1 << LayerMask.NameToLayer("Ground");
+
+            // Start slightly above impact to avoid immediately hitting the enemy collider
+            Vector3 startPos = transform.position + Vector3.up * 2f;
+
+            if (Physics.Raycast(startPos, Vector3.down, out RaycastHit hit, 20f, groundMask))
+            {
+                spawnPos = hit.point;
+                spawnRot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            }
+            else
+            {
+                // Fallback if no ground found (e.g., midair hit)
+                spawnPos += Vector3.up * 0.05f;
+            }
+
+            // Slight lift to avoid clipping
+            spawnPos += Vector3.up * 0.05f;
+
+            Instantiate(cfg.stats.onHitPrefab, spawnPos, spawnRot);
+        }
+
+
+    }
+
+    private void TryChainLightning(Collider firstTarget)
+    {
+        if (!cfg.stats.chainOnHit || firstTarget == null) return;
+
+        // Do chain: first target + up to N jumps
+        var visited = new HashSet<Collider> { firstTarget };
+        Collider current = firstTarget;
+
+        for (int i = 0; i < cfg.stats.chainMaxJumps; i++)
+        {
+            if (!current) break;
+
+            // Damage current link (skip if we already did base hit; harmless to double-hit once)
+            if (current.TryGetComponent<Health>(out var hp))
+                hp.TakeDamage(cfg.stats.chainDamagePerJump, cfg.stats.damageType, cfg.owner);
+
+            // Find next closest unvisited in radius
+            Collider next = FindNextChainTarget(current.transform.position, visited);
+            if (!next) break;
+            visited.Add(next);
+            current = next;
+        }
+    }
+
+    private Collider FindNextChainTarget(Vector3 from, HashSet<Collider> visited)
+    {
+        var hits = Physics.OverlapSphere(from, cfg.stats.chainRadius, cfg.stats.chainMask, QueryTriggerInteraction.Ignore);
+        float best = float.MaxValue;
+        Collider pick = null;
+        foreach (var h in hits)
+        {
+            if (!h || visited.Contains(h)) continue;
+            float d = (h.transform.position - from).sqrMagnitude;
+            if (d < best) { best = d; pick = h; }
+        }
+        return pick;
+    }
+
+    private void TrySpawnBeam(Collider hit)
+    {
+        if (!cfg.stats.spawnBeamOnHit || !cfg.stats.beamPrefab) return;
+
+        var beam = Instantiate(cfg.stats.beamPrefab, transform.position, Quaternion.identity);
+        // Choose an origin: owner’s transform if possible, else projectile’s transform
+        Transform origin = null;
+        if (cfg.owner is Component c) origin = c.transform;
+        if (!origin) origin = transform;
+
+        beam.transform.position = origin.position;   // align with shooter (or projectile)
+        beam.Activate();                             // beam handles its own duration/damage
     }
 
     // Deactivates the projectile (can be pooled instead of destroyed)
     private void Despawn()
     {
-
-        // if (cfg.stats.spawnExplosion && cfg.stats.explosion.explosionPrefab != null)
-        // {
-        //     // 2. Spawn the explosion
-        //     FireballExplosion explosion = Instantiate(
-        //         cfg.stats.explosion.explosionPrefab,
-        //         transform.position,
-        //         Quaternion.identity
-        //     );
-
-        //     // 3. Pass our stats and owner to the explosion
-        //     explosion.settings = cfg.stats.explosion;
-        //     explosion.owner = cfg.owner;
-        // }
-
         gameObject.SetActive(false);
     }
 

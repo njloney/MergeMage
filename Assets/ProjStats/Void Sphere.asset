@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
-  m_Name: FireBolt
+  m_Name: Void Sphere
   m_EditorClassIdentifier: 
-  speed: 25
+  speed: 20
   lifetime: 5
-  projectileMaterial: {fileID: 2100000, guid: 72cdd9579e347c544a469ecebf7f2c76, type: 2}
+  projectileMaterial: {fileID: 0}
   baseDamage: 10
-  damageType: 1
+  damageType: 4
   destroyOnHit: 1
   effects:
-  - effect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
-    duration: 4
-    magnitude: 8
+  - effect: {fileID: 11400000, guid: 1c2fff792f6b53543874340509baa331, type: 2}
+    duration: 3
+    magnitude: 3
   spawnExplosion: 0
   explosion:
     explosionPrefab: {fileID: 0}
@@ -35,3 +35,15 @@ MonoBehaviour:
     maxVisualScale: 0
   enablePierce: 0
   pierceCount: 0
+  spawnObjectOnHit: 0
+  onHitPrefab: {fileID: 0}
+  chainOnHit: 0
+  chainMaxJumps: 3
+  chainRadius: 6
+  chainDamagePerJump: 8
+  chainMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  spawnBeamOnHit: 0
+  beamPrefab: {fileID: 0}
+  beamDuration: 2
