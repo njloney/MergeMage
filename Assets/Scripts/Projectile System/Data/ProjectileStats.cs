@@ -40,12 +40,15 @@ public class ProjectileStats : ScriptableObject
     public float chainDamagePerJump = 8f;
     public LayerMask chainMask = ~0;
 
-    [Header("Beam On Hit (Light Ray wrapper)")]
-    public bool spawnBeamOnHit = false;
-    public LightRayBeam beamPrefab;   // prefab with LightRayBeam
-    public float beamDuration = 2f;   // you can also keep this in the prefab
+    [Header("Light Ray Beam (non-projectile spell)")]
+    [Tooltip("If true, this spell will cast a LightRayBeam instead of spawning a projectile.")]
+    public bool isBeamSpell = false;
 
+    [Tooltip("Prefab that has a LightRayBeam component.")]
+    public LightRayBeam beamPrefab;
 
+    [Tooltip("Config asset that defines DPS, range, duration, etc.")]
+    public LightRayConfig beamConfig;
 }
 
 [System.Serializable]

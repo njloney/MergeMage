@@ -1,57 +1,143 @@
 using UnityEngine;
 
-// Hitscan beam that deals DPS while active.
 [RequireComponent(typeof(LineRenderer))]
 public class LightRayBeam : MonoBehaviour
 {
-    [SerializeField] private Transform origin;  // muzzle or camera
-    [SerializeField] private float dps = 10f;
-    [SerializeField] private float maxRange = 30f;
-    [SerializeField] private float duration = 2f;
-    [SerializeField] private float tickInterval = 0.1f; // apply in small steps
+    private LightRayConfig _cfg;
+    private Transform _origin;              // where the beam starts (muzzle/caster/camera)
+    private Object _owner;                  // for damage source
+    private LineRenderer _lr;
 
-    private LineRenderer lr;
-    private float time, tick;
+    private float _timeAlive;
+    private float _tick;
 
-    private void Awake() => lr = GetComponent<LineRenderer>();
+    private Vector3 _fixedStart;
+    private Vector3 _fixedDir;
 
-    public void Activate()
+    public void Init(Transform origin, Object owner, LightRayConfig config)
     {
-        time = 0f; tick = 0f;
+        _origin = origin;
+        _owner = owner;
+        _cfg = config;
+
+        _lr = GetComponent<LineRenderer>();
+        if (_lr == null) _lr = gameObject.AddComponent<LineRenderer>();
+
+        _timeAlive = 0f;
+        _tick = 0f;
+
+        if (!_cfg.followOrigin && _origin != null)
+        {
+            _fixedStart = _origin.position;
+            _fixedDir = _origin.forward;
+        }
+
+        // ensure beam is visible immediately
+        UpdateBeamVisuals(0f);
         gameObject.SetActive(true);
     }
 
     private void Update()
     {
-        time += Time.deltaTime;
-        if (time >= duration) { gameObject.SetActive(false); return; }
+        if (_cfg == null)
+        {
+            // No config assigned = disable to avoid errors
+            gameObject.SetActive(false);
+            return;
+        }
 
-        // draw beam each frame
-        Vector3 start = origin.position;
-        Vector3 dir = origin.forward;
-        Vector3 end = start + dir * maxRange;
+        _timeAlive += Time.deltaTime;
+        if (_timeAlive >= _cfg.duration)
+        {
+            gameObject.SetActive(false); // poolable
+            return;
+        }
 
-        if (Physics.Raycast(start, dir, out var hit, maxRange, ~0, QueryTriggerInteraction.Ignore))
+        // Visuals update every frame for smoothness
+        UpdateBeamVisuals(Time.deltaTime);
+
+        // Damage on ticks
+        _tick += Time.deltaTime;
+        while (_tick >= _cfg.tickInterval)
+        {
+            _tick -= _cfg.tickInterval;
+            ApplyDamage(_cfg.tickInterval);
+        }
+    }
+
+    private void UpdateBeamVisuals(float dt)
+    {
+        if (_lr == null) return;
+
+        Vector3 start, dir;
+        if (_cfg.followOrigin && _origin != null)
+        {
+            start = _origin.position;
+            dir = _origin.forward;
+        }
+        else
+        {
+            start = _fixedStart;
+            dir = _fixedDir;
+        }
+
+        Vector3 end = start + dir * _cfg.maxRange;
+
+        if (Physics.Raycast(start, dir, out var hit, _cfg.maxRange, _cfg.hitMask, QueryTriggerInteraction.Ignore))
         {
             end = hit.point;
-        }
-
-        lr.positionCount = 2;
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, end);
-
-        // apply dps on ticks
-        tick += Time.deltaTime;
-        while (tick >= tickInterval)
-        {
-            tick -= tickInterval;
-            if (Physics.Raycast(start, dir, out var dmgHit, maxRange, ~0, QueryTriggerInteraction.Ignore))
+            if (!_cfg.stopOnHit)
             {
-                if (dmgHit.collider.TryGetComponent<Health>(out var hp))
-                {
-                    hp.TakeDamage(dps * tickInterval, DamageType.Light, this);
-                }
+                // draw through the hit but continue full length (purely visual)
+                end = start + dir * _cfg.maxRange;
             }
         }
+
+        _lr.positionCount = 2;
+        _lr.SetPosition(0, start);
+        _lr.SetPosition(1, end);
+    }
+
+    private void ApplyDamage(float tick)
+    {
+        // Use the same aim as visuals this frame
+        Vector3 start, dir;
+        if (_cfg.followOrigin && _origin != null)
+        {
+            start = _origin.position;
+            dir = _origin.forward;
+        }
+        else
+        {
+            start = _fixedStart;
+            dir = _fixedDir;
+        }
+
+        // We apply damage at the first hit point only (typical hitscan).
+        if (Physics.Raycast(start, dir, out var hit, _cfg.maxRange, _cfg.hitMask, QueryTriggerInteraction.Ignore))
+        {
+            if (hit.collider.TryGetComponent<Health>(out var hp))
+            {
+                hp.TakeDamage(_cfg.dps * tick, _cfg.damageType, _owner);
+            }
+        }
+    }
+
+    public static LightRayBeam Spawn(Transform origin, Object owner, LightRayConfig cfg, Vector3? overrideDir = null)
+    {
+        var prefab = Resources.Load<LightRayBeam>("LightRayBeam"); // OPTIONAL pattern if you use Resources
+        if (prefab == null)
+        {
+            Debug.LogError("LightRayBeam prefab not found in Resources. Prefer manual Instantiate.");
+            return null;
+        }
+        var beam = Instantiate(prefab);
+        if (overrideDir.HasValue && cfg != null && !cfg.followOrigin && origin != null)
+        {
+            beam._fixedStart = origin.position;
+            beam._fixedDir = overrideDir.Value.normalized;
+        }
+        beam.Init(origin, owner, cfg);
+        return beam;
     }
 }

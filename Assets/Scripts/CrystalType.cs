@@ -2,7 +2,5 @@ using UnityEngine;
 
 public enum CrystalType
 {
-    Fire,
-    Ice,
-    Wind
+    Fire, Ice, Wind, Light, Dark, Earth, Lightning
 }

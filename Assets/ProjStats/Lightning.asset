@@ -40,7 +40,7 @@ MonoBehaviour:
   chainDamagePerJump: 8
   chainMask:
     serializedVersion: 2
-    m_Bits: 256
-  spawnBeamOnHit: 0
+    m_Bits: 4294967295
+  isBeamSpell: 0
   beamPrefab: {fileID: 0}
-  beamDuration: 2
+  beamConfig: {fileID: 0}

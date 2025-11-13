@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class PlayerWand : MonoBehaviour
 {
@@ -10,28 +9,47 @@ public class PlayerWand : MonoBehaviour
     [Header("Spells/Effects")]
     [SerializeField] private SpellCombinationResolver resolver;
 
-    [Header("Wand Visuals")]
+    [Header("Wand Visuals (Sockets)")]
     [Tooltip("Empty GameObject on the wand model for the first crystal")]
     [SerializeField] private Transform socketA;
     [Tooltip("Empty GameObject on the wand model for the second crystal")]
     [SerializeField] private Transform socketB;
 
+    [Header("Crystal Models (Visual Only)")]
     [Tooltip("Visual-only prefab for a Fire crystal")]
     [SerializeField] private GameObject fireCrystalModel;
     [Tooltip("Visual-only prefab for an Ice crystal")]
     [SerializeField] private GameObject iceCrystalModel;
     [Tooltip("Visual-only prefab for a Wind crystal")]
     [SerializeField] private GameObject windCrystalModel;
+    [Tooltip("Visual-only prefab for an Earth crystal")]
+    [SerializeField] private GameObject earthCrystalModel;
+    [Tooltip("Visual-only prefab for a Lightning crystal")]
+    [SerializeField] private GameObject lightningCrystalModel;
+    [Tooltip("Visual-only prefab for a Light crystal")]
+    [SerializeField] private GameObject lightCrystalModel;
+    [Tooltip("Visual-only prefab for a Dark crystal")]
+    [SerializeField] private GameObject darkCrystalModel;
 
     [Header("Dropping")]
     [Tooltip("Point where crystals are dropped (e.g., behind the player)")]
     [SerializeField] private Transform dropPoint;
+
+    [Header("Crystal Pickup Prefabs")]
     [Tooltip("The 'CrystalPickup' prefab for Fire")]
     [SerializeField] private GameObject fireCrystalPickupPrefab;
     [Tooltip("The 'CrystalPickup' prefab for Ice")]
     [SerializeField] private GameObject iceCrystalPickupPrefab;
     [Tooltip("The 'CrystalPickup' prefab for Wind")]
     [SerializeField] private GameObject windCrystalPickupPrefab;
+    [Tooltip("The 'CrystalPickup' prefab for Earth")]
+    [SerializeField] private GameObject earthCrystalPickupPrefab;
+    [Tooltip("The 'CrystalPickup' prefab for Lightning")]
+    [SerializeField] private GameObject lightningCrystalPickupPrefab;
+    [Tooltip("The 'CrystalPickup' prefab for Light")]
+    [SerializeField] private GameObject lightCrystalPickupPrefab;
+    [Tooltip("The 'CrystalPickup' prefab for Dark")]
+    [SerializeField] private GameObject darkCrystalPickupPrefab;
 
     // --- Private State ---
     private CrystalType? slotA = null;
@@ -50,12 +68,15 @@ public class PlayerWand : MonoBehaviour
 
     public void Collect(CrystalType c)
     {
+        // Fill slot A first
         if (!slotA.HasValue)
         {
             slotA = c;
             UpdateWandVisuals();
             return;
         }
+
+        // Then slot B
         if (!slotB.HasValue)
         {
             slotB = c;
@@ -74,12 +95,14 @@ public class PlayerWand : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) TryCast();
+        if (Input.GetMouseButtonDown(0))
+            TryCast();
     }
 
     private void TryCast()
     {
-        if (!slotA.HasValue || !slotB.HasValue || resolver == null || projectilePrefab == null || firePoint == null) return;
+        if (!slotA.HasValue || !slotB.HasValue || resolver == null || firePoint == null)
+            return;
 
         var stats = resolver.BuildStats(slotA.Value, slotB.Value);
         if (stats == null)
@@ -88,10 +111,32 @@ public class PlayerWand : MonoBehaviour
             return;
         }
 
-        // Spawn the (inactive) projectile
+        // Decide if this is a beam spell or projectile spell
+        if (stats.isBeamSpell)
+        {
+            CastBeamSpell(stats);
+        }
+        else
+        {
+            CastProjectileSpell(stats);
+        }
+
+        // Consume both slots (for now)
+        slotA = null;
+        slotB = null;
+        UpdateWandVisuals();
+    }
+
+    private void CastProjectileSpell(ProjectileStats stats)
+    {
+        if (projectilePrefab == null)
+        {
+            Debug.LogWarning("No projectilePrefab assigned on PlayerWand, cannot fire projectile.");
+            return;
+        }
+
         var go = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
 
-        // Get the config and set the stats before it's enabled
         if (go.TryGetComponent<ProjectileConfig>(out var cfg))
         {
             cfg.stats = stats;
@@ -99,11 +144,19 @@ public class PlayerWand : MonoBehaviour
         }
 
         go.SetActive(true);
+    }
 
-        // Consume both slots
-        slotA = null;
-        slotB = null;
-        UpdateWandVisuals();
+    private void CastBeamSpell(ProjectileStats stats)
+    {
+        if (stats.beamPrefab == null || stats.beamConfig == null)
+        {
+            Debug.LogWarning("Beam spell selected but beamPrefab or beamConfig is not assigned in ProjectileStats.", stats);
+            return;
+        }
+
+        var beam = Instantiate(stats.beamPrefab);
+        Transform origin = firePoint;
+        beam.Init(origin, this, stats.beamConfig);
     }
 
     private void DropCrystal(CrystalType typeToDrop)
@@ -118,8 +171,11 @@ public class PlayerWand : MonoBehaviour
 
         if (prefabToDrop != null)
         {
-            // Spawn the pickup prefab at the drop point
             Instantiate(prefabToDrop, dropPoint.position, dropPoint.rotation);
+        }
+        else
+        {
+            Debug.LogWarning($"No pickup prefab assigned for crystal type {typeToDrop}.");
         }
     }
 
@@ -129,7 +185,7 @@ public class PlayerWand : MonoBehaviour
         if (spawnedModelA != null) Destroy(spawnedModelA);
         if (spawnedModelB != null) Destroy(spawnedModelB);
 
-        // Spawn new model for Slot A
+        // Slot A model
         if (slotA.HasValue && socketA != null)
         {
             GameObject modelPrefab = GetModelPrefab(slotA.Value);
@@ -139,7 +195,7 @@ public class PlayerWand : MonoBehaviour
             }
         }
 
-        // Spawn new model for Slot B
+        // Slot B model
         if (slotB.HasValue && socketB != null)
         {
             GameObject modelPrefab = GetModelPrefab(slotB.Value);
@@ -157,6 +213,10 @@ public class PlayerWand : MonoBehaviour
             case CrystalType.Fire: return fireCrystalModel;
             case CrystalType.Ice: return iceCrystalModel;
             case CrystalType.Wind: return windCrystalModel;
+            case CrystalType.Earth: return earthCrystalModel;
+            case CrystalType.Lightning: return lightningCrystalModel;
+            case CrystalType.Light: return lightCrystalModel;
+            case CrystalType.Dark: return darkCrystalModel;
             default: return null;
         }
     }
@@ -168,6 +228,10 @@ public class PlayerWand : MonoBehaviour
             case CrystalType.Fire: return fireCrystalPickupPrefab;
             case CrystalType.Ice: return iceCrystalPickupPrefab;
             case CrystalType.Wind: return windCrystalPickupPrefab;
+            case CrystalType.Earth: return earthCrystalPickupPrefab;
+            case CrystalType.Lightning: return lightningCrystalPickupPrefab;
+            case CrystalType.Light: return lightCrystalPickupPrefab;
+            case CrystalType.Dark: return darkCrystalPickupPrefab;
             default: return null;
         }
     }

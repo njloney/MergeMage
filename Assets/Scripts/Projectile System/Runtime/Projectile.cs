@@ -119,7 +119,6 @@ public class Projectile : MonoBehaviour
 
         TrySpawnOnHitObject();          // Earth Rupture spikes, or any “place object” spell
         TryChainLightning(other);       // Lightning chain starting from the first target
-        TrySpawnBeam(other);            // Light Ray: spawn hitscan beam when projectile hits
 
     }
 
@@ -193,20 +192,6 @@ public class Projectile : MonoBehaviour
             if (d < best) { best = d; pick = h; }
         }
         return pick;
-    }
-
-    private void TrySpawnBeam(Collider hit)
-    {
-        if (!cfg.stats.spawnBeamOnHit || !cfg.stats.beamPrefab) return;
-
-        var beam = Instantiate(cfg.stats.beamPrefab, transform.position, Quaternion.identity);
-        // Choose an origin: owner’s transform if possible, else projectile’s transform
-        Transform origin = null;
-        if (cfg.owner is Component c) origin = c.transform;
-        if (!origin) origin = transform;
-
-        beam.transform.position = origin.position;   // align with shooter (or projectile)
-        beam.Activate();                             // beam handles its own duration/damage
     }
 
     // Deactivates the projectile (can be pooled instead of destroyed)

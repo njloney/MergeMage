@@ -22,12 +22,15 @@ MonoBehaviour:
   - element1: 2
     element2: 2
     resultingStats: {fileID: 11400000, guid: 2036df098649a3841b9aa97ad7d58336, type: 2}
-  - element1: 0
-    element2: 1
-    resultingStats: {fileID: 0}
-  - element1: 0
-    element2: 2
-    resultingStats: {fileID: 0}
-  - element1: 1
-    element2: 2
-    resultingStats: {fileID: 0}
+  - element1: 3
+    element2: 3
+    resultingStats: {fileID: 11400000, guid: 94e7b560f7fa74e4a851d05fde17f25e, type: 2}
+  - element1: 4
+    element2: 4
+    resultingStats: {fileID: 11400000, guid: f40060806465c2a43b4aa44ec9a5105c, type: 2}
+  - element1: 6
+    element2: 6
+    resultingStats: {fileID: 11400000, guid: a0942033e4667d546b0b74fe00394c88, type: 2}
+  - element1: 5
+    element2: 5
+    resultingStats: {fileID: 11400000, guid: a3167528103d14e42813528551cf7691, type: 2}

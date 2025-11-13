@@ -1,2 +1,31 @@
 fileFormatVersion: 2
 guid: 25ec4fa17a961654199ad922b9f68a98
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - projectilePrefab: {instanceID: 0}
+  - firePoint: {instanceID: 0}
+  - resolver: {instanceID: 0}
+  - socketA: {instanceID: 0}
+  - socketB: {instanceID: 0}
+  - fireCrystalModel: {instanceID: 0}
+  - iceCrystalModel: {instanceID: 0}
+  - windCrystalModel: {instanceID: 0}
+  - earthCrystalModel: {fileID: 398299751778499956, guid: a7eca5aba673b5f47bcc60e4cc3e509a, type: 3}
+  - lightningCrystalModel: {fileID: 845731965430775724, guid: 672ba0b95a3f4fc45a8bc1a60b9ad9b5, type: 3}
+  - lightCrystalModel: {fileID: 649273544743041373, guid: d7b0282851b2c884babafbf568e4a1f9, type: 3}
+  - darkCrystalModel: {fileID: 7032899937279157544, guid: e1efbfb7964366149bb7dc8cf95a22f4, type: 3}
+  - dropPoint: {instanceID: 0}
+  - fireCrystalPickupPrefab: {instanceID: 0}
+  - iceCrystalPickupPrefab: {instanceID: 0}
+  - windCrystalPickupPrefab: {instanceID: 0}
+  - earthCrystalPickupPrefab: {instanceID: 0}
+  - lightningCrystalPickupPrefab: {instanceID: 0}
+  - lightCrystalPickupPrefab: {instanceID: 0}
+  - darkCrystalPickupPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
