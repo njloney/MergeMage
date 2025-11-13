@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 40
   lifetime: 10
+  projectileMaterial: {fileID: 2100000, guid: 3c9e88b993724a54abd631732e9e290c, type: 2}
   baseDamage: 10
   damageType: 0
   destroyOnHit: 1

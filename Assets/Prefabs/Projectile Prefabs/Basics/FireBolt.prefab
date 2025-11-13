@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7315822974869475560}
   - component: {fileID: 2875951882893781090}
   - component: {fileID: 6887333033025947693}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FireBolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,3 +165,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  visualRenderer: {fileID: 0}

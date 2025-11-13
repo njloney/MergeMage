@@ -38,8 +38,13 @@ public class PunchingBag : MonoBehaviour
 
     private void Update()
     {
-        // Update the on-screen damage number
-        damageTakenText.text = totalDamageTaken.ToString();
+        
+        // Safely update UI text if assigned
+        if (damageTakenText != null)
+        {
+            // Use SetText to avoid GC from ToString allocations in tight loops
+            damageTakenText.SetText(totalDamageTaken.ToString());
+        }
 
         // Manual reset if flag is triggered (optional feature)
         if (resetDamage)

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7045691321073728581}
   - component: {fileID: 2381653730284969806}
   - component: {fileID: 2348041075020754537}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ray of Frost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,3 +165,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  visualRenderer: {fileID: 0}

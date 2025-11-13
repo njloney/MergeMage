@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4482445555534012344}
   - component: {fileID: 7825202284975461580}
   - component: {fileID: 2586883433573642461}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Wind Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,3 +165,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  visualRenderer: {fileID: 0}

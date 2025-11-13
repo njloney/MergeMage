@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1818b872d950eee489745b5d7d128c87, type: 3}
+  m_Name: PlayerSpellbook
+  m_EditorClassIdentifier: 
+  spellRecipes:
+  - element1: 0
+    element2: 0
+    resultingStats: {fileID: 11400000, guid: 67e07e3a704e59d42ba5ab0f6117b454, type: 2}
+  - element1: 1
+    element2: 1
+    resultingStats: {fileID: 11400000, guid: 720346ced65497f4da9f0ca1e5e291bb, type: 2}
+  - element1: 2
+    element2: 2
+    resultingStats: {fileID: 11400000, guid: 2036df098649a3841b9aa97ad7d58336, type: 2}
+  - element1: 0
+    element2: 1
+    resultingStats: {fileID: 0}
+  - element1: 0
+    element2: 2
+    resultingStats: {fileID: 0}
+  - element1: 1
+    element2: 2
+    resultingStats: {fileID: 0}

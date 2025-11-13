@@ -5,7 +5,7 @@ using UnityEngine;
 public class BurnEffect : StatusEffect
 {
     [Tooltip("Seconds between damage ticks.")]
-    [SerializeField] private float tickInterval = 1.0f;
+    [SerializeField] public float tickInterval = 1.0f;
 
     [Tooltip("If true, stacks increase damage.")]
     [SerializeField] private bool scaleDamageWithStacks = true;

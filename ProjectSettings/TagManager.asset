@@ -15,10 +15,10 @@ TagManager:
   - UI
   - 
   - Cube
-  - 
-  - 
+  - Enemy
+  - Player
+  - PlayerProjectile
   - Ground
-  - 
   - 
   - 
   - 
