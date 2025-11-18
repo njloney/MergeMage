@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventorySlot crystalSlot2;
 
     private int activeCrystalSlotIndex = 0;
+
+    private bool mergeMode = false;
+
+    public event Action<bool> OnMergeModeChanged;
 
     void Start()
     {
@@ -39,6 +44,17 @@ public class InventoryManager : MonoBehaviour
             activeCrystalSlotIndex = 1; //Set Active Slot to 2
             UpdateSlotHighlights();
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            ToggleMergeMode();
+        }
+    }
+
+    private void ToggleMergeMode()
+    {
+        mergeMode = !mergeMode;
+        OnMergeModeChanged?.Invoke(mergeMode);
     }
 
 
