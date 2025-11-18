@@ -788,6 +788,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_Color.a
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_Color.g
+      value: 0.7921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8039216
+      objectReference: {fileID: 0}
     - target: {fileID: 2235467220942980308, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1694,8 +1710,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2077069290}
   - {fileID: 1909204513521882646}
+  - {fileID: 2077069290}
   m_Father: {fileID: 857858401}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2890,8 +2906,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 865871886}
   - {fileID: 614446005}
+  - {fileID: 865871886}
   m_Father: {fileID: 857858401}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5067,6 +5083,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'Item_Icon '
       objectReference: {fileID: 0}
+    - target: {fileID: 3969441500678091713, guid: f436698b16af948039b977014181372f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5255,6 +5275,22 @@ PrefabInstance:
     - target: {fileID: 1080622992771680599, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_Color.a
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7905393
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_Color.g
+      value: 0.7905393
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8018868
       objectReference: {fileID: 0}
     - target: {fileID: 2235467220942980308, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_IsActive
