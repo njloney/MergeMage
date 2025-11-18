@@ -11,11 +11,12 @@ public class Health : MonoBehaviour
     [SerializeField] private float maxHealth = 100f;   // Maximum health value
     private float _hp;                                // Current health (private)
 
-    public Stats playerStats;
+    [SerializeField] private Stats playerStats;
 
     // Event triggered whenever this object takes damage.
     // Parameters: (damage amount, damage type, who caused it)
     public event Action<float, DamageType, UnityEngine.Object> OnDamaged;
+    public event Action OnDied;
 
     // Set health to full at the start
     private void Awake()
@@ -42,9 +43,28 @@ public class Health : MonoBehaviour
         }
     }
 
+    public float currentHP => _hp;
+
+    public float maxHP
+    {
+        get
+        {
+            //Getter for getting maxHealth
+            if (gameObject.CompareTag("Player") && playerStats != null)
+            {
+                return playerStats.maxHealth;
+            }
+            return maxHealth;
+        }
+    }
+
     // Apply damage to this object
     public void TakeDamage(float amount, DamageType type = DamageType.Physical, UnityEngine.Object source = null)
     {
+        if (source == this.gameObject)
+    {
+        return; // Exit the function, no damage taken
+    }
         // Reduce health but never below zero instantly
         _hp -= Mathf.Max(0f, amount);
 
@@ -58,6 +78,7 @@ public class Health : MonoBehaviour
     // Called when HP reaches zero — customize for enemies, destructibles, etc.
     private void Die()
     {
+        OnDied?.Invoke();
         // Placeholder for death/reset logic
     }
 }

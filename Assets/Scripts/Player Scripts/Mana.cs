@@ -5,7 +5,7 @@ public class Mana : MonoBehaviour
 {
     private float _mana;
 
-    public Stats playerStats;
+    [SerializeField] private Stats playerStats;
 
     public event Action<float> OnManaChanged;
 
@@ -19,6 +19,12 @@ public class Mana : MonoBehaviour
 
         _mana = playerStats.maxMana;
     }
+
+    public float currentMana => _mana;
+
+    public float maxMana => playerStats.maxMana;
+
+
 
     public void useMana(float amount)
     {
