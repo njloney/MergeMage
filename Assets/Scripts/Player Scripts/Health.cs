@@ -10,8 +10,7 @@ public class Health : MonoBehaviour
 
     [SerializeField] private float maxHealth = 100f;   // Maximum health value
     private float _hp;                                // Current health (private)
-
-    [SerializeField] private Stats playerStats;
+    private Stats playerStats;
 
     // Event triggered whenever this object takes damage.
     // Parameters: (damage amount, damage type, who caused it)
@@ -24,6 +23,9 @@ public class Health : MonoBehaviour
         // Check if this object is tagged as "Player"
         if (gameObject.CompareTag("Player"))
         {
+
+             playerStats = Resources.Load<Stats>("PlayerResources/PlayerStats");
+
             // If it's the Player, try to use the PlayerStats asset
             if (playerStats != null)
             {

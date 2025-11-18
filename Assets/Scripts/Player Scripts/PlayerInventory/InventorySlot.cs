@@ -53,7 +53,7 @@ public class InventorySlot : MonoBehaviour
         else
         {
             itemIcon.sprite = null;
-            itemIcon.enabled = true;
+            itemIcon.enabled = false;
         }
 
     }

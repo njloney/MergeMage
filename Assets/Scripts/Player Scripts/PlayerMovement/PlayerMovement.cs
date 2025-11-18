@@ -4,7 +4,7 @@ public class FirstPersonController : MonoBehaviour
 {
     public CharacterController controller;
 
-    public Stats playerStats;
+    private Stats playerStats;
 
     public Transform spawnPoint;
 
@@ -23,7 +23,7 @@ public class FirstPersonController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+         playerStats = Resources.Load<Stats>("PlayerResources/PlayerStats");
     }
 
     // Update is called once per frame

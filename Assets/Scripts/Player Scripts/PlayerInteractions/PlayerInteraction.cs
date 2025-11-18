@@ -8,7 +8,7 @@ public class PlayerInteraction : MonoBehaviour
 
 {
 
-    [SerializeField] private InventoryManager inventoryManager;
+     private InventoryManager inventoryManager;
 
     [SerializeField] private float interactDistance = 3f;
 
@@ -16,6 +16,8 @@ public class PlayerInteraction : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        inventoryManager = transform.parent.gameObject.GetComponent<InventoryManager>();
+
         if (pickupHint != null)
         {
             pickupHint.SetActive(false);

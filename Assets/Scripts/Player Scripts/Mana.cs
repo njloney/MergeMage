@@ -5,12 +5,14 @@ public class Mana : MonoBehaviour
 {
     private float _mana;
 
-    [SerializeField] private Stats playerStats;
+    private Stats playerStats;
 
     public event Action<float> OnManaChanged;
 
     private void Awake()
     {
+        playerStats = Resources.Load<Stats>("PlayerResources/PlayerStats");
+
         if (playerStats == null)
         {
             Debug.LogError("Player Stats not assigned to Mana!", this);

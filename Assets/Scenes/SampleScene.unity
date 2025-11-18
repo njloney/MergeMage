@@ -257,7 +257,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  playerStats: {fileID: 0}
 --- !u!114 &125983819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,7 +648,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 200092905}
-  playerStats: {fileID: 11400000, guid: 20fd82726c17d401d89fedc7f09d632a, type: 2}
   spawnPoint: {fileID: 255031469}
   respawnHeight: -10
   groundCheck: {fileID: 165275557}
@@ -685,7 +683,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8a835704bce4e58a2cee5203afe52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 11400000, guid: 20fd82726c17d401d89fedc7f09d632a, type: 2}
 --- !u!114 &200092913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699,7 +696,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  playerStats: {fileID: 11400000, guid: 20fd82726c17d401d89fedc7f09d632a, type: 2}
 --- !u!1001 &200708184
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1395,7 +1391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1407,7 +1403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1447,11 +1443,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 106.66666
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3951,7 +3947,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 373405e24ea5c480497eff25be0560f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryManager: {fileID: 200092911}
   interactDistance: 3
   pickupHint: {fileID: 782823911}
 --- !u!1 &1354237265
@@ -4385,7 +4380,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1000
-  playerStats: {fileID: 0}
 --- !u!114 &1520854943
 MonoBehaviour:
   m_ObjectHideFlags: 0
