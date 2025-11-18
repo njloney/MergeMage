@@ -9,9 +9,15 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private InventorySlot consumableSlot;
 
-    [Header("Crystal Hot-Swap Slots")]
+    [Header("Crystal Slots")]
     [SerializeField] private InventorySlot crystalSlot1;
     [SerializeField] private InventorySlot crystalSlot2;
+
+    [Header("Merge Slot")]
+
+    [SerializeField] private InventorySlot mergeSlot;
+
+
 
     private int activeCrystalSlotIndex = 0;
 
