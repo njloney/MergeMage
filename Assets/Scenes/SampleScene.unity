@@ -1680,6 +1680,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 608184424722468891, guid: eb55a1210b098844f99e48397721507a, type: 3}
   firePoint: {fileID: 229168447}
+  playerCamera: {fileID: 1338444849}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   resolver: {fileID: 11400000, guid: 82532d2e40cc3dc4a9e7d404d577e8eb, type: 2}
   socketA: {fileID: 1819208468}
   socketB: {fileID: 298407651}

@@ -34,3 +34,6 @@ MonoBehaviour:
   - element1: 5
     element2: 5
     resultingStats: {fileID: 11400000, guid: a3167528103d14e42813528551cf7691, type: 2}
+  - element1: 6
+    element2: 2
+    resultingStats: {fileID: 11400000, guid: b3ec77640fd8c6b40a9b469387b7dda7, type: 2}

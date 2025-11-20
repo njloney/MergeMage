@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
-  m_Name: Lightning
+  m_Name: Lightning Strike
   m_EditorClassIdentifier: 
   speed: 20
   lifetime: 5
   projectileMaterial: {fileID: 0}
   baseDamage: 10
-  damageType: 6
+  damageType: 0
   destroyOnHit: 1
   effects: []
   spawnExplosion: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
   pierceCount: 0
   spawnObjectOnHit: 0
   onHitPrefab: {fileID: 0}
-  chainOnHit: 1
+  chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
   chainDamagePerJump: 8
@@ -44,7 +44,7 @@ MonoBehaviour:
   isBeamSpell: 0
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
-  isGroundSpell: 0
-  groundTargetPrefab: {fileID: 0}
-  groundSpellPrefab: {fileID: 0}
-  maxCastDistance: 20
+  isGroundSpell: 1
+  groundTargetPrefab: {fileID: 6319264174915865844, guid: ade55de552977cb49a9b53194549a35f, type: 3}
+  groundSpellPrefab: {fileID: 1001543723264087180, guid: fe555447ab4e68f429ddc5ed01fc3d68, type: 3}
+  maxCastDistance: 200

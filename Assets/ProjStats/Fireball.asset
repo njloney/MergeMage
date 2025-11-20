@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   lifetime: 5
+  projectileMaterial: {fileID: 2100000, guid: 4c3e00ba937f48d46b5f8173e67af8b2, type: 2}
   baseDamage: 10
   damageType: 1
   destroyOnHit: 1
@@ -37,3 +38,19 @@ MonoBehaviour:
     maxVisualScale: 5
   enablePierce: 0
   pierceCount: 0
+  spawnObjectOnHit: 0
+  onHitPrefab: {fileID: 0}
+  chainOnHit: 0
+  chainMaxJumps: 3
+  chainRadius: 6
+  chainDamagePerJump: 8
+  chainMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  isBeamSpell: 0
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  isGroundSpell: 0
+  groundTargetPrefab: {fileID: 0}
+  groundSpellPrefab: {fileID: 0}
+  maxCastDistance: 20

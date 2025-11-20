@@ -49,6 +49,16 @@ public class ProjectileStats : ScriptableObject
 
     [Tooltip("Config asset that defines DPS, range, duration, etc.")]
     public LightRayConfig beamConfig;
+
+    [Header("Ground Target Spell (Earth Rupture, Void Field, Lightning Strike etc.)")]
+    [Tooltip("If true, this spell will target the ground instead of firing a projectile.")]
+    public bool isGroundSpell = false;
+    [Tooltip("The prefab to show on the ground where the spell will hit.")]
+    public GameObject groundTargetPrefab;  // prefab for the ground target effect
+    [Tooltip("The actual spell prefab to spawn on the ground at the target point.")]
+    public GameObject groundSpellPrefab;   // prefab for the spell effect that spawns on the ground
+    [Tooltip("The max distance to cast this spell.")]
+    public float maxCastDistance = 20f;
 }
 
 [System.Serializable]

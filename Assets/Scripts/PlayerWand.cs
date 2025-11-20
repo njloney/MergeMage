@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerWand : MonoBehaviour
@@ -5,6 +6,9 @@ public class PlayerWand : MonoBehaviour
     [Header("Firing")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private Transform firePoint;
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private LayerMask groundMask;
+
 
     [Header("Spells/Effects")]
     [SerializeField] private SpellCombinationResolver resolver;
@@ -57,6 +61,12 @@ public class PlayerWand : MonoBehaviour
     private GameObject spawnedModelA = null;
     private GameObject spawnedModelB = null;
 
+    // For ground-targeting spells
+    private ProjectileStats pendingStats = null;
+    private GameObject currentGhost = null;
+    private Vector3 currentTargetPoint;
+    private bool validTargetFound = false;
+
     public bool HasA => slotA.HasValue;
     public bool HasB => slotB.HasValue;
 
@@ -95,8 +105,43 @@ public class PlayerWand : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(pendingStats);
+        if (pendingStats != null && pendingStats.isGroundSpell)
+        {
+            UpdateGroundTargeting();
+        }
         if (Input.GetMouseButtonDown(0))
             TryCast();
+    }
+
+    private void UpdateGroundTargeting()
+    {
+        // Ensure we have a ghost instantiated
+        if (currentGhost == null && pendingStats.groundTargetPrefab != null)
+        {
+            currentGhost = Instantiate(pendingStats.groundTargetPrefab);
+        }
+
+        // Raycast from camera center
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit, pendingStats.maxCastDistance, groundMask))
+        {
+            validTargetFound = true;
+            currentTargetPoint = hit.point;
+
+            if (currentGhost != null)
+            {
+                currentGhost.SetActive(true);
+                currentGhost.transform.position = hit.point + Vector3.up * 0.1f; // Lift slightly
+                // Optional: Rotate to match ground normal
+                currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            }
+        }
+        else
+        {
+            validTargetFound = false;
+            if (currentGhost != null) currentGhost.SetActive(false);
+        }
     }
 
     private void TryCast()
@@ -110,9 +155,20 @@ public class PlayerWand : MonoBehaviour
             Debug.Log("Spell fizzled (no recipe found).");
             return;
         }
-
+        if (stats.isGroundSpell)
+        {
+            if (validTargetFound)
+            {
+                CastGroundSpell(stats, currentTargetPoint);
+            }
+            else
+            {
+                Debug.Log("No valid ground target found for this spell.");
+                return; // Don't consue for missing
+            }
+        }
         // Decide if this is a beam spell or projectile spell
-        if (stats.isBeamSpell)
+        else if (stats.isBeamSpell)
         {
             CastBeamSpell(stats);
         }
@@ -125,6 +181,17 @@ public class PlayerWand : MonoBehaviour
         slotA = null;
         slotB = null;
         UpdateWandVisuals();
+    }
+
+    private void CastGroundSpell(ProjectileStats stats, Vector3 targetPoint)
+    {
+        if (stats.groundSpellPrefab == null)
+        {
+            Debug.LogWarning("Ground spell selected but groundSpellPrefab is not assigned in ProjectileStats.", stats);
+            return;
+        }
+
+        Instantiate(stats.groundSpellPrefab, targetPoint, Quaternion.identity);
     }
 
     private void CastProjectileSpell(ProjectileStats stats)
@@ -203,6 +270,14 @@ public class PlayerWand : MonoBehaviour
             {
                 spawnedModelB = Instantiate(modelPrefab, socketB.position, socketB.rotation, socketB);
             }
+        }
+
+        if (currentGhost != null) Destroy(currentGhost); // Destroy old ghost
+        pendingStats = null;
+
+        if (slotA.HasValue && slotB.HasValue)
+        {
+            pendingStats = resolver.BuildStats(slotA.Value, slotB.Value);
         }
     }
 
