@@ -28,9 +28,11 @@ public class PlayerWand : MonoBehaviour
     [Tooltip("InventoryManager that owns the crystal slots")]
     [SerializeField] private InventoryManager inventoryManager;
 
+    // runtime spawned models attached to the wand
     private GameObject spawnedModelA;
     private GameObject spawnedModelB;
 
+    // cached last types so we only refresh visuals when something actually changes
     private CrystalType? lastTypeA = null;
     private CrystalType? lastTypeB = null;
 
@@ -46,6 +48,10 @@ public class PlayerWand : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
             TryCast();
     }
+
+    // -------------------------------------------------------------
+    // INVENTORY WAND VISUALS
+    // -------------------------------------------------------------
 
     private void SyncVisualsIfSlotsChanged()
     {
@@ -96,18 +102,16 @@ public class PlayerWand : MonoBehaviour
 
     private void UpdateWandVisuals(CrystalType? typeA, CrystalType? typeB)
     {
-        // Clear old models
         if (spawnedModelA != null) Destroy(spawnedModelA);
         if (spawnedModelB != null) Destroy(spawnedModelB);
 
-        // Slot A (inventory crystal slot 1)
         if (typeA.HasValue && socketA != null)
         {
             var prefabA = GetModelPrefab(typeA.Value);
             if (prefabA != null)
             {
                 spawnedModelA = Instantiate(prefabA, socketA.position, socketA.rotation, socketA);
-                MakeWandSafe(spawnedModelA); 
+                MakeWandSafe(spawnedModelA);
             }
         }
 
@@ -152,6 +156,10 @@ public class PlayerWand : MonoBehaviour
             default: return null;
         }
     }
+
+    // -------------------------------------------------------------
+    // CASTING
+    // -------------------------------------------------------------
 
     private void TryCast()
     {

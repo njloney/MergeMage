@@ -1,87 +1,101 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-// Handles projectile movement, collision, and applying damage/effects.
 [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(ProjectileConfig))]
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rb;  // Used for movement
+    [SerializeField] private Rigidbody rb;
     [SerializeField] private MeshRenderer visualRenderer;
-    private ProjectileConfig cfg;           // Holds projectile data (speed, damage, effects)
-    private float elapsed;                  // Tracks how long the projectile has existed
-    private readonly HashSet<Collider> _hitThisFrame = new(); // avoid double-hit on same collider this frame
-    private int _hitsSoFar = 0;
+
+    private ProjectileConfig cfg;
+    private float elapsed;
+    private int hitsSoFar;
+    private readonly HashSet<Collider> hitThisFrame = new();
 
     private void Awake()
     {
-        cfg = GetComponent<ProjectileConfig>();  // Get projectile configuration
-        if (!rb) rb = GetComponent<Rigidbody>(); // Auto-grab Rigidbody if not set
+        cfg = GetComponent<ProjectileConfig>();
+        if (!rb) rb = GetComponent<Rigidbody>();
+
+        // Make sure collider + rigidbody are configured correctly
+        var col = GetComponent<Collider>();
+        col.isTrigger = true;                       // projectile uses triggers
+        rb.useGravity = false;                     // no falling
+        rb.isKinematic = false;                    // dynamic body
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
 
     private void OnEnable()
     {
-        elapsed = 0f; // Reset lifetime timer
-        if (rb && cfg != null && cfg.stats != null)
-        {// Added null checks
-            rb.linearVelocity = transform.forward * cfg.stats.speed; // Move forward
+        elapsed = 0f;
+        hitsSoFar = 0;
+        hitThisFrame.Clear();
+
+        if (cfg != null && cfg.stats != null)
+        {
+            rb.linearVelocity = transform.forward * cfg.stats.speed;
+
             if (visualRenderer != null && cfg.stats.projectileMaterial != null)
-            {
                 visualRenderer.material = cfg.stats.projectileMaterial;
-            }
         }
-        _hitsSoFar = 0;
-        _hitThisFrame.Clear();
     }
 
     private void Update()
     {
         elapsed += Time.deltaTime;
-
-        // Destroy projectile after its lifetime expires
-        if (cfg != null && cfg.stats != null && elapsed >= cfg.stats.lifetime) // Added null checks
+        if (cfg != null && cfg.stats != null && elapsed >= cfg.stats.lifetime)
             Despawn();
+    }
+
+    private void LateUpdate()
+    {
+        hitThisFrame.Clear();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // --- Safety check: make sure config exists ---
         if (cfg == null || cfg.stats == null)
             return;
 
-        // --- 1. Apply direct hit damage and effects ---
-        // If the target has a Health component, deal base damage.
-        if (other.TryGetComponent<Health>(out var hp))
+        // Avoid double-processing the same collider in a single frame
+        if (hitThisFrame.Contains(other))
+            return;
+        hitThisFrame.Add(other);
+
+        Debug.Log($"[Projectile] Trigger hit: {other.name} (Layer: {LayerMask.LayerToName(other.gameObject.layer)})", this);
+
+        //------------------------------------------------------------------
+        // 1. DAMAGE + STATUS
+        //------------------------------------------------------------------
+        var hp = other.GetComponentInParent<Health>();
+        var status = other.GetComponentInParent<StatusController>();
+
+        if (hp != null)
         {
-            // Apply raw damage from this projectile.
             hp.TakeDamage(cfg.stats.baseDamage, cfg.stats.damageType, cfg.owner);
 
-            // If the target can receive effects (like burn or freeze), apply them.
-            if (other.TryGetComponent<StatusController>(out var status))
+            if (status != null && cfg.stats.effects != null)
             {
-                var effects = cfg.stats.effects;
-                if (effects != null)
+                foreach (var e in cfg.stats.effects)
                 {
-                    foreach (var e in effects)
-                    {
-                        // Only apply valid effects (must have a ScriptableObject + positive duration)
-                        if (e.effect && e.duration > 0f)
-                            status.ApplyEffect(e.effect, e.duration, e.magnitude, cfg.owner);
-                    }
+                    if (e.effect != null && e.duration > 0f)
+                        status.ApplyEffect(e.effect, e.duration, e.magnitude, cfg.owner);
                 }
             }
         }
 
-        // 2. Spawn explosion
+        //------------------------------------------------------------------
+        // 2. EXPLOSION (if you use it)
+        //------------------------------------------------------------------
         if (cfg.stats.spawnExplosion)
         {
             var data = cfg.stats.explosion;
 
             if (data.explosionPrefab != null)
             {
-                Debug.Log($"[Projectile] Spawning explosion prefab '{data.explosionPrefab.name}' at {transform.position}.", this);
-
                 var exp = Instantiate(data.explosionPrefab, transform.position, Quaternion.identity);
-
                 exp.Init(
                     data.damage,
                     cfg.stats.damageType,
@@ -95,72 +109,58 @@ public class Projectile : MonoBehaviour
                     data.maxVisualScale
                 );
             }
-            else
-            {
-                Debug.LogWarning($"[Projectile] spawnExplosion is TRUE but no explosionPrefab assigned in '{cfg.stats.name}'.", this);
-            }
         }
-
-
-        // --- 2. Handle piercing projectiles (like Wind Bullet) ---
-        // If this projectile can pierce, count how many valid targets it has hit so far.
+         
+        
+        //------------------------------------------------------------------
+        // 3. PIERCE LOGIC
+        //------------------------------------------------------------------
         if (cfg.stats.enablePierce)
         {
-            _hitsSoFar++;  // Increment total hits
-
-            if (_hitsSoFar >= cfg.stats.pierceCount)
+            hitsSoFar++;
+            if (hitsSoFar >= cfg.stats.pierceCount)
                 Despawn();
 
+            // NOTE: we still damage this target, then continue flying
             return;
         }
 
+        //------------------------------------------------------------------
+        // 4. EXTRA BEHAVIOR (EARTH SPIKES / CHAIN LIGHTNING / ETC.)
+        //------------------------------------------------------------------
+        TrySpawnOnHitObject();
+        TryChainLightning(other);
+
         if (cfg.stats.destroyOnHit)
             Despawn();
-
-        TrySpawnOnHitObject();          // Earth Rupture spikes, or any “place object” spell
-        TryChainLightning(other);       // Lightning chain starting from the first target
-
     }
 
-    // Projectile.cs (add inside class)
     private void TrySpawnOnHitObject()
     {
-        if (cfg.stats.spawnObjectOnHit && cfg.stats.onHitPrefab)
+        if (!cfg.stats.spawnObjectOnHit || !cfg.stats.onHitPrefab)
+            return;
+
+        Vector3 spawnPos = transform.position;
+        Quaternion spawnRot = Quaternion.identity;
+
+        int groundMask = 1 << LayerMask.NameToLayer("Ground");
+        Vector3 startPos = transform.position + Vector3.up * 2f;
+
+        if (Physics.Raycast(startPos, Vector3.down, out RaycastHit hit, 20f, groundMask))
         {
-            Vector3 spawnPos = transform.position;
-            Quaternion spawnRot = Quaternion.identity;
-
-            // Cast straight down, but ONLY against the Ground layer
-            int groundMask = 1 << LayerMask.NameToLayer("Ground");
-
-            // Start slightly above impact to avoid immediately hitting the enemy collider
-            Vector3 startPos = transform.position + Vector3.up * 2f;
-
-            if (Physics.Raycast(startPos, Vector3.down, out RaycastHit hit, 20f, groundMask))
-            {
-                spawnPos = hit.point;
-                spawnRot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            }
-            else
-            {
-                // Fallback if no ground found (e.g., midair hit)
-                spawnPos += Vector3.up * 0.05f;
-            }
-
-            // Slight lift to avoid clipping
-            spawnPos += Vector3.up * 0.05f;
-
-            Instantiate(cfg.stats.onHitPrefab, spawnPos, spawnRot);
+            spawnPos = hit.point;
+            spawnRot = Quaternion.FromToRotation(Vector3.up, hit.normal);
         }
 
-
+        spawnPos += Vector3.up * 0.05f;
+        Instantiate(cfg.stats.onHitPrefab, spawnPos, spawnRot);
     }
 
     private void TryChainLightning(Collider firstTarget)
     {
-        if (!cfg.stats.chainOnHit || firstTarget == null) return;
+        if (!cfg.stats.chainOnHit || firstTarget == null)
+            return;
 
-        // Do chain: first target + up to N jumps
         var visited = new HashSet<Collider> { firstTarget };
         Collider current = firstTarget;
 
@@ -168,13 +168,13 @@ public class Projectile : MonoBehaviour
         {
             if (!current) break;
 
-            // Damage current link (skip if we already did base hit; harmless to double-hit once)
-            if (current.TryGetComponent<Health>(out var hp))
+            var hp = current.GetComponentInParent<Health>();
+            if (hp != null)
                 hp.TakeDamage(cfg.stats.chainDamagePerJump, cfg.stats.damageType, cfg.owner);
 
-            // Find next closest unvisited in radius
             Collider next = FindNextChainTarget(current.transform.position, visited);
             if (!next) break;
+
             visited.Add(next);
             current = next;
         }
@@ -185,25 +185,19 @@ public class Projectile : MonoBehaviour
         var hits = Physics.OverlapSphere(from, cfg.stats.chainRadius, cfg.stats.chainMask, QueryTriggerInteraction.Ignore);
         float best = float.MaxValue;
         Collider pick = null;
+
         foreach (var h in hits)
         {
             if (!h || visited.Contains(h)) continue;
             float d = (h.transform.position - from).sqrMagnitude;
             if (d < best) { best = d; pick = h; }
         }
+
         return pick;
     }
 
-    // Deactivates the projectile (can be pooled instead of destroyed)
     private void Despawn()
     {
         gameObject.SetActive(false);
-    }
-
-
-    private void LateUpdate()
-    {
-        // clear the per-frame collider cache
-        _hitThisFrame.Clear();
     }
 }
