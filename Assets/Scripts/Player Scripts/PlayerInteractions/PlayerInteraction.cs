@@ -40,12 +40,20 @@ public class PlayerInteraction : MonoBehaviour
                     bool success = inventoryManager.addItem(script.itemToGive);
                     if (success)
                     {
-                    Destroy(hit.collider.gameObject);
-                    pickupHint.SetActive(false);
+                        Destroy(hit.collider.gameObject);
+                        pickupHint.SetActive(false);
                     }
                 }
-                
+
             }
+            else
+            {
+                pickupHint.SetActive(false);
+            }
+        }
+        else
+        {
+            pickupHint.SetActive(false);
         }
     }
 }

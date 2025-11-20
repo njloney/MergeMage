@@ -4,5 +4,11 @@ public enum CrystalType
 {
     Fire,
     Ice,
-    Wind
+    Wind,
+    Earth,
+    Dark,
+    Lightning,
+    None
+
+
 }
