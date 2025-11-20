@@ -7,42 +7,56 @@ public class PlayerWandCast : MonoBehaviour
     [SerializeField] private InventoryManager inventoryManager;
 
     // The Wand stores the "Ammo" locally
-    private ItemData currentCrystal;
+    private ItemData currentActive;
+
+    private bool mergeMode;
+
     void Start()
     {
 
         inventoryManager.OnActiveItemChanged += getAmmo;
+        inventoryManager.OnMergeModeChanged += checkMergeMode;
 
+    }
+
+    void checkMergeMode(bool isMerge)
+    {
+        mergeMode = isMerge;
     }
     
     void getAmmo(ItemData item)
     {
-        currentCrystal = item;
+        currentActive = item;
 
-        if(currentCrystal == null)
+        if(currentActive == null)
         {
-            Debug.Log("current crystal is null");
+            Debug.Log("current active is null");
         }
         else
         {
-            Debug.Log("current crystal is not null");
+            Debug.Log("current active is not null");
         }
     }
 
 
     private void TryCast()
     {
-        if(currentCrystal != null)
+        if(currentActive != null)
         {
-            var go = Instantiate(currentCrystal.projectilePrefab, firePoint.position, firePoint.rotation);
+            var go = Instantiate(currentActive.projectilePrefab, firePoint.position, firePoint.rotation);
 
             if (go.TryGetComponent<ProjectileConfig>(out var cfg))
             {
                 cfg.owner = this;
             }
-        
-         go.SetActive(true);
-            
+
+            go.SetActive(true);
+
+            if (mergeMode)
+            {
+                inventoryManager.ToggleMergeMode();
+
+            }
         }
     }
 

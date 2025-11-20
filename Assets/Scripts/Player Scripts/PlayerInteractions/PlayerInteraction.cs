@@ -14,9 +14,13 @@ public class PlayerInteraction : MonoBehaviour
 
     [SerializeField] private GameObject pickupHint;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    private bool mergeMode;
     void Start()
     {
         inventoryManager = transform.parent.gameObject.GetComponent<InventoryManager>();
+        inventoryManager.OnMergeModeChanged += checkMergeMode;
+
 
         if (pickupHint != null)
         {
@@ -24,32 +28,30 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
+    void checkMergeMode(bool isMerge)
+    {
+        mergeMode = isMerge;
+    }
+
     // Update is called once per frame
     void Update()
     {
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
-        if (Physics.Raycast(transform.position, fwd, out RaycastHit hit, interactDistance))
+        if (!mergeMode && Physics.Raycast(transform.position, fwd, out RaycastHit hit, interactDistance) && hit.collider.TryGetComponent<ItemPickup>(out ItemPickup script))
         {
-            if (hit.collider.TryGetComponent<ItemPickup>(out ItemPickup script))
-            {
-                pickupHint.SetActive(true);
-                Debug.Log("Looking at: " + script.itemToGive.itemName);
+            pickupHint.SetActive(true);
+            Debug.Log("Looking at: " + script.itemToGive.itemName);
 
-                if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                bool success = inventoryManager.addItem(script.itemToGive);
+                if (success)
                 {
-                    bool success = inventoryManager.addItem(script.itemToGive);
-                    if (success)
-                    {
-                        Destroy(hit.collider.gameObject);
-                        pickupHint.SetActive(false);
-                    }
+                    Destroy(hit.collider.gameObject);
+                    pickupHint.SetActive(false);
                 }
-
             }
-            else
-            {
-                pickupHint.SetActive(false);
-            }
+            
         }
         else
         {

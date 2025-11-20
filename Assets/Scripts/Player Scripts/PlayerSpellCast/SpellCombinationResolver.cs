@@ -37,18 +37,85 @@ public class SpellCombinationResolver : ScriptableObject
     }
 
     // This is the method your PlayerWand.cs calls
-    public ProjectileStats BuildStats(CrystalType a, CrystalType b)
+    public ItemData BuildComboSpell(ItemData Crystala, ItemData Crystalb)
+
     {
         // Normalize the input to get the correct key
-        var key = GetNormalizedKey(a, b);
+        var key = GetNormalizedKey(Crystala.elementType, Crystalb.elementType);
+
 
         if (recipeLookup.TryGetValue(key, out ProjectileStats stats))
         {
-            return stats;
+            ItemData newComboSpell = Resources.Load<ItemData>("ObjectResources/UnstableComboSpell");
+            if (newComboSpell != null && newComboSpell.projectilePrefab != null)
+            {
+                ProjectileConfig config = newComboSpell.projectilePrefab.GetComponent<ProjectileConfig>();
+                Renderer rend = newComboSpell.projectilePrefab.GetComponent<Renderer>();
+                if (config != null && rend != null)
+                {
+                        config.stats = stats;
+
+
+
+                        Color A = getColorFromCrystal(Crystala);
+                        Color B = getColorFromCrystal(Crystalb);
+                        Color fusedColor = getFusedColor(A, B);
+                        rend.sharedMaterial.color = fusedColor;
+
+
+
+                        return newComboSpell;
+
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
-        Debug.LogWarning($"No spell recipe found for combination {a} + {b}");
+        Debug.LogWarning($"No spell recipe found for combination {Crystala.elementType} + {Crystalb.elementType}");
         return null;
+    }
+
+
+    private Color getColorFromCrystal(ItemData crystal)
+    {
+        if (crystal == null || crystal.projectilePrefab == null)
+        {
+            return Color.white;
+
+        }
+
+        Renderer rend = crystal.projectilePrefab.GetComponent<Renderer>();
+        
+        if(rend != null)
+        {
+            return rend.sharedMaterial.color;
+
+        }
+        
+
+        return Color.white;
+    }
+
+    private Color getFusedColor(Color a, Color b)
+    {
+
+        if (a == b)
+        {
+            return Color.Lerp(a, Color.grey, 0.5f);
+
+        }
+        
+        return Color.Lerp(a, b, 0.5f);
+
     }
 
     private (CrystalType, CrystalType) GetNormalizedKey(CrystalType a, CrystalType b)

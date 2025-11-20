@@ -81,29 +81,10 @@ public class PlayerWand : MonoBehaviour
     {
         if (!slotA.HasValue || !slotB.HasValue || resolver == null || projectilePrefab == null || firePoint == null) return;
 
-        var stats = resolver.BuildStats(slotA.Value, slotB.Value);
-        if (stats == null)
-        {
-            Debug.Log("Spell fizzled (no recipe found).");
-            return;
-        }
+        
+           
+          return;
 
-        // Spawn the (inactive) projectile
-        var go = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-
-        // Get the config and set the stats before it's enabled
-        if (go.TryGetComponent<ProjectileConfig>(out var cfg))
-        {
-            cfg.stats = stats;
-            cfg.owner = this;
-        }
-
-        go.SetActive(true);
-
-        // Consume both slots
-        slotA = null;
-        slotB = null;
-        UpdateWandVisuals();
     }
 
     private void DropCrystal(CrystalType typeToDrop)

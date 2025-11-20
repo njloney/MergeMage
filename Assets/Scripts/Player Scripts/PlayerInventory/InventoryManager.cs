@@ -21,23 +21,22 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private SpellCombinationResolver resolver;
 
 
-    [Header("Wand Visuals")]
-    [SerializeField] private WandVisuals wandVisuals;
-
-
-
     private int activeCrystalSlotIndex = 0;
 
     private bool mergeMode = false;
 
+    public event Action<ItemData> OnActiveItemChanged;
+
+    public event Action<ItemData, ItemData> OnCrystalSlotsChanged;
+
     public event Action<bool> OnMergeModeChanged;
 
-    public event Action<ItemData> OnActiveItemChanged;
 
 
     void Start()
     {
         UpdateSlotHighlights();
+        OnMergeModeChanged?.Invoke(mergeMode);
     }
 
     private void UpdateSlotHighlights()
@@ -53,7 +52,7 @@ public class InventoryManager : MonoBehaviour
 
         activeCrystalSlotIndex = index;
         UpdateSlotHighlights();
-        sendActiveCrystaltoWand();
+        sendUpdates();
     }
     
     public ItemData getCrystalSlot1()
@@ -67,8 +66,11 @@ public class InventoryManager : MonoBehaviour
     }
     
 
-    private void sendActiveCrystaltoWand()
+    private void sendUpdates()
     {
+
+        OnCrystalSlotsChanged?.Invoke(crystalSlot1.currentItem, crystalSlot2.currentItem);
+
         ItemData itemToSend = null;
 
         if (mergeMode)
@@ -78,6 +80,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
+
             if (activeCrystalSlotIndex == 0)
             {
                 itemToSend = crystalSlot1.currentItem;
@@ -112,28 +115,39 @@ public class InventoryManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            ToggleMergeMode();
+            EnterMergeMode();
         }
     }
 
-    private void ToggleMergeMode()
+    private void EnterMergeMode()
     {
         if (crystalSlot1.currentItem == null && crystalSlot2.currentItem == null) return;
-        mergeMode = true;
-        OnMergeModeChanged?.Invoke(mergeMode);
-        calcMergeResult();
-        //sendActiveCrystaltoWand();
+        initiateMerge();
+        sendUpdates();
+
     }
 
 
-    private void calcMergeResult()
+    public void ToggleMergeMode()
+    {
+        mergeMode = !mergeMode;
+        OnMergeModeChanged?.Invoke(mergeMode);
+
+    }
+
+
+    private void initiateMerge()
     {
         ItemData item1 = crystalSlot1.currentItem;
         ItemData item2 = crystalSlot2.currentItem;
-
-       // ItemData result = resolver.Resolve(item1.elementType, item2.elementType);
-        //mergeSlot.AddItemToSlot(result);
-        
+        ItemData result = resolver.BuildComboSpell(item1, item2);
+        if(result != null)
+        {
+            ToggleMergeMode();
+            mergeSlot.AddItemToSlot(result);
+            crystalSlot1.RemoveItemFromSlot();
+            crystalSlot2.RemoveItemFromSlot();
+        }
     }
 
 
@@ -167,8 +181,7 @@ public class InventoryManager : MonoBehaviour
                 }
 
             }
-            sendActiveCrystaltoWand();
-            wandVisuals.updateVisuals();
+            sendUpdates();
             return true;
 
         }
