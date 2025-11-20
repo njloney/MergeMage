@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
   m_Name: DarkCrystal
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: DarkCrystal
   itemIcon: {fileID: 0}
   itemType: 0
-  pickupPrefab: {fileID: 0}
-  crystalType: 0
-  wandModelPrefab: {fileID: 0}
+  pickupPrefab: {fileID: 7032899937279157544, guid: e1efbfb7964366149bb7dc8cf95a22f4, type: 3}
+  crystalType: 4
+  wandModelPrefab: {fileID: 7032899937279157544, guid: e1efbfb7964366149bb7dc8cf95a22f4, type: 3}

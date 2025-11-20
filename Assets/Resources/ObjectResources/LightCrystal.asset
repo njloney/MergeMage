@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
   m_Name: LightCrystal
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: LightCrystal
   itemIcon: {fileID: 0}
   itemType: 0
-  pickupPrefab: {fileID: 0}
-  crystalType: 0
-  wandModelPrefab: {fileID: 0}
+  pickupPrefab: {fileID: 649273544743041373, guid: d7b0282851b2c884babafbf568e4a1f9, type: 3}
+  crystalType: 3
+  wandModelPrefab: {fileID: 649273544743041373, guid: d7b0282851b2c884babafbf568e4a1f9, type: 3}

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
   m_Name: IceCrystal
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: IceCrystal
   itemIcon: {fileID: 0}
   itemType: 0
-  pickupPrefab: {fileID: 0}
-  crystalType: 0
-  wandModelPrefab: {fileID: 0}
+  pickupPrefab: {fileID: 7326374143667366313, guid: afd95634839908243b174afa2fd31a45, type: 3}
+  crystalType: 1
+  wandModelPrefab: {fileID: 7326374143667366313, guid: afd95634839908243b174afa2fd31a45, type: 3}
