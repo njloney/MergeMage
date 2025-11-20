@@ -9,6 +9,8 @@ public class ProjectileStats : ScriptableObject
     public float speed = 20f;
     public float lifetime = 5f;
 
+    [Header("Mana Effects")]
+    public float manaCost = 25f;
     [Header("Projectile Visuals")]
     public Material projectileMaterial;
 
@@ -29,6 +31,7 @@ public class ProjectileStats : ScriptableObject
     public bool enablePierce = false;     // if true, the projectile can pass through targets
     public int pierceCount = 0;           // how many distinct targets it can hit before despawning
 
+    
     [Header("Spawn Object On Impact (Earth Rupture / Void field, etc.)")]
     public bool spawnObjectOnHit = false;
     public GameObject onHitPrefab;   // GroundSpikeField prefab
