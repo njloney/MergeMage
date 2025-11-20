@@ -16,3 +16,5 @@ MonoBehaviour:
   itemIcon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   itemType: 0
   pickupPrefab: {fileID: 3735373058826829019, guid: a05627c98a20649148f6b23e054fa8a7, type: 3}
+  crystalType: 0
+  wandModelPrefab: {fileID: 3735373058826829019, guid: a05627c98a20649148f6b23e054fa8a7, type: 3}

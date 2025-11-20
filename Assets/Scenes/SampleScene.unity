@@ -671,6 +671,7 @@ MonoBehaviour:
   consumableSlot: {fileID: 1044679274}
   crystalSlot1: {fileID: 690764265}
   crystalSlot2: {fileID: 1080221639}
+  mergeSlot: {fileID: 0}
 --- !u!114 &200092912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,15 +791,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_Color.b
-      value: 0.7921569
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_Color.g
-      value: 0.7921569
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_Color.r
-      value: 0.8039216
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183688507632502926, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183688507632502926, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 110
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183688507632502926, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2235467220942980308, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_IsActive
@@ -1146,7 +1159,7 @@ Transform:
   m_GameObject: {fileID: 532594700}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.82, y: 2.19, z: 6.95}
+  m_LocalPosition: {x: -12.6, y: 2.19, z: 7}
   m_LocalScale: {x: 3.9224057, y: 0.7655331, z: 4.503209}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1380,6 +1393,18 @@ PrefabInstance:
     - target: {fileID: 3969441500678091713, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_Name
       value: Item_Icon
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404211291092981367, guid: f436698b16af948039b977014181372f, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4433962
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404211291092981367, guid: f436698b16af948039b977014181372f, type: 3}
+      propertyPath: m_Color.g
+      value: 0.4433962
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404211291092981367, guid: f436698b16af948039b977014181372f, type: 3}
+      propertyPath: m_Color.r
+      value: 0.4433962
       objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_Pivot.x
@@ -1744,7 +1769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.44705883, g: 0.44705883, b: 0.44705883, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2188,7 +2213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.19607843}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.19607843}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2402,13 +2427,7 @@ MonoBehaviour:
   resolver: {fileID: 11400000, guid: 82532d2e40cc3dc4a9e7d404d577e8eb, type: 2}
   socketA: {fileID: 1819208468}
   socketB: {fileID: 298407651}
-  fireCrystalModel: {fileID: 6004452089206357310, guid: b57c81725d63ce74c89f8cdcf76441eb, type: 3}
-  iceCrystalModel: {fileID: 7326374143667366313, guid: afd95634839908243b174afa2fd31a45, type: 3}
-  windCrystalModel: {fileID: 5443426475684917389, guid: 15ca2732cb368eb4e90eec3ceabc5e02, type: 3}
-  dropPoint: {fileID: 0}
-  fireCrystalPickupPrefab: {fileID: 6004452089206357310, guid: b57c81725d63ce74c89f8cdcf76441eb, type: 3}
-  iceCrystalPickupPrefab: {fileID: 7326374143667366313, guid: afd95634839908243b174afa2fd31a45, type: 3}
-  windCrystalPickupPrefab: {fileID: 5443426475684917389, guid: 15ca2732cb368eb4e90eec3ceabc5e02, type: 3}
+  inventoryManager: {fileID: 200092911}
 --- !u!1 &857858400
 GameObject:
   m_ObjectHideFlags: 0
@@ -2488,7 +2507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.19607843}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.19607843}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2846,7 +2865,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.44705883, g: 0.44705883, b: 0.44705883, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2940,7 +2959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.44705883, g: 0.44705883, b: 0.44705883, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5081,6 +5100,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6404211291092981367, guid: f436698b16af948039b977014181372f, type: 3}
+      propertyPath: m_Color.b
+      value: 0.44705883
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404211291092981367, guid: f436698b16af948039b977014181372f, type: 3}
+      propertyPath: m_Color.g
+      value: 0.44705883
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404211291092981367, guid: f436698b16af948039b977014181372f, type: 3}
+      propertyPath: m_Color.r
+      value: 0.44705883
+      objectReference: {fileID: 0}
     - target: {fileID: 6977488639319362819, guid: f436698b16af948039b977014181372f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5276,15 +5307,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_Color.b
-      value: 0.7905393
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_Color.g
-      value: 0.7905393
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1086393091465833494, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_Color.r
-      value: 0.8018868
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2235467220942980308, guid: 0fcfa55448abb4341a70a6bc891b00a2, type: 3}
       propertyPath: m_IsActive

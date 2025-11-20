@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class PlayerWand : MonoBehaviour
 {
@@ -11,87 +10,133 @@ public class PlayerWand : MonoBehaviour
     [SerializeField] private SpellCombinationResolver resolver;
 
     [Header("Wand Visuals")]
-    [Tooltip("Empty GameObject on the wand model for the first crystal")]
+    [Tooltip("Empty GameObject on the wand model for the first crystal (slot 1)")]
     [SerializeField] private Transform socketA;
-    [Tooltip("Empty GameObject on the wand model for the second crystal")]
+    [Tooltip("Empty GameObject on the wand model for the second crystal (slot 2)")]
     [SerializeField] private Transform socketB;
 
-    [Tooltip("Visual-only prefab for a Fire crystal")]
-    [SerializeField] private GameObject fireCrystalModel;
-    [Tooltip("Visual-only prefab for an Ice crystal")]
-    [SerializeField] private GameObject iceCrystalModel;
-    [Tooltip("Visual-only prefab for a Wind crystal")]
-    [SerializeField] private GameObject windCrystalModel;
+    [Header("Inventory Link")]
+    [Tooltip("InventoryManager that owns the crystal slots")]
+    [SerializeField] private InventoryManager inventoryManager;
 
-    [Header("Dropping")]
-    [Tooltip("Point where crystals are dropped (e.g., behind the player)")]
-    [SerializeField] private Transform dropPoint;
-    [Tooltip("The 'CrystalPickup' prefab for Fire")]
-    [SerializeField] private GameObject fireCrystalPickupPrefab;
-    [Tooltip("The 'CrystalPickup' prefab for Ice")]
-    [SerializeField] private GameObject iceCrystalPickupPrefab;
-    [Tooltip("The 'CrystalPickup' prefab for Wind")]
-    [SerializeField] private GameObject windCrystalPickupPrefab;
+    // runtime spawned models
+    private GameObject spawnedModelA;
+    private GameObject spawnedModelB;
 
-    // --- Private State ---
-    private CrystalType? slotA = null;
-    private CrystalType? slotB = null;
-    private GameObject spawnedModelA = null;
-    private GameObject spawnedModelB = null;
-
-    public bool HasA => slotA.HasValue;
-    public bool HasB => slotB.HasValue;
+    // cache last items so we only refresh visuals when something changes
+    private ItemData lastSlot1Item;
+    private ItemData lastSlot2Item;
 
     private void Start()
     {
-        // Sync visuals on game start, in case we start with crystals
-        UpdateWandVisuals();
-    }
-
-    public void Collect(CrystalType c)
-    {
-        if (!slotA.HasValue)
-        {
-            slotA = c;
-            UpdateWandVisuals();
-            return;
-        }
-        if (!slotB.HasValue)
-        {
-            slotB = c;
-            UpdateWandVisuals();
-            return;
-        }
-
-        // Both full: drop A, shift B to A, new -> B
-        CrystalType crystalToDrop = slotA.Value;
-        slotA = slotB;
-        slotB = c;
-
-        DropCrystal(crystalToDrop);
-        UpdateWandVisuals();
+        UpdateWandVisualsFromInventory();
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) TryCast();
+        // 1) keep wand visuals in sync with inventory
+        SyncVisualsIfSlotsChanged();
+
+        // 2) casting input
+        if (Input.GetMouseButtonDown(0))
+            TryCast();
     }
+
+    // ---------------------------------------------------------------------
+    // VISUAL SYNC
+    // ---------------------------------------------------------------------
+
+    private void SyncVisualsIfSlotsChanged()
+    {
+        if (inventoryManager == null) return;
+
+        var slot1 = inventoryManager.CrystalSlot1;
+        var slot2 = inventoryManager.CrystalSlot2;
+
+        ItemData current1 = slot1 != null ? slot1.currentItem : null;
+        ItemData current2 = slot2 != null ? slot2.currentItem : null;
+
+        if (current1 != lastSlot1Item || current2 != lastSlot2Item)
+        {
+            UpdateWandVisuals(current1, current2);
+            lastSlot1Item = current1;
+            lastSlot2Item = current2;
+        }
+    }
+
+    private void UpdateWandVisualsFromInventory()
+    {
+        if (inventoryManager == null) return;
+
+        var slot1 = inventoryManager.CrystalSlot1;
+        var slot2 = inventoryManager.CrystalSlot2;
+
+        UpdateWandVisuals(
+            slot1 != null ? slot1.currentItem : null,
+            slot2 != null ? slot2.currentItem : null
+        );
+    }
+
+    private void UpdateWandVisuals(ItemData slot1Item, ItemData slot2Item)
+    {
+        // Clear old models
+        if (spawnedModelA != null) Destroy(spawnedModelA);
+        if (spawnedModelB != null) Destroy(spawnedModelB);
+
+        if (slot1Item != null && slot1Item.itemType == ItemType.Crystal &&
+            socketA != null && slot1Item.wandModelPrefab != null)
+        {
+            spawnedModelA = Instantiate(
+                slot1Item.wandModelPrefab,
+                socketA.position,
+                socketA.rotation,
+                socketA
+            );
+        }
+
+        if (slot2Item != null && slot2Item.itemType == ItemType.Crystal &&
+            socketB != null && slot2Item.wandModelPrefab != null)
+        {
+            spawnedModelB = Instantiate(
+                slot2Item.wandModelPrefab,
+                socketB.position,
+                socketB.rotation,
+                socketB
+            );
+        }
+    }
+
+    // ---------------------------------------------------------------------
+    // CASTING
+    // ---------------------------------------------------------------------
 
     private void TryCast()
     {
-        if (!slotA.HasValue || !slotB.HasValue || resolver == null || projectilePrefab == null || firePoint == null) return;
+        if (resolver == null || projectilePrefab == null || firePoint == null || inventoryManager == null)
+            return;
 
-        var stats = resolver.BuildStats(slotA.Value, slotB.Value);
+        var slot1 = inventoryManager.CrystalSlot1;
+        var slot2 = inventoryManager.CrystalSlot2;
+
+        ItemData item1 = slot1 != null ? slot1.currentItem : null;
+        ItemData item2 = slot2 != null ? slot2.currentItem : null;
+
+        // Need two crystals to cast
+        if (item1 == null || item2 == null) return;
+        if (item1.itemType != ItemType.Crystal || item2.itemType != ItemType.Crystal) return;
+
+        CrystalType a = item1.crystalType;
+        CrystalType b = item2.crystalType;
+
+        var stats = resolver.BuildStats(a, b);
         if (stats == null)
         {
             Debug.Log("Spell fizzled (no recipe found).");
             return;
         }
 
-        // Spawn the (inactive) projectile
         var go = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
 
-        // Get the config and set the stats before it's enabled
         if (go.TryGetComponent<ProjectileConfig>(out var cfg))
         {
             cfg.stats = stats;
@@ -100,75 +145,8 @@ public class PlayerWand : MonoBehaviour
 
         go.SetActive(true);
 
-        // Consume both slots
-        slotA = null;
-        slotB = null;
-        UpdateWandVisuals();
-    }
-
-    private void DropCrystal(CrystalType typeToDrop)
-    {
-        if (dropPoint == null)
-        {
-            Debug.LogWarning("No drop point set on wand. Cannot drop crystal.");
-            return;
-        }
-
-        GameObject prefabToDrop = GetPickupPrefab(typeToDrop);
-
-        if (prefabToDrop != null)
-        {
-            // Spawn the pickup prefab at the drop point
-            Instantiate(prefabToDrop, dropPoint.position, dropPoint.rotation);
-        }
-    }
-
-    private void UpdateWandVisuals()
-    {
-        // Clear old models
-        if (spawnedModelA != null) Destroy(spawnedModelA);
-        if (spawnedModelB != null) Destroy(spawnedModelB);
-
-        // Spawn new model for Slot A
-        if (slotA.HasValue && socketA != null)
-        {
-            GameObject modelPrefab = GetModelPrefab(slotA.Value);
-            if (modelPrefab != null)
-            {
-                spawnedModelA = Instantiate(modelPrefab, socketA.position, socketA.rotation, socketA);
-            }
-        }
-
-        // Spawn new model for Slot B
-        if (slotB.HasValue && socketB != null)
-        {
-            GameObject modelPrefab = GetModelPrefab(slotB.Value);
-            if (modelPrefab != null)
-            {
-                spawnedModelB = Instantiate(modelPrefab, socketB.position, socketB.rotation, socketB);
-            }
-        }
-    }
-
-    private GameObject GetModelPrefab(CrystalType type)
-    {
-        switch (type)
-        {
-            case CrystalType.Fire: return fireCrystalModel;
-            case CrystalType.Ice: return iceCrystalModel;
-            case CrystalType.Wind: return windCrystalModel;
-            default: return null;
-        }
-    }
-
-    private GameObject GetPickupPrefab(CrystalType type)
-    {
-        switch (type)
-        {
-            case CrystalType.Fire: return fireCrystalPickupPrefab;
-            case CrystalType.Ice: return iceCrystalPickupPrefab;
-            case CrystalType.Wind: return windCrystalPickupPrefab;
-            default: return null;
-        }
+        // inventoryManager.CrystalSlot1.RemoveItemFromSlot();
+        // inventoryManager.CrystalSlot2.RemoveItemFromSlot();
+        // (InventoryManager will not drop these because you are manually clearing)
     }
 }

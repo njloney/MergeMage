@@ -29,8 +29,8 @@ public class CrystalPickup : MonoBehaviour
             if (wand != null)
             {
                 // Send the crystal type to the wand
-                wand.Collect(crystalType);
-
+                //wand.Collect(crystalType);
+                
                 // Play effect
                 if (pickupEffect != null)
                 {

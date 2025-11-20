@@ -10,4 +10,8 @@ public class ItemData : ScriptableObject
     public ItemType itemType;
 
     public GameObject pickupPrefab;
+
+    [Header("Crystal-only Data")]
+    public CrystalType crystalType;          // e.g. Fire, Ice, Wind, Earth, etc.
+    public GameObject wandModelPrefab;       // visual model to attach to the wand socket
 }

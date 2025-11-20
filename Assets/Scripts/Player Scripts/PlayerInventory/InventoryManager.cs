@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System;
 
 public class InventoryManager : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+{ 
     [Header("Consumable Slot")]
-
     [SerializeField] private InventorySlot consumableSlot;
 
     [Header("Crystal Slots")]
@@ -14,8 +12,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventorySlot crystalSlot2;
 
     [Header("Merge Slot")]
-
     [SerializeField] private InventorySlot mergeSlot;
+    public InventorySlot CrystalSlot1 => crystalSlot1;
+    public InventorySlot CrystalSlot2 => crystalSlot2;
 
 
 
@@ -68,55 +67,42 @@ public class InventoryManager : MonoBehaviour
     {
         ItemData oldItem = null;
 
-        if (item.itemType == ItemType.Crystal)
+        if (activeCrystalSlotIndex == 0)
         {
-            if (activeCrystalSlotIndex == 0)
+         
+            if (crystalSlot1.currentItem != null && crystalSlot2.currentItem == null)
             {
-                oldItem = crystalSlot1.currentItem;
-                crystalSlot1.AddItemToSlot(item);
-
-                if (oldItem != null)
-                {
-                    dropItem(oldItem);
-                }
-
-                return true;
-            }
-            else
-            {
-                oldItem = crystalSlot2.currentItem;
                 crystalSlot2.AddItemToSlot(item);
-                if (oldItem != null)
-                {
-                    dropItem(oldItem);
-                }
-
                 return true;
             }
 
-        }
-        else if (item.itemType == ItemType.Consumable)
-        {
-            oldItem = consumableSlot.currentItem;
-            consumableSlot.AddItemToSlot(item);
+            oldItem = crystalSlot1.currentItem;
+            crystalSlot1.AddItemToSlot(item);
+
             if (oldItem != null)
-            {
                 dropItem(oldItem);
-            }
-
-
-
-
 
             return true;
         }
 
+        else
+        {
+            if (crystalSlot2.currentItem != null && crystalSlot1.currentItem == null)
+            {
+                crystalSlot1.AddItemToSlot(item);
+                return true;
+            }
 
-        return false;
+            oldItem = crystalSlot2.currentItem;
+            crystalSlot2.AddItemToSlot(item);
 
+            if (oldItem != null)
+                dropItem(oldItem);
 
+            return true;
+        }
     }
-    
+
     private void dropItem(ItemData itemDrop)
     {
         if (itemDrop.pickupPrefab == null)
