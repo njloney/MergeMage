@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b16c46bf98dbc3e489cbca3124b2e5c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 2036df098649a3841b9aa97ad7d58336, type: 2}
+  stats: {fileID: 0}
   owner: {fileID: 0}
 --- !u!114 &2586883433573642461
 MonoBehaviour:

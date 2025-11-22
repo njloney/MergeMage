@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
+  m_Name: FCData
+  m_EditorClassIdentifier: 
+  itemName: Fire Crystal
+  itemIcon: {fileID: 21300000, guid: e2ed1357515db47a4a7256aedadcf8a0, type: 3}
+  itemType: 0
+  elementType: 0
+  projectilePrefab: {fileID: 7855230155840578728, guid: 44edf47ac302b1e42b3db56af23548a6, type: 3}
+  pickupPrefab: {fileID: 323376945461147110, guid: 9b852ef219d77423d8e21eb31c9a7370, type: 3}
+  wandModelPrefab: {fileID: 3178756978964193548, guid: 83f63629cd9ae479e8da3ec73cfab3fc, type: 3}

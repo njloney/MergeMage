@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerWand : MonoBehaviour
 {
@@ -9,136 +10,124 @@ public class PlayerWand : MonoBehaviour
     [Header("Spells/Effects")]
     [SerializeField] private SpellCombinationResolver resolver;
 
-    [Header("Wand Visuals (Sockets)")]
-    [Tooltip("Empty GameObject on the wand model for the first crystal (inventory crystal slot 1)")]
+    [Header("Wand Visuals")]
+    [Tooltip("Empty GameObject on the wand model for the first crystal")]
     [SerializeField] private Transform socketA;
-    [Tooltip("Empty GameObject on the wand model for the second crystal (inventory crystal slot 2)")]
+    [Tooltip("Empty GameObject on the wand model for the second crystal")]
     [SerializeField] private Transform socketB;
 
-    [Header("Crystal Models (Visual Only, per CrystalType)")]
+    [Tooltip("Visual-only prefab for a Fire crystal")]
     [SerializeField] private GameObject fireCrystalModel;
+    [Tooltip("Visual-only prefab for an Ice crystal")]
     [SerializeField] private GameObject iceCrystalModel;
+    [Tooltip("Visual-only prefab for a Wind crystal")]
     [SerializeField] private GameObject windCrystalModel;
-    [SerializeField] private GameObject earthCrystalModel;
-    [SerializeField] private GameObject lightningCrystalModel;
-    [SerializeField] private GameObject lightCrystalModel;
-    [SerializeField] private GameObject darkCrystalModel;
 
-    [Header("Inventory Link")]
-    [Tooltip("InventoryManager that owns the crystal slots")]
-    [SerializeField] private InventoryManager inventoryManager;
+    [Header("Dropping")]
+    [Tooltip("Point where crystals are dropped (e.g., behind the player)")]
+    [SerializeField] private Transform dropPoint;
+    [Tooltip("The 'CrystalPickup' prefab for Fire")]
+    [SerializeField] private GameObject fireCrystalPickupPrefab;
+    [Tooltip("The 'CrystalPickup' prefab for Ice")]
+    [SerializeField] private GameObject iceCrystalPickupPrefab;
+    [Tooltip("The 'CrystalPickup' prefab for Wind")]
+    [SerializeField] private GameObject windCrystalPickupPrefab;
 
-    // runtime spawned models attached to the wand
-    private GameObject spawnedModelA;
-    private GameObject spawnedModelB;
+    // --- Private State ---
+    private CrystalType? slotA = null;
+    private CrystalType? slotB = null;
+    private GameObject spawnedModelA = null;
+    private GameObject spawnedModelB = null;
 
-    // cached last types so we only refresh visuals when something actually changes
-    private CrystalType? lastTypeA = null;
-    private CrystalType? lastTypeB = null;
+    public bool HasA => slotA.HasValue;
+    public bool HasB => slotB.HasValue;
 
     private void Start()
     {
-        RefreshFromInventory();
+        // Sync visuals on game start, in case we start with crystals
+        UpdateWandVisuals();
+    }
+
+    public void Collect(CrystalType c)
+    {
+        if (!slotA.HasValue)
+        {
+            slotA = c;
+            UpdateWandVisuals();
+            return;
+        }
+        if (!slotB.HasValue)
+        {
+            slotB = c;
+            UpdateWandVisuals();
+            return;
+        }
+
+        // Both full: drop A, shift B to A, new -> B
+        CrystalType crystalToDrop = slotA.Value;
+        slotA = slotB;
+        slotB = c;
+
+        DropCrystal(crystalToDrop);
+        UpdateWandVisuals();
     }
 
     private void Update()
     {
-        SyncVisualsIfSlotsChanged();
-
-        if (Input.GetMouseButtonDown(0))
-            TryCast();
+        if (Input.GetMouseButtonDown(0)) TryCast();
     }
 
-    // -------------------------------------------------------------
-    // INVENTORY WAND VISUALS
-    // -------------------------------------------------------------
-
-    private void SyncVisualsIfSlotsChanged()
+    private void TryCast()
     {
-        if (inventoryManager == null) return;
+        if (!slotA.HasValue || !slotB.HasValue || resolver == null || projectilePrefab == null || firePoint == null) return;
 
-        var (typeA, typeB) = GetCrystalTypesFromInventory();
+        
+           
+          return;
 
-        if (typeA != lastTypeA || typeB != lastTypeB)
+    }
+
+    private void DropCrystal(CrystalType typeToDrop)
+    {
+        if (dropPoint == null)
         {
-            UpdateWandVisuals(typeA, typeB);
-            lastTypeA = typeA;
-            lastTypeB = typeB;
+            Debug.LogWarning("No drop point set on wand. Cannot drop crystal.");
+            return;
+        }
+
+        GameObject prefabToDrop = GetPickupPrefab(typeToDrop);
+
+        if (prefabToDrop != null)
+        {
+            // Spawn the pickup prefab at the drop point
+            Instantiate(prefabToDrop, dropPoint.position, dropPoint.rotation);
         }
     }
 
-    private void RefreshFromInventory()
+    private void UpdateWandVisuals()
     {
-        if (inventoryManager == null) return;
-
-        var (typeA, typeB) = GetCrystalTypesFromInventory();
-        UpdateWandVisuals(typeA, typeB);
-        lastTypeA = typeA;
-        lastTypeB = typeB;
-    }
-
-    private (CrystalType?, CrystalType?) GetCrystalTypesFromInventory()
-    {
-        CrystalType? typeA = null;
-        CrystalType? typeB = null;
-
-        if (inventoryManager != null)
-        {
-            var slot1 = inventoryManager.CrystalSlot1;
-            var slot2 = inventoryManager.CrystalSlot2;
-
-            ItemData item1 = slot1 != null ? slot1.currentItem : null;
-            ItemData item2 = slot2 != null ? slot2.currentItem : null;
-
-            if (item1 != null && item1.itemType == ItemType.Crystal)
-                typeA = item1.crystalType;
-
-            if (item2 != null && item2.itemType == ItemType.Crystal)
-                typeB = item2.crystalType;
-        }
-
-        return (typeA, typeB);
-    }
-
-    private void UpdateWandVisuals(CrystalType? typeA, CrystalType? typeB)
-    {
+        // Clear old models
         if (spawnedModelA != null) Destroy(spawnedModelA);
         if (spawnedModelB != null) Destroy(spawnedModelB);
 
-        if (typeA.HasValue && socketA != null)
+        // Spawn new model for Slot A
+        if (slotA.HasValue && socketA != null)
         {
-            var prefabA = GetModelPrefab(typeA.Value);
-            if (prefabA != null)
+            GameObject modelPrefab = GetModelPrefab(slotA.Value);
+            if (modelPrefab != null)
             {
-                spawnedModelA = Instantiate(prefabA, socketA.position, socketA.rotation, socketA);
-                MakeWandSafe(spawnedModelA);
+                spawnedModelA = Instantiate(modelPrefab, socketA.position, socketA.rotation, socketA);
             }
         }
 
-        if (typeB.HasValue && socketB != null)
+        // Spawn new model for Slot B
+        if (slotB.HasValue && socketB != null)
         {
-            var prefabB = GetModelPrefab(typeB.Value);
-            if (prefabB != null)
+            GameObject modelPrefab = GetModelPrefab(slotB.Value);
+            if (modelPrefab != null)
             {
-                spawnedModelB = Instantiate(prefabB, socketB.position, socketB.rotation, socketB);
-                MakeWandSafe(spawnedModelB);
+                spawnedModelB = Instantiate(modelPrefab, socketB.position, socketB.rotation, socketB);
             }
-        }
-    }
-
-    private void MakeWandSafe(GameObject modelRoot)
-    {
-        if (modelRoot == null) return;
-
-        foreach (var rb in modelRoot.GetComponentsInChildren<Rigidbody>())
-        {
-            rb.isKinematic = true;
-            rb.useGravity = false;
-        }
-
-        foreach (var col in modelRoot.GetComponentsInChildren<Collider>())
-        {
-            col.enabled = false;
         }
     }
 
@@ -149,70 +138,18 @@ public class PlayerWand : MonoBehaviour
             case CrystalType.Fire: return fireCrystalModel;
             case CrystalType.Ice: return iceCrystalModel;
             case CrystalType.Wind: return windCrystalModel;
-            case CrystalType.Earth: return earthCrystalModel;
-            case CrystalType.Lightning: return lightningCrystalModel;
-            case CrystalType.Light: return lightCrystalModel;
-            case CrystalType.Dark: return darkCrystalModel;
             default: return null;
         }
     }
 
-    // -------------------------------------------------------------
-    // CASTING
-    // -------------------------------------------------------------
-
-    private void TryCast()
+    private GameObject GetPickupPrefab(CrystalType type)
     {
-        if (resolver == null || firePoint == null || inventoryManager == null)
-            return;
-
-        var (typeA, typeB) = GetCrystalTypesFromInventory();
-
-        if (!typeA.HasValue || !typeB.HasValue)
-            return;
-
-        var stats = resolver.BuildStats(typeA.Value, typeB.Value);
-        if (stats == null)
+        switch (type)
         {
-            Debug.Log("Spell fizzled (no recipe found).");
-            return;
+            case CrystalType.Fire: return fireCrystalPickupPrefab;
+            case CrystalType.Ice: return iceCrystalPickupPrefab;
+            case CrystalType.Wind: return windCrystalPickupPrefab;
+            default: return null;
         }
-
-        if (stats.isBeamSpell)
-            CastBeamSpell(stats);
-        else
-            CastProjectileSpell(stats);
-    }
-
-    private void CastProjectileSpell(ProjectileStats stats)
-    {
-        if (projectilePrefab == null)
-        {
-            Debug.LogWarning("No projectilePrefab assigned on PlayerWand, cannot fire projectile.");
-            return;
-        }
-
-        var go = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-
-        if (go.TryGetComponent<ProjectileConfig>(out var cfg))
-        {
-            cfg.stats = stats;
-            cfg.owner = this;
-        }
-
-        go.SetActive(true);
-    }
-
-    private void CastBeamSpell(ProjectileStats stats)
-    {
-        if (stats.beamPrefab == null || stats.beamConfig == null)
-        {
-            Debug.LogWarning("Beam spell selected but beamPrefab or beamConfig is not assigned in ProjectileStats.", stats);
-            return;
-        }
-
-        var beam = Instantiate(stats.beamPrefab);
-        Transform origin = firePoint;
-        beam.Init(origin, this, stats.beamConfig);
     }
 }

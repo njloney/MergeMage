@@ -5,5 +5,6 @@ public enum ItemType
 {
     Crystal,
     Consumable,
-    Permanent,
+
+    UnstableCombinationSpell,
 }

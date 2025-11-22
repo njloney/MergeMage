@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7326374143667366313
+--- !u!1 &6298102970364675568
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,49 +8,56 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD:Assets/Prefabs/CrystalPrefabs/IceCrystal.prefab
   - component: {fileID: 7705338067477872003}
   - component: {fileID: 6047950039118131825}
   - component: {fileID: 8710460025112253316}
   - component: {fileID: 959881225102091394}
   - component: {fileID: 2632629664270435872}
   - component: {fileID: 6458866368530698562}
+=======
+  - component: {fileID: 1224694602025649144}
+  - component: {fileID: 1568214370087790884}
+  - component: {fileID: 5425998684504920988}
+  - component: {fileID: 2539927539985651753}
+>>>>>>> new_player_stuff:Assets/Prefabs/CrystalPrefabs/CrystalVis.prefab
   m_Layer: 0
-  m_Name: IceCrystal
+  m_Name: CrystalVis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7705338067477872003
+--- !u!4 &1224694602025649144
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7326374143667366313}
+  m_GameObject: {fileID: 6298102970364675568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.355, y: 1.095, z: -13.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6047950039118131825
+--- !u!33 &1568214370087790884
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7326374143667366313}
+  m_GameObject: {fileID: 6298102970364675568}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8710460025112253316
+--- !u!23 &5425998684504920988
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7326374143667366313}
+  m_GameObject: {fileID: 6298102970364675568}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -67,7 +74,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c74fdb91dd2892d4abae72aad56ad5a6, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -89,13 +96,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &959881225102091394
+--- !u!65 &2539927539985651753
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7326374143667366313}
+  m_GameObject: {fileID: 6298102970364675568}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -110,6 +117,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD:Assets/Prefabs/CrystalPrefabs/IceCrystal.prefab
 --- !u!54 &2632629664270435872
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -151,3 +159,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemToGive: {fileID: 11400000, guid: bc04fe34e6a86df4ab95638622805fc4, type: 2}
   pickupEffect: {fileID: 0}
+=======
+>>>>>>> new_player_stuff:Assets/Prefabs/CrystalPrefabs/CrystalVis.prefab
