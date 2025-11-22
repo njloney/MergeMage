@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: LightningCrystal
   itemIcon: {fileID: 0}
   itemType: 0
+  elementType: 6
+  projectilePrefab: {fileID: 8159945988062719947, guid: 791a978c7803dc14db60b3fe8afeb9df, type: 3}
   pickupPrefab: {fileID: 845731965430775724, guid: 672ba0b95a3f4fc45a8bc1a60b9ad9b5, type: 3}
-  crystalType: 6
   wandModelPrefab: {fileID: 845731965430775724, guid: 672ba0b95a3f4fc45a8bc1a60b9ad9b5, type: 3}

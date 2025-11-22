@@ -149,5 +149,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e3e1af1e79b481faae8c5366dfd38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemToGive: {fileID: 11400000, guid: 387b588bb8e97494d992e283a81acae8, type: 2}
+  itemToGive: {fileID: 11400000, guid: ad286a4a21a57492492485aa6a726bca, type: 2}
   pickupEffect: {fileID: 0}
