@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
-  m_Name: EarthCrystal
+  m_Name: FCCrystal
   m_EditorClassIdentifier: 
-  itemName: EarthCrystal
+  itemName: 
   itemIcon: {fileID: 0}
   itemType: 0
-  pickupPrefab: {fileID: 398299751778499956, guid: a7eca5aba673b5f47bcc60e4cc3e509a, type: 3}
-  crystalType: 5
-  wandModelPrefab: {fileID: 398299751778499956, guid: a7eca5aba673b5f47bcc60e4cc3e509a, type: 3}
+  elementType: 0
+  projectilePrefab: {fileID: 0}
+  pickupPrefab: {fileID: 0}
+  wandModelPrefab: {fileID: 0}
