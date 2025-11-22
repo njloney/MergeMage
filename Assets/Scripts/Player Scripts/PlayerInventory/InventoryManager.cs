@@ -115,6 +115,7 @@ public class InventoryManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
+            Debug.Log("M key pressed");
             EnterMergeMode();
         }
     }
