@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
+  m_Name: ICData
+  m_EditorClassIdentifier: 
+  itemName: Ice Crystal
+  itemIcon: {fileID: 21300000, guid: 3fdd592b63c2a46d9aad0cfc7528b944, type: 3}
+  itemType: 0
+  elementType: 1
+  projectilePrefab: {fileID: 3163358326176441626, guid: c1d6b0214f10bc84685006289356d7b6, type: 3}
+  pickupPrefab: {fileID: 5650307487705054395, guid: c712f7daa2972464dae3d05ffad00e47, type: 3}
+  wandModelPrefab: {fileID: 8069644271694742635, guid: ed2a8f9afd38241e094003c345aa9ff4, type: 3}
