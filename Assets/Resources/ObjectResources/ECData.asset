@@ -15,7 +15,13 @@ MonoBehaviour:
   itemName: Earth Crystal
   itemIcon: {fileID: 21300000, guid: 794324271082a43318a204658b559522, type: 3}
   itemType: 0
-  elementType: 3
-  projectilePrefab: {fileID: 997186534403776413, guid: dd5c695e44dc9bd40bc053adb9a5f7e6, type: 3}
   pickupPrefab: {fileID: 782277515300987730, guid: ea7a21fadcebd6a43abd80e9ad33f173, type: 3}
+  castType: 1
+  projectilePrefab: {fileID: 997186534403776413, guid: dd5c695e44dc9bd40bc053adb9a5f7e6, type: 3}
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  crystalType: 3
   wandModelPrefab: {fileID: 782277515300987730, guid: ea7a21fadcebd6a43abd80e9ad33f173, type: 3}
+  isSpellItem: 0
+  projectileStats: {fileID: 11400000, guid: a3167528103d14e42813528551cf7691, type: 2}
+  gameObject: {fileID: 997186534403776413, guid: dd5c695e44dc9bd40bc053adb9a5f7e6, type: 3}

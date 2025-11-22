@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   lifetime: 5
+  manaCost: 25
   projectileMaterial: {fileID: 0}
   baseDamage: 10
   damageType: 6
   destroyOnHit: 1
+  castType: 1
   effects: []
   spawnExplosion: 0
   explosion:
@@ -44,3 +46,4 @@ MonoBehaviour:
   isBeamSpell: 0
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
+  projectileOverridePrefab: {fileID: 8159945988062719947, guid: 791a978c7803dc14db60b3fe8afeb9df, type: 3}

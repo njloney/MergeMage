@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 25
   lifetime: 5
+  manaCost: 25
   projectileMaterial: {fileID: 2100000, guid: 72cdd9579e347c544a469ecebf7f2c76, type: 2}
   baseDamage: 10
   damageType: 1
   destroyOnHit: 1
+  castType: 1
   effects:
   - effect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
     duration: 4
@@ -35,3 +37,16 @@ MonoBehaviour:
     maxVisualScale: 0
   enablePierce: 0
   pierceCount: 0
+  spawnObjectOnHit: 0
+  onHitPrefab: {fileID: 0}
+  chainOnHit: 0
+  chainMaxJumps: 3
+  chainRadius: 6
+  chainDamagePerJump: 8
+  chainMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  isBeamSpell: 0
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  projectileOverridePrefab: {fileID: 7855230155840578728, guid: 44edf47ac302b1e42b3db56af23548a6, type: 3}

@@ -15,7 +15,13 @@ MonoBehaviour:
   itemName: Wind Crystal
   itemIcon: {fileID: 21300000, guid: a163601f45942454eb65f56ff8aef060, type: 3}
   itemType: 0
-  elementType: 2
-  projectilePrefab: {fileID: 608184424722468891, guid: 0c125347a290f984a9609e8b9f15dfad, type: 3}
   pickupPrefab: {fileID: 7390488429245240623, guid: 49680275da94ead429bd641502a78d17, type: 3}
+  castType: 1
+  projectilePrefab: {fileID: 608184424722468891, guid: 0c125347a290f984a9609e8b9f15dfad, type: 3}
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  crystalType: 2
   wandModelPrefab: {fileID: 7390488429245240623, guid: 49680275da94ead429bd641502a78d17, type: 3}
+  isSpellItem: 0
+  projectileStats: {fileID: 11400000, guid: 2036df098649a3841b9aa97ad7d58336, type: 2}
+  gameObject: {fileID: 608184424722468891, guid: 0c125347a290f984a9609e8b9f15dfad, type: 3}

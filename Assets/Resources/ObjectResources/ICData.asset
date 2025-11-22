@@ -15,7 +15,13 @@ MonoBehaviour:
   itemName: Ice Crystal
   itemIcon: {fileID: 21300000, guid: 3fdd592b63c2a46d9aad0cfc7528b944, type: 3}
   itemType: 0
-  elementType: 1
-  projectilePrefab: {fileID: 3163358326176441626, guid: c1d6b0214f10bc84685006289356d7b6, type: 3}
   pickupPrefab: {fileID: 5650307487705054395, guid: 32d8ccdbd4b34da4bb09cacaa2067444, type: 3}
+  castType: 1
+  projectilePrefab: {fileID: 3163358326176441626, guid: c1d6b0214f10bc84685006289356d7b6, type: 3}
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  crystalType: 1
   wandModelPrefab: {fileID: 5650307487705054395, guid: 32d8ccdbd4b34da4bb09cacaa2067444, type: 3}
+  isSpellItem: 0
+  projectileStats: {fileID: 11400000, guid: 720346ced65497f4da9f0ca1e5e291bb, type: 2}
+  gameObject: {fileID: 3163358326176441626, guid: c1d6b0214f10bc84685006289356d7b6, type: 3}

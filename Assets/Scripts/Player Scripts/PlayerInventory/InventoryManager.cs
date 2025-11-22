@@ -151,6 +151,25 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public void ConsumeMergeSpell()
+    {
+        // Clear the merge slot
+        if (mergeSlot != null)
+        {
+            mergeSlot.RemoveItemFromSlot();
+        }
+
+        // Ensure merge mode is OFF
+        if (mergeMode)
+        {
+            mergeMode = false;
+            OnMergeModeChanged?.Invoke(mergeMode);
+        }
+
+        // Re-send updates so wand & UI know there's no longer an active unstable item
+        sendUpdates();
+    }
+
 
 
 

@@ -24,9 +24,22 @@ public class ItemData : ScriptableObject
 
     [Header("Crystal Specifics")]
     [Tooltip("Leave this as 'None' if this item is a Consumable")]
-    public CrystalType elementType;
+    public CrystalType crystalType;
 
     public GameObject wandModelPrefab;
 
+    [Header("Spell Binding (for unstable combo crystals, spell scrolls, etc.)")]
+    [Tooltip("If true, this item directly represents a spell, not just a base crystal.")]
+    public bool isSpellItem = false;
+
+    [Header("Spell / Projectile")]
+    [Tooltip("What spell/projectile this item casts when active.")]
+    public ProjectileStats projectileStats;
+
+    [Tooltip("Prefab that actually flies through the world. " +
+             "Usually a generic Projectile with ProjectileConfig on it.")]
+    public GameObject gameObject;
+
+    
 
 }

@@ -19,6 +19,9 @@ public class ProjectileStats : ScriptableObject
     public DamageType damageType = DamageType.Physical;
     public bool destroyOnHit = true;
 
+    [Header("Cast Type")]
+    public SpellCastType castType = SpellCastType.None;
+
     [Header("Status Effects on Direct Hit")]
     public List<EffectSpec> effects = new();
 
@@ -52,6 +55,10 @@ public class ProjectileStats : ScriptableObject
 
     [Tooltip("Config asset that defines DPS, range, duration, etc.")]
     public LightRayConfig beamConfig;
+
+    [Header("Prefab Override")]
+    public GameObject projectileOverridePrefab;
+
 }
 
 [System.Serializable]

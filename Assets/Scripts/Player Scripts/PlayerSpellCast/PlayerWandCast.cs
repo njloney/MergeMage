@@ -4,16 +4,38 @@ public class PlayerWandCast : MonoBehaviour
 {
     [Header("Casting")]
     [SerializeField] private Transform firePoint;
-    [SerializeField] private InventoryManager inventoryManager; 
+    [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private SpellCombinationResolver resolver;
+
+    [Header("Projectile Casting")]
+    [SerializeField] private GameObject projectilePrefab;
 
     private ItemData currentActive;
-
-    private bool mergeMode;
+    private bool mergeMode = false;
 
     private void Start()
     {
+        // Listen to inventory
         inventoryManager.OnActiveItemChanged += GetAmmoFromInventory;
         inventoryManager.OnMergeModeChanged += CheckMergeMode;
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+            TryCast();
+    }
+
+    // ------------------ EVENT HANDLERS ------------------
+
+    private void GetAmmoFromInventory(ItemData item)
+    {
+        currentActive = item;
+
+        if (item == null)
+            Debug.Log("[WandCast] Active item is NULL");
+        else
+            Debug.Log("[WandCast] Active item: " + item.itemName);
     }
 
     private void CheckMergeMode(bool isMerge)
@@ -21,101 +43,116 @@ public class PlayerWandCast : MonoBehaviour
         mergeMode = isMerge;
     }
 
-    private void GetAmmoFromInventory(ItemData item)
-    {
-        currentActive = item;
+    // ------------------ SPELL RESOLUTION ------------------
 
-        if (currentActive == null)
+    private ProjectileStats ResolveSpellStats()
+    {
+        if (mergeMode && currentActive != null && currentActive.isSpellItem && currentActive.projectileStats!= null)
         {
-            Debug.Log("[WandCast] Current active item is NULL.");
+            return currentActive.projectileStats;
         }
-        else
+
+        if (!mergeMode && currentActive != null && currentActive.itemType == ItemType.Crystal && !currentActive.isSpellItem)
         {
-            Debug.Log($"[WandCast] Active item set to: {currentActive.itemName}");
+            return resolver.GetBaseStats(currentActive.crystalType);
         }
+
+        // No valid spell
+        return null;
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            TryCast();
-        }
-    }
+
+
+    // ------------------ CASTING LOGIC ------------------
 
     private void TryCast()
     {
-        if (currentActive == null)
+        if (firePoint == null)
         {
-            Debug.Log("[WandCast] No active spell item to cast.");
+            Debug.LogError("[WandCast] firePoint missing.");
             return;
         }
 
-        // Decide spell behavior by castType
-        switch (currentActive.castType)
+        // Did we use an unstable combo spell?
+        bool usingUnstableSpell =
+            mergeMode &&
+            currentActive != null &&
+            currentActive.isSpellItem &&
+            currentActive.projectileStats != null;
+
+
+        ProjectileStats stats = ResolveSpellStats();
+        if (stats == null)
+        {
+            Debug.Log("[WandCast] No spell found to cast.");
+            return;
+        }
+
+        switch (stats.castType)
         {
             case SpellCastType.Projectile:
-                CastProjectileSpell();
+                CastProjectileSpell(stats);
                 break;
 
             case SpellCastType.Beam:
-                CastBeamSpell();
+                CastBeamSpell(stats);
                 break;
 
-            case SpellCastType.None:
             default:
-                Debug.LogWarning($"[WandCast] Item '{currentActive.itemName}' cannot be cast (castType = {currentActive.castType}).");
-                break;
+                Debug.LogWarning($"Spell '{stats.name}' has invalid castType={stats.castType}");
+                return;
         }
 
-        if (mergeMode)
+        // If we cast an unstable spell, delete it and exit merge mode
+        if (usingUnstableSpell)
         {
-            inventoryManager.ToggleMergeMode();
+            inventoryManager.ConsumeMergeSpell();
+            currentActive = null;
         }
     }
 
-    private void CastProjectileSpell()
+    // ------------------ PROJECTILE SPELL ------------------
+
+    private void CastProjectileSpell(ProjectileStats stats)
     {
-        if (currentActive.projectilePrefab == null)
+        if (projectilePrefab == null)
         {
-            Debug.LogWarning($"[WandCast] Item '{currentActive.itemName}' has castType = Projectile but no projectilePrefab assigned.");
+            Debug.LogWarning("[WandCast] Missing projectilePrefab.");
             return;
         }
 
-        if (firePoint == null)
+        GameObject prefabToUse = stats.projectileOverridePrefab != null
+        ? stats.projectileOverridePrefab
+        : projectilePrefab;
+
+        if (prefabToUse == null)
         {
-            Debug.LogError("[WandCast] FirePoint is not assigned on PlayerWandCast.");
+            Debug.LogError("[WandCast] No projectile prefab available (override is null AND wand prefab is null).");
             return;
         }
 
-        var go = Instantiate(currentActive.projectilePrefab, firePoint.position, firePoint.rotation);
+        var go = Instantiate(prefabToUse, firePoint.position, firePoint.rotation);
 
         if (go.TryGetComponent<ProjectileConfig>(out var cfg))
         {
+            cfg.stats = stats;
             cfg.owner = this;
         }
 
         go.SetActive(true);
     }
 
-    private void CastBeamSpell()
+    // ------------------ BEAM SPELL ------------------
+
+    private void CastBeamSpell(ProjectileStats stats)
     {
-        if (currentActive.beamPrefab == null || currentActive.beamConfig == null)
+        if (stats.beamPrefab == null || stats.beamConfig == null)
         {
-            Debug.LogWarning(
-                $"[WandCast] Item '{currentActive.itemName}' has castType = Beam but beamPrefab or beamConfig is not assigned."
-            );
+            Debug.LogWarning("[WandCast] Beam spell missing prefab or config.");
             return;
         }
 
-        if (firePoint == null)
-        {
-            Debug.LogError("[WandCast] FirePoint is not assigned on PlayerWandCast.");
-            return;
-        }
-
-        LightRayBeam beam = Instantiate(currentActive.beamPrefab);
-
-        beam.Init(firePoint, this, currentActive.beamConfig);
+        LightRayBeam beam = Instantiate(stats.beamPrefab);
+        beam.Init(firePoint, this, stats.beamConfig);
     }
 }
