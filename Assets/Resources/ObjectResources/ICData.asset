@@ -17,5 +17,5 @@ MonoBehaviour:
   itemType: 0
   elementType: 1
   projectilePrefab: {fileID: 3163358326176441626, guid: c1d6b0214f10bc84685006289356d7b6, type: 3}
-  pickupPrefab: {fileID: 5650307487705054395, guid: c712f7daa2972464dae3d05ffad00e47, type: 3}
-  wandModelPrefab: {fileID: 8069644271694742635, guid: ed2a8f9afd38241e094003c345aa9ff4, type: 3}
+  pickupPrefab: {fileID: 5650307487705054395, guid: 32d8ccdbd4b34da4bb09cacaa2067444, type: 3}
+  wandModelPrefab: {fileID: 5650307487705054395, guid: 32d8ccdbd4b34da4bb09cacaa2067444, type: 3}
