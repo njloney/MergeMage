@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/CrystalPrefabs/CrystalPickUp/CrystalIce Variant.prefab.meta
 guid: c712f7daa2972464dae3d05ffad00e47
+========
+guid: 9b852ef219d77423d8e21eb31c9a7370
+>>>>>>>> new_player_stuff:Assets/Prefabs/CrystalPrefabs/CrystalPickUp/CrystalFire Variant.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
