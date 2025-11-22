@@ -5,65 +5,55 @@ public class PlayerWandCast : MonoBehaviour
     [Header("Casting")]
     [SerializeField] private Transform firePoint;
     [SerializeField] private InventoryManager inventoryManager;
-    [SerializeField] private SpellCombinationResolver resolver;
 
     [Header("Projectile Casting")]
+    [Tooltip("Fallback projectile prefab if the spell's stats don't override it.")]
     [SerializeField] private GameObject projectilePrefab;
 
     private ItemData currentActive;
+    private ItemData currentInactive;
     private bool mergeMode = false;
 
     private void Start()
     {
-        // Listen to inventory
-        inventoryManager.OnActiveItemChanged += GetAmmoFromInventory;
-        inventoryManager.OnMergeModeChanged += CheckMergeMode;
+        if (inventoryManager != null)
+        {
+            inventoryManager.OnActiveItemChanged += OnActiveItemChanged;
+            inventoryManager.OnMergeModeChanged += OnMergeModeChanged;
+        }
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        if (Input.GetMouseButtonDown(0))
-            TryCast();
+        if (inventoryManager != null)
+        {
+            inventoryManager.OnActiveItemChanged -= OnActiveItemChanged;
+            inventoryManager.OnMergeModeChanged -= OnMergeModeChanged;
+        }
     }
 
-    // ------------------ EVENT HANDLERS ------------------
-
-    private void GetAmmoFromInventory(ItemData item)
+    private void OnActiveItemChanged(ItemData item)
     {
         currentActive = item;
 
         if (item == null)
             Debug.Log("[WandCast] Active item is NULL");
         else
-            Debug.Log("[WandCast] Active item: " + item.itemName);
+            Debug.Log("[WandCast] Active item set to: " + item.itemName);
     }
 
-    private void CheckMergeMode(bool isMerge)
+    private void OnMergeModeChanged(bool isMerge)
     {
         mergeMode = isMerge;
     }
 
-    // ------------------ SPELL RESOLUTION ------------------
-
-    private ProjectileStats ResolveSpellStats()
+    private void Update()
     {
-        if (mergeMode && currentActive != null && currentActive.isSpellItem && currentActive.projectileStats!= null)
+        if (Input.GetMouseButtonDown(0))
         {
-            return currentActive.projectileStats;
+            TryCast();
         }
-
-        if (!mergeMode && currentActive != null && currentActive.itemType == ItemType.Crystal && !currentActive.isSpellItem)
-        {
-            return resolver.GetBaseStats(currentActive.crystalType);
-        }
-
-        // No valid spell
-        return null;
     }
-
-
-
-    // ------------------ CASTING LOGIC ------------------
 
     private void TryCast()
     {
@@ -73,61 +63,72 @@ public class PlayerWandCast : MonoBehaviour
             return;
         }
 
-        // Did we use an unstable combo spell?
-        bool usingUnstableSpell =
-            mergeMode &&
-            currentActive != null &&
-            currentActive.isSpellItem &&
-            currentActive.projectileStats != null;
-
-
-        ProjectileStats stats = ResolveSpellStats();
-        if (stats == null)
+        if (currentActive == null || !currentActive.isSpellItem || currentActive.spellPrefab == null)
         {
-            Debug.Log("[WandCast] No spell found to cast.");
+            Debug.Log("[WandCast] No valid spell on active item.");
             return;
         }
 
-        switch (stats.castType)
+        // Check if we are in merge mode
+        if (IsMergeModeActive())
         {
-            case SpellCastType.Projectile:
-                CastProjectileSpell(stats);
-                break;
+            Debug.Log("[WandCast] In merge mode, using merged spell data.");
+            ItemData mergedSpell = inventoryManager.GetMergeItem();
 
-            case SpellCastType.Beam:
-                CastBeamSpell(stats);
-                break;
-
-            default:
-                Debug.LogWarning($"Spell '{stats.name}' has invalid castType={stats.castType}");
-                return;
+            if (mergedSpell != null)
+            {
+                CastMergedSpell(mergedSpell);
+                inventoryManager.ConsumeMergeSpell();
+            }
+            else
+            {
+                Debug.LogError("[WandCast] No merged spell available.");
+            }
+            return;
         }
 
-        // If we cast an unstable spell, delete it and exit merge mode
-        if (usingUnstableSpell)
+        // Directly cast the spell based on the current active item
+        if (currentActive.castType == SpellCastType.Beam)
         {
-            inventoryManager.ConsumeMergeSpell();
-            currentActive = null;
+            Debug.Log("[WandCast] Attempting to cast beam spell.");
+            CastBeamSpell(currentActive.projectileStats);
+        }
+        else if (currentActive.castType == SpellCastType.Projectile)
+        {
+            Debug.Log("[WandCast] Attempting to cast projectile spell.");
+            CastProjectileSpell(currentActive.projectileStats);
+        }
+        else
+        {
+            Debug.LogError("[WandCast] Invalid spell type for casting.");
         }
     }
 
-    // ------------------ PROJECTILE SPELL ------------------
+    // Check if merge mode is active
+    private bool IsMergeModeActive()
+    {
+        return mergeMode; // Adjust this according to your merge mode logic
+    }
+
+    // Method to cast the merged spell
+    private void CastMergedSpell(ItemData mergedSpell)
+    {
+        GameObject spellPrefab = Instantiate(mergedSpell.spellPrefab, firePoint.position, firePoint.rotation);
+        Debug.Log($"Cast merged spell: {mergedSpell.itemName}");
+    }
+
+    // ---------- PROJECTILE SPELLS ----------
 
     private void CastProjectileSpell(ProjectileStats stats)
     {
-        if (projectilePrefab == null)
-        {
-            Debug.LogWarning("[WandCast] Missing projectilePrefab.");
-            return;
-        }
-
+        // Optional override per spell
         GameObject prefabToUse = stats.projectileOverridePrefab != null
-        ? stats.projectileOverridePrefab
-        : projectilePrefab;
+            ? stats.projectileOverridePrefab
+            : projectilePrefab;
 
         if (prefabToUse == null)
         {
-            Debug.LogError("[WandCast] No projectile prefab available (override is null AND wand prefab is null).");
+            Debug.LogError("[WandCast] No projectile prefab available.");
             return;
         }
 
@@ -142,13 +143,13 @@ public class PlayerWandCast : MonoBehaviour
         go.SetActive(true);
     }
 
-    // ------------------ BEAM SPELL ------------------
+    // ---------- BEAM SPELLS ----------
 
     private void CastBeamSpell(ProjectileStats stats)
     {
         if (stats.beamPrefab == null || stats.beamConfig == null)
         {
-            Debug.LogWarning("[WandCast] Beam spell missing prefab or config.");
+            Debug.LogWarning($"[WandCast] Beam spell '{stats.name}' missing prefab or config.");
             return;
         }
 

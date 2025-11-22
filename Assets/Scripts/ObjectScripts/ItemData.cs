@@ -14,7 +14,7 @@ public class ItemData : ScriptableObject
     public SpellCastType castType = SpellCastType.None;
 
     [Tooltip("Projectile prefab to spawn when castType = Projectile.")]
-    public GameObject projectilePrefab;
+    public GameObject spellPrefab;
 
     [Tooltip("Beam prefab to spawn when castType = Beam (e.g. Light Ray).")]
     public LightRayBeam beamPrefab;
@@ -36,9 +36,6 @@ public class ItemData : ScriptableObject
     [Tooltip("What spell/projectile this item casts when active.")]
     public ProjectileStats projectileStats;
 
-    [Tooltip("Prefab that actually flies through the world. " +
-             "Usually a generic Projectile with ProjectileConfig on it.")]
-    public GameObject gameObject;
 
     
 

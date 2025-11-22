@@ -34,8 +34,8 @@ public class PlayerWand : MonoBehaviour
     [SerializeField] private GameObject windCrystalPickupPrefab;
 
     // --- Private State ---
-    private CrystalType? slotA = null;
-    private CrystalType? slotB = null;
+    public CrystalType? slotA = null;
+    public CrystalType? slotB = null;
     private GameObject spawnedModelA = null;
     private GameObject spawnedModelB = null;
 

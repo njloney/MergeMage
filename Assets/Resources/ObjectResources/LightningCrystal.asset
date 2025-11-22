@@ -17,11 +17,10 @@ MonoBehaviour:
   itemType: 0
   pickupPrefab: {fileID: 845731965430775724, guid: 672ba0b95a3f4fc45a8bc1a60b9ad9b5, type: 3}
   castType: 1
-  projectilePrefab: {fileID: 8159945988062719947, guid: 791a978c7803dc14db60b3fe8afeb9df, type: 3}
+  spellPrefab: {fileID: 8159945988062719947, guid: 791a978c7803dc14db60b3fe8afeb9df, type: 3}
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
   crystalType: 6
-  wandModelPrefab: {fileID: 845731965430775724, guid: 672ba0b95a3f4fc45a8bc1a60b9ad9b5, type: 3}
-  isSpellItem: 0
+  wandModelPrefab: {fileID: 7189669997616419143, guid: c1a5177d25af7d54b9b1ca3495d4cbae, type: 3}
+  isSpellItem: 1
   projectileStats: {fileID: 11400000, guid: a0942033e4667d546b0b74fe00394c88, type: 2}
-  gameObject: {fileID: 8159945988062719947, guid: 791a978c7803dc14db60b3fe8afeb9df, type: 3}

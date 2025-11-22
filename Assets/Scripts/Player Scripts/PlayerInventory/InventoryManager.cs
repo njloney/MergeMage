@@ -170,7 +170,15 @@ public class InventoryManager : MonoBehaviour
         sendUpdates();
     }
 
+    public ItemData GetMergeItem()
+    {
+            if (mergeSlot != null)
+            {
+                return mergeSlot.currentItem;
+        }
 
+            return null;
+    }
 
 
     public bool addItem(ItemData item)
