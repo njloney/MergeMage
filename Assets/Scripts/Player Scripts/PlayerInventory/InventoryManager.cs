@@ -4,9 +4,7 @@ using System;
 
 public class InventoryManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     [Header("Consumable Slot")]
-
     [SerializeField] private InventorySlot consumableSlot;
 
     [Header("Crystal Slots")]
@@ -14,36 +12,41 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventorySlot crystalSlot2;
 
     [Header("Merge Slot")]
-
     [SerializeField] private InventorySlot mergeSlot;
 
     [Header("Spell Combination Resolver")]
     [SerializeField] private SpellCombinationResolver resolver;
 
+    [Header("Passive Items")]
+    [SerializeField] private PassiveItemManager passiveItemManager;
 
     private int activeCrystalSlotIndex = 0;
-
     private bool mergeMode = false;
 
     public event Action<ItemData> OnActiveItemChanged;
-
     public event Action<ItemData, ItemData> OnCrystalSlotsChanged;
-
     public event Action<bool> OnMergeModeChanged;
-
-
 
     void Start()
     {
         UpdateSlotHighlights();
         OnMergeModeChanged?.Invoke(mergeMode);
+
+        // Ensure PassiveItemManager exists
+        if (passiveItemManager == null)
+        {
+            passiveItemManager = GetComponent<PassiveItemManager>();
+            if (passiveItemManager == null)
+            {
+                passiveItemManager = gameObject.AddComponent<PassiveItemManager>();
+            }
+        }
     }
 
     private void UpdateSlotHighlights()
     {
         crystalSlot1.setSlotHighLight(activeCrystalSlotIndex == 1);
         crystalSlot2.setSlotHighLight(activeCrystalSlotIndex == 0);
-
     }
 
     private void setActiveSlot(int index)
@@ -54,7 +57,7 @@ public class InventoryManager : MonoBehaviour
         UpdateSlotHighlights();
         sendUpdates();
     }
-    
+
     public ItemData getCrystalSlot1()
     {
         return crystalSlot1.currentItem;
@@ -64,11 +67,9 @@ public class InventoryManager : MonoBehaviour
     {
         return crystalSlot2.currentItem;
     }
-    
 
     private void sendUpdates()
     {
-
         OnCrystalSlotsChanged?.Invoke(crystalSlot1.currentItem, crystalSlot2.currentItem);
 
         ItemData itemToSend = null;
@@ -76,11 +77,9 @@ public class InventoryManager : MonoBehaviour
         if (mergeMode)
         {
             itemToSend = mergeSlot.currentItem;
-
         }
         else
         {
-
             if (activeCrystalSlotIndex == 0)
             {
                 itemToSend = crystalSlot1.currentItem;
@@ -95,11 +94,7 @@ public class InventoryManager : MonoBehaviour
         {
             OnActiveItemChanged?.Invoke(itemToSend);
         }
-        
-        
     }
-    
-    
 
     void Update()
     {
@@ -110,7 +105,7 @@ public class InventoryManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-           setActiveSlot(1);
+            setActiveSlot(1);
         }
 
         if (Input.GetKeyDown(KeyCode.M))
@@ -125,24 +120,20 @@ public class InventoryManager : MonoBehaviour
         if (crystalSlot1.currentItem == null && crystalSlot2.currentItem == null) return;
         initiateMerge();
         sendUpdates();
-
     }
-
 
     public void ToggleMergeMode()
     {
         mergeMode = !mergeMode;
         OnMergeModeChanged?.Invoke(mergeMode);
-
     }
-
 
     private void initiateMerge()
     {
         ItemData item1 = crystalSlot1.currentItem;
         ItemData item2 = crystalSlot2.currentItem;
         ItemData result = resolver.BuildComboSpell(item1, item2);
-        if(result != null)
+        if (result != null)
         {
             ToggleMergeMode();
             mergeSlot.AddItemToSlot(result);
@@ -153,35 +144,46 @@ public class InventoryManager : MonoBehaviour
 
     public void ConsumeMergeSpell()
     {
-        // Clear the merge slot
         if (mergeSlot != null)
         {
             mergeSlot.RemoveItemFromSlot();
         }
 
-        // Ensure merge mode is OFF
         if (mergeMode)
         {
             mergeMode = false;
             OnMergeModeChanged?.Invoke(mergeMode);
         }
 
-        // Re-send updates so wand & UI know there's no longer an active unstable item
         sendUpdates();
     }
 
     public ItemData GetMergeItem()
     {
-            if (mergeSlot != null)
-            {
-                return mergeSlot.currentItem;
+        if (mergeSlot != null)
+        {
+            return mergeSlot.currentItem;
         }
-
-            return null;
+        return null;
     }
 
     public bool addItem(ItemData item)
     {
+        // Handle passive items differently - they're collected, not equipped
+        if (item.itemType == ItemType.Passive)
+        {
+            if (passiveItemManager != null)
+            {
+                passiveItemManager.AddPassiveItem(item);
+                return true;
+            }
+            else
+            {
+                Debug.LogError("PassiveItemManager not found!");
+                return false;
+            }
+        }
+
         ItemData oldItem = null;
 
         if (item.itemType == ItemType.Crystal)
@@ -254,10 +256,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        // Spawn the item's specific prefab in front of the player
         Vector3 dropPosition = transform.position + (transform.forward * 1.5f);
         Instantiate(itemDrop.pickupPrefab, dropPosition, Quaternion.identity);
     }
-
-
 }

@@ -36,7 +36,7 @@ public class ItemData : ScriptableObject
     [Tooltip("What spell/projectile this item casts when active.")]
     public ProjectileStats projectileStats;
 
-
-    
-
+    [Header("Passive Item Effects")]
+    [Tooltip("For Passive items: the effect this item provides when collected.")]
+    public PassiveItemEffect passiveEffect;
 }

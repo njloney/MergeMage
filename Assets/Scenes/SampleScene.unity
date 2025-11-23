@@ -616,6 +616,7 @@ MonoBehaviour:
   crystalSlot2: {fileID: 1080221639}
   mergeSlot: {fileID: 1367198103}
   resolver: {fileID: 11400000, guid: 82532d2e40cc3dc4a9e7d404d577e8eb, type: 2}
+  passiveItemManager: {fileID: 0}
 --- !u!114 &200092912
 MonoBehaviour:
   m_ObjectHideFlags: 0
