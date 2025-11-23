@@ -180,38 +180,56 @@ public class InventoryManager : MonoBehaviour
             return null;
     }
 
-
     public bool addItem(ItemData item)
     {
         ItemData oldItem = null;
 
         if (item.itemType == ItemType.Crystal)
         {
+            // Check if active slot is full and other slot is empty
             if (activeCrystalSlotIndex == 0)
             {
-                oldItem = crystalSlot1.currentItem;
-                crystalSlot1.AddItemToSlot(item);
-
-
-                if (oldItem != null)
+                // Active slot is crystalSlot1
+                if (crystalSlot1.currentItem != null && crystalSlot2.currentItem == null)
                 {
-                    dropItem(oldItem);
+                    // Slot 1 is full, slot 2 is empty - add to slot 2
+                    crystalSlot2.AddItemToSlot(item);
                 }
+                else
+                {
+                    // Normal behavior - add to active slot (slot 1)
+                    oldItem = crystalSlot1.currentItem;
+                    crystalSlot1.AddItemToSlot(item);
 
+                    if (oldItem != null)
+                    {
+                        dropItem(oldItem);
+                    }
+                }
             }
             else
             {
-                oldItem = crystalSlot2.currentItem;
-                crystalSlot2.AddItemToSlot(item);
-                if (oldItem != null)
+                // Active slot is crystalSlot2
+                if (crystalSlot2.currentItem != null && crystalSlot1.currentItem == null)
                 {
-                    dropItem(oldItem);
+                    // Slot 2 is full, slot 1 is empty - add to slot 1
+                    crystalSlot1.AddItemToSlot(item);
                 }
+                else
+                {
+                    // Normal behavior - add to active slot (slot 2)
+                    oldItem = crystalSlot2.currentItem;
+                    crystalSlot2.AddItemToSlot(item);
 
+                    if (oldItem != null)
+                    {
+                        dropItem(oldItem);
+                    }
+                }
             }
+
             sendUpdates();
             return true;
-
         }
         else if (item.itemType == ItemType.Consumable)
         {
@@ -222,19 +240,12 @@ public class InventoryManager : MonoBehaviour
                 dropItem(oldItem);
             }
 
-
-
-
-
             return true;
         }
 
-
         return false;
-
-
     }
-    
+
     private void dropItem(ItemData itemDrop)
     {
         if (itemDrop.pickupPrefab == null)

@@ -164,5 +164,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a226b68d6cabc24cba5431689763bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  visualRenderer: {fileID: 0}
+  rb: {fileID: 7315822974869475560}
+  visualRenderer: {fileID: 386864500988906536}
