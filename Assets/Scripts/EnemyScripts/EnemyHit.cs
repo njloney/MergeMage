@@ -18,6 +18,8 @@ public class EnemySlime : MonoBehaviour
 
     private int totalDamageTaken = 0; // Tracks running total of recent hits
     private bool resetDamage;         // Flag for manual reset (unused but left in)
+    public GameObject itemDrop;
+    public Rigidbody itemRigid;
 
     private void Start()
     {
@@ -27,6 +29,14 @@ public class EnemySlime : MonoBehaviour
         // Listen for damage events from the Health script
         health.OnDamaged += HandleDamageTaken;
         health.OnDied += Die;
+        GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
+        Debug.Log(prefabs.Length);
+        itemDrop = Instantiate(prefabs[UnityEngine.Random.Range(0, prefabs.Length)]);
+        itemDrop.transform.SetParent(transform);
+        itemDrop.transform.localScale = Vector3.one;
+        itemRigid = itemDrop.GetComponent<Rigidbody>();
+        Destroy(itemRigid);
+        //itemDrop = ItemData.
     }
 
     private void OnDisable()
@@ -39,7 +49,6 @@ public class EnemySlime : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(health._hp);
         
         // Safely update UI text if assigned
         if (damageTakenText != null)
@@ -54,6 +63,7 @@ public class EnemySlime : MonoBehaviour
             totalDamageTaken = 0;
             resetDamage = false;
         }
+        itemDrop.transform.localPosition = Vector3.zero;
     }
 
     // Called whenever this object takes damage
@@ -86,6 +96,20 @@ public class EnemySlime : MonoBehaviour
 
     private void Die()
     {
+        dropItem(itemDrop);
         Destroy(gameObject);
+    }
+    private void dropItem(GameObject itemDrop)
+    {
+        if (itemDrop == null)
+        {
+            Debug.LogError(itemDrop.name + " has no pickup prefab assigned!");
+            return;
+        }
+
+        // Spawn the item's specific prefab in place of slime
+        Vector3 dropPosition = transform.position;
+        dropPosition.y += 0.3f;
+        Instantiate(itemDrop, dropPosition, Quaternion.identity);
     }
 }

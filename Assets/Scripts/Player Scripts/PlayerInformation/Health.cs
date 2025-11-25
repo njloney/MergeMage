@@ -9,7 +9,7 @@ public class Health : MonoBehaviour
 
 
     [SerializeField] private float maxHealth = 100f;   // Maximum health value
-    public float _hp;                                // Current health (private)
+    private float _hp;                                // Current health (private)
     private Stats playerStats;
 
     // Event triggered whenever this object takes damage.
