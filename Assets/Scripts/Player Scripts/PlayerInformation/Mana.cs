@@ -4,29 +4,46 @@ using System;
 public class Mana : MonoBehaviour
 {
     private float _mana;
-
-    private Stats playerStats;
+    private RuntimePlayerStats runtimeStats;
 
     public event Action<float> OnManaChanged;
 
     private void Awake()
     {
-        playerStats = Resources.Load<Stats>("PlayerResources/PlayerStats");
+        runtimeStats = GetComponent<RuntimePlayerStats>();
 
-        if (playerStats == null)
+        if (runtimeStats == null)
         {
-            Debug.LogError("Player Stats not assigned to Mana!", this);
+            Debug.LogError("RuntimePlayerStats not found on Player!", this);
             return;
         }
 
-        _mana = playerStats.maxMana;
+        _mana = runtimeStats.maxMana;
+
+        // Subscribe to max mana changes from passive items
+        runtimeStats.OnMaxManaChanged += OnMaxManaIncrease;
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe to prevent memory leaks
+        if (runtimeStats != null)
+        {
+            runtimeStats.OnMaxManaChanged -= OnMaxManaIncrease;
+        }
+    }
+
+    private void OnMaxManaIncrease(float manaIncrease)
+    {
+        // When max mana increases from passive items, restore by that amount
+        _mana += manaIncrease;
+        OnManaChanged?.Invoke(_mana);
+        Debug.Log($"Max mana increased! Current: {_mana}/{maxMana}");
     }
 
     public float currentMana => _mana;
 
-    public float maxMana => playerStats.maxMana;
-
-
+    public float maxMana => runtimeStats != null ? runtimeStats.maxMana : 0f;
 
     public void useMana(float amount)
     {
@@ -41,7 +58,6 @@ public class Mana : MonoBehaviour
         {
             OnManaChanged?.Invoke(_mana);
         }
-
     }
 
     public bool hasMana(float amount)
@@ -52,40 +68,32 @@ public class Mana : MonoBehaviour
     public void RestoreMana(float amount)
     {
         float old_mana = _mana;
-         
-        _mana += amount;
-        
-        _mana = Mathf.Min(_mana, playerStats.maxMana);
 
-      if (old_mana != _mana)
+        _mana += amount;
+        _mana = Mathf.Min(_mana, maxMana);
+
+        if (old_mana != _mana)
         {
             OnManaChanged?.Invoke(_mana);
-        } // Notify UI
+        }
     }
 
     void Update()
     {
-        if (playerStats == null || _mana >= playerStats.maxMana)
+        if (runtimeStats == null || _mana >= maxMana)
         {
             return;
         }
 
         float old_mana = _mana;
 
-        _mana += playerStats.manaRecoveryRate * Time.deltaTime;
-
-        _mana = Mathf.Min(_mana, playerStats.maxMana);
-
-
+        // Use runtime mana recovery rate (can be modified by passive items)
+        _mana += runtimeStats.manaRecoveryRate * Time.deltaTime;
+        _mana = Mathf.Min(_mana, maxMana);
 
         if (old_mana != _mana)
         {
             OnManaChanged?.Invoke(_mana);
-        } 
-
-
-
+        }
     }
-
-
 }
