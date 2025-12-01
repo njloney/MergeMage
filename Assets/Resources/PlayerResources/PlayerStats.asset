@@ -16,7 +16,7 @@ MonoBehaviour:
   jump: 3
   gravity: -9.81
   maxHealth: 500
-  maxMana: 1000
+  maxMana: 500
   manaRecoveryRate: 5
   meleeAttackDamage: 50
   rangeAttackDamage: 25

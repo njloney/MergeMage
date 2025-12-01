@@ -455,6 +455,7 @@ GameObject:
   - component: {fileID: 200092911}
   - component: {fileID: 200092915}
   - component: {fileID: 200092914}
+  - component: {fileID: 200092916}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -616,7 +617,6 @@ MonoBehaviour:
   crystalSlot1: {fileID: 690764265}
   crystalSlot2: {fileID: 1080221639}
   mergeSlot: {fileID: 1367198103}
-  resolver: {fileID: 11400000, guid: 82532d2e40cc3dc4a9e7d404d577e8eb, type: 2}
   passiveItemManager: {fileID: 200092914}
 --- !u!114 &200092912
 MonoBehaviour:
@@ -668,6 +668,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseStats: {fileID: 11400000, guid: 20fd82726c17d401d89fedc7f09d632a, type: 2}
+--- !u!114 &200092916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200092904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7e0aaf3ad894da7aa81c748abff41e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolver: {fileID: 11400000, guid: 82532d2e40cc3dc4a9e7d404d577e8eb, type: 2}
+  manaRegenRate: 5
+  baseSelfDamage: 2
+  damageRampUp: 1
+  spellPowerDecay: 0.1
 --- !u!1001 &200708184
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1026,11 +1043,11 @@ Transform:
   m_GameObject: {fileID: 298407650}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.85, z: -2.33}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 935252787}
+  m_Father: {fileID: 1524349538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &532594700
 GameObject:
@@ -2330,6 +2347,7 @@ MonoBehaviour:
   inventoryManager: {fileID: 200092911}
   socketA: {fileID: 1819208468}
   socketB: {fileID: 298407651}
+  crsytalRotater: {fileID: 1524349538}
   crystalRotationSpeed: 50
 --- !u!114 &855475404
 MonoBehaviour:
@@ -2345,6 +2363,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 229168447}
   inventoryManager: {fileID: 200092911}
+  mergeController: {fileID: 200092916}
+  manaPool: {fileID: 200092912}
   projectilePrefab: {fileID: 0}
 --- !u!1 &857858400
 GameObject:
@@ -2592,8 +2612,7 @@ Transform:
   m_LocalScale: {x: 0.1, y: 1, z: 0.10000001}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1819208468}
-  - {fileID: 298407651}
+  - {fileID: 1524349538}
   m_Father: {fileID: 855475402}
   m_LocalEulerAnglesHint: {x: 17.11, y: 0, z: 0}
 --- !u!136 &935252788
@@ -4390,6 +4409,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPower: 10
+--- !u!1 &1524349537
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1524349538}
+  m_Layer: 8
+  m_Name: CrystalRotateHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1524349538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524349537}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1819208468}
+  - {fileID: 298407651}
+  m_Father: {fileID: 935252787}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1597364019
 GameObject:
   m_ObjectHideFlags: 0
@@ -4755,7 +4807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 268b6d7605bfa4d81b74369b311ee0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryManager: {fileID: 200092911}
+  mergeController: {fileID: 200092916}
   crystalBackground: {fileID: 857858401}
   crystalPanel: {fileID: 866713931}
   mergePanel: {fileID: 1367198099}
@@ -4786,11 +4838,11 @@ Transform:
   m_GameObject: {fileID: 1819208467}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.85, z: 2.33}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 935252787}
+  m_Father: {fileID: 1524349538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1864380445
 GameObject:
