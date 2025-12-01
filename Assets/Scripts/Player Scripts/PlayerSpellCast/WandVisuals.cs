@@ -9,6 +9,8 @@ public class WandVisuals : MonoBehaviour
     [SerializeField] private Transform socketA;
     [SerializeField] private Transform socketB;
 
+    [SerializeField] private Transform crsytalRotater;
+
     [Header("Visual Effects")]
     [SerializeField] private float crystalRotationSpeed = 50f;
 
@@ -50,5 +52,12 @@ public class WandVisuals : MonoBehaviour
     public void Update()
     {
         //Rotate the model around the wand
+
+        if (crsytalRotater != null)
+        {
+            // Rotate around the local Z axis (Forward)
+            // Time.deltaTime ensures it spins smoothly regardless of framerate
+            crsytalRotater.Rotate(Vector3.up * crystalRotationSpeed * Time.deltaTime);
+        }
     }
 }

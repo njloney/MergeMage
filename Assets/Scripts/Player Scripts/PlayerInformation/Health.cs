@@ -74,11 +74,13 @@ public class Health : MonoBehaviour
             return;
         }
 
-        _hp -= Mathf.Max(0f, amount);
+        float damageToTake = Mathf.Max(0f, amount);
+
+        _hp = Mathf.Max(0f, _hp - damageToTake);
 
         OnDamaged?.Invoke(amount, type, source);
 
-        if (_hp <= 0f) Die();
+        if (_hp == 0f) Die();
     }
 
     public void Heal(float amount)
