@@ -23,10 +23,11 @@ public class PlayerUI : MonoBehaviour
     {
         if (playerHealth != null)
         {
+            Debug.Log(playerHealth.maxHP);
             healthSlider.maxValue = playerHealth.maxHP;
             healthSlider.value = playerHealth.currentHP;
 
-            healthText.text = $"{playerHealth.currentHP} / {playerHealth.maxHP}";
+            healthText.text = $"{playerHealth.currentHP:0} / {playerHealth.maxHP}";
 
             playerHealth.OnDamaged += HandleDamageTaken;
             playerHealth.OnDied += HandleDeath;
@@ -37,7 +38,7 @@ public class PlayerUI : MonoBehaviour
             manaSlider.maxValue = playerMana.maxMana;
             manaSlider.value = playerMana.currentMana;
 
-            manaText.text = $"{playerMana.currentMana} / {playerMana.maxMana}";
+            manaText.text = $"{playerMana.currentMana:0} / {playerMana.maxMana}";
 
             playerMana.OnManaChanged += HandleManaChanged;
 
@@ -49,7 +50,7 @@ public class PlayerUI : MonoBehaviour
 
         healthSlider.value = playerHealth.currentHP;
 
-        healthText.text = $"{playerHealth.currentHP} / {playerHealth.maxHP}";
+        healthText.text = $"{playerHealth.currentHP:0} / {playerHealth.maxHP}";
 
 
     }
@@ -58,7 +59,7 @@ public class PlayerUI : MonoBehaviour
     {
         manaSlider.value = playerMana.currentMana;
 
-        manaText.text = $"{playerMana.currentMana} / {playerMana.maxMana}";
+        manaText.text = $"{playerMana.currentMana:0} / {playerMana.maxMana}";
 
         
     }

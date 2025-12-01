@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private MergeMode mergeController;
 
     [Header("UI References")]
     [SerializeField] private RectTransform crystalBackground;
@@ -19,9 +19,9 @@ public class InventoryUI : MonoBehaviour
     void Start()
     {
 
-        if (inventoryManager != null)
+        if (mergeController != null)
         {
-            inventoryManager.OnMergeModeChanged += UpdateInventoryView;
+            mergeController.OnMergeModeChanged += UpdateInventoryView;
         }
     }
 

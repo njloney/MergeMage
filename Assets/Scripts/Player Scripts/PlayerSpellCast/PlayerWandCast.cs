@@ -6,6 +6,10 @@ public class PlayerWandCast : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private InventoryManager inventoryManager;
 
+    [SerializeField] private MergeMode mergeController;
+
+    [SerializeField] private Mana manaPool;
+
     [Header("Projectile Casting")]
     [Tooltip("Fallback projectile prefab if the spell's stats don't override it.")]
     [SerializeField] private GameObject projectilePrefab;
@@ -19,7 +23,11 @@ public class PlayerWandCast : MonoBehaviour
         if (inventoryManager != null)
         {
             inventoryManager.OnActiveItemChanged += OnActiveItemChanged;
-            inventoryManager.OnMergeModeChanged += OnMergeModeChanged;
+        }
+
+        if (mergeController != null)
+        {
+            mergeController.OnMergeModeChanged += OnMergeModeChanged;
         }
     }
 
@@ -28,7 +36,11 @@ public class PlayerWandCast : MonoBehaviour
         if (inventoryManager != null)
         {
             inventoryManager.OnActiveItemChanged -= OnActiveItemChanged;
-            inventoryManager.OnMergeModeChanged -= OnMergeModeChanged;
+        }
+
+        if (mergeController != null)
+        {
+            mergeController.OnMergeModeChanged -= OnMergeModeChanged;
         }
     }
 
@@ -70,10 +82,10 @@ public class PlayerWandCast : MonoBehaviour
         }
 
         // Check if we are in merge mode
-        if (IsMergeModeActive())
+        if (mergeMode)
         {
             Debug.Log("[WandCast] In merge mode, using merged spell data.");
-            ItemData mergedSpell = inventoryManager.GetMergeItem();
+            ItemData mergedSpell = currentActive;
 
             if (mergedSpell != null)
             {
@@ -105,10 +117,6 @@ public class PlayerWandCast : MonoBehaviour
     }
 
     // Check if merge mode is active
-    private bool IsMergeModeActive()
-    {
-        return mergeMode; // Adjust this according to your merge mode logic
-    }
 
     // Method to cast the merged spell
     private void CastMergedSpell(ItemData mergedSpell)
@@ -121,6 +129,18 @@ public class PlayerWandCast : MonoBehaviour
 
     private void CastProjectileSpell(ProjectileStats stats)
     {
+        if (manaPool != null)
+        {
+            // Check if we have enough
+            if (manaPool.currentMana < stats.manaCost)
+            {
+                Debug.Log("Not enough mana!");
+                return; 
+            }
+
+            // Consume the mana
+            manaPool.useMana(stats.manaCost);
+        }
         // Optional override per spell
         GameObject prefabToUse = stats.projectileOverridePrefab != null
             ? stats.projectileOverridePrefab
@@ -147,6 +167,19 @@ public class PlayerWandCast : MonoBehaviour
 
     private void CastBeamSpell(ProjectileStats stats)
     {
+        if (manaPool != null)
+        {
+            // Check if we have enough
+            if (manaPool.currentMana < stats.manaCost)
+            {
+                Debug.Log("Not enough mana!");
+                return;
+            }
+
+            // Consume the mana
+            manaPool.useMana(stats.manaCost);
+        }
+        
         if (stats.beamPrefab == null || stats.beamConfig == null)
         {
             Debug.LogWarning($"[WandCast] Beam spell '{stats.name}' missing prefab or config.");

@@ -8,7 +8,7 @@ public class Mana : MonoBehaviour
 
     public event Action<float> OnManaChanged;
 
-    private void Awake()
+    private void Start()
     {
         runtimeStats = GetComponent<RuntimePlayerStats>();
 
@@ -80,20 +80,7 @@ public class Mana : MonoBehaviour
 
     void Update()
     {
-        if (runtimeStats == null || _mana >= maxMana)
-        {
-            return;
-        }
 
-        float old_mana = _mana;
-
-        // Use runtime mana recovery rate (can be modified by passive items)
-        _mana += runtimeStats.manaRecoveryRate * Time.deltaTime;
-        _mana = Mathf.Min(_mana, maxMana);
-
-        if (old_mana != _mana)
-        {
-            OnManaChanged?.Invoke(_mana);
-        }
+    
     }
 }

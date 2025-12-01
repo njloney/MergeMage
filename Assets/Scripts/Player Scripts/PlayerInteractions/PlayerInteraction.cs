@@ -8,7 +8,9 @@ public class PlayerInteraction : MonoBehaviour
 
 {
 
-     private InventoryManager inventoryManager;
+    private InventoryManager inventoryManager;
+     
+    private MergeMode mergeController;
 
     [SerializeField] private float interactDistance = 3f;
 
@@ -19,7 +21,8 @@ public class PlayerInteraction : MonoBehaviour
     void Start()
     {
         inventoryManager = transform.parent.gameObject.GetComponent<InventoryManager>();
-        inventoryManager.OnMergeModeChanged += checkMergeMode;
+        mergeController = transform.parent.gameObject.GetComponent<MergeMode>();
+        mergeController.OnMergeModeChanged += checkMergeMode;
 
 
         if (pickupHint != null)

@@ -14,23 +14,27 @@ public class InventoryManager : MonoBehaviour
     [Header("Merge Slot")]
     [SerializeField] private InventorySlot mergeSlot;
 
-    [Header("Spell Combination Resolver")]
-    [SerializeField] private SpellCombinationResolver resolver;
-
     [Header("Passive Items")]
     [SerializeField] private PassiveItemManager passiveItemManager;
+
+    private MergeMode mergeController;
 
     private int activeCrystalSlotIndex = 0;
     private bool mergeMode = false;
 
     public event Action<ItemData> OnActiveItemChanged;
+    public event Action OnMergeConsumed;
     public event Action<ItemData, ItemData> OnCrystalSlotsChanged;
-    public event Action<bool> OnMergeModeChanged;
+
 
     void Start()
     {
         UpdateSlotHighlights();
-        OnMergeModeChanged?.Invoke(mergeMode);
+
+         if(mergeController == null)
+        {
+            mergeController = GetComponent<MergeMode>();
+        }
 
         // Ensure PassiveItemManager exists
         if (passiveItemManager == null)
@@ -40,6 +44,19 @@ public class InventoryManager : MonoBehaviour
             {
                 passiveItemManager = gameObject.AddComponent<PassiveItemManager>();
             }
+        }
+
+         mergeController.OnMergeModeChanged += onMerge;
+    }
+    
+
+    public void onMerge(bool merge)
+    {
+        mergeMode = merge;
+
+        if (merge)
+        {
+            sendUpdates();
         }
     }
 
@@ -73,10 +90,14 @@ public class InventoryManager : MonoBehaviour
         OnCrystalSlotsChanged?.Invoke(crystalSlot1.currentItem, crystalSlot2.currentItem);
 
         ItemData itemToSend = null;
-
+        Debug.Log("Merge Mode Active " + mergeMode);
         if (mergeMode)
         {
             itemToSend = mergeSlot.currentItem;
+            if(mergeSlot.currentItem == null)
+            {
+                Debug.Log("Merge is not null??????");
+            }
         }
         else
         {
@@ -89,11 +110,8 @@ public class InventoryManager : MonoBehaviour
                 itemToSend = crystalSlot2.currentItem;
             }
         }
-
-        if (itemToSend != null)
-        {
             OnActiveItemChanged?.Invoke(itemToSend);
-        }
+        
     }
 
     void Update()
@@ -108,38 +126,6 @@ public class InventoryManager : MonoBehaviour
             setActiveSlot(1);
         }
 
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log("M key pressed");
-            EnterMergeMode();
-        }
-    }
-
-    private void EnterMergeMode()
-    {
-        if (crystalSlot1.currentItem == null && crystalSlot2.currentItem == null) return;
-        initiateMerge();
-        sendUpdates();
-    }
-
-    public void ToggleMergeMode()
-    {
-        mergeMode = !mergeMode;
-        OnMergeModeChanged?.Invoke(mergeMode);
-    }
-
-    private void initiateMerge()
-    {
-        ItemData item1 = crystalSlot1.currentItem;
-        ItemData item2 = crystalSlot2.currentItem;
-        ItemData result = resolver.BuildComboSpell(item1, item2);
-        if (result != null)
-        {
-            ToggleMergeMode();
-            mergeSlot.AddItemToSlot(result);
-            crystalSlot1.RemoveItemFromSlot();
-            crystalSlot2.RemoveItemFromSlot();
-        }
     }
 
     public void ConsumeMergeSpell()
@@ -149,22 +135,15 @@ public class InventoryManager : MonoBehaviour
             mergeSlot.RemoveItemFromSlot();
         }
 
-        if (mergeMode)
-        {
-            mergeMode = false;
-            OnMergeModeChanged?.Invoke(mergeMode);
-        }
-
+        OnMergeConsumed?.Invoke();
         sendUpdates();
     }
 
-    public ItemData GetMergeItem()
+    public void addToMergeSlot(ItemData item)
     {
-        if (mergeSlot != null)
-        {
-            return mergeSlot.currentItem;
-        }
-        return null;
+        mergeSlot.AddItemToSlot(item);
+        crystalSlot1.RemoveItemFromSlot();
+        crystalSlot2.RemoveItemFromSlot();
     }
 
     public bool addItem(ItemData item)

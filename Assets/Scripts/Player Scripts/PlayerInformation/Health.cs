@@ -10,7 +10,7 @@ public class Health : MonoBehaviour
     public event Action<float, DamageType, UnityEngine.Object> OnDamaged;
     public event Action OnDied;
 
-    private void Awake()
+    private void Start()
     {
         if (gameObject.CompareTag("Player"))
         {
@@ -19,6 +19,7 @@ public class Health : MonoBehaviour
             if (runtimeStats != null)
             {
                 _hp = runtimeStats.maxHealth;
+                Debug.Log("Hp " + runtimeStats.maxHealth);
 
                 // Subscribe to max health changes from passive items
                 runtimeStats.OnMaxHealthChanged += OnMaxHealthIncrease;
