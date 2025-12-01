@@ -2308,6 +2308,7 @@ GameObject:
   - component: {fileID: 855475402}
   - component: {fileID: 855475404}
   - component: {fileID: 855475403}
+  - component: {fileID: 855475405}
   m_Layer: 8
   m_Name: Wand
   m_TagString: Untagged
@@ -2366,6 +2367,28 @@ MonoBehaviour:
   mergeController: {fileID: 200092916}
   manaPool: {fileID: 200092912}
   projectilePrefab: {fileID: 0}
+--- !u!95 &855475405
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855475401}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 39e554ae901bb4ca3b66f8daac04d30b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &857858400
 GameObject:
   m_ObjectHideFlags: 0

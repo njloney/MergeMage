@@ -55,8 +55,6 @@ public class WandVisuals : MonoBehaviour
 
         if (crsytalRotater != null)
         {
-            // Rotate around the local Z axis (Forward)
-            // Time.deltaTime ensures it spins smoothly regardless of framerate
             crsytalRotater.Rotate(Vector3.up * crystalRotationSpeed * Time.deltaTime);
         }
     }
