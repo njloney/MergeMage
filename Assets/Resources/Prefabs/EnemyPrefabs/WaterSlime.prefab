@@ -61,12 +61,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: ea47af8344d654b41b6ce033aa0416e2, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ea47af8344d654b41b6ce033aa0416e2, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: bf567e8b4d07d4e68a8972283aa9e35a, type: 2}
+      objectReference: {fileID: 2100000, guid: 67a0499e34ee747ca9d5ed9986e3609d, type: 2}
     - target: {fileID: 919132149155446097, guid: ea47af8344d654b41b6ce033aa0416e2, type: 3}
       propertyPath: m_Name
-      value: FireSlime
+      value: WaterSlime
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -103,11 +107,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HurtMat: {fileID: 0}
-  IdleMat: {fileID: 2100000, guid: bf567e8b4d07d4e68a8972283aa9e35a, type: 2}
-  damageTakenText: {fileID: 0}
+  IdleMat: {fileID: 2100000, guid: 67a0499e34ee747ca9d5ed9986e3609d, type: 2}
   comboWindow: 3
   itemDrop: {fileID: 0}
   itemRigid: {fileID: 0}
+  target: {fileID: 0}
+  maxSpeed: 20
+  moveSpeed: 0
 --- !u!114 &133561839704818115
 MonoBehaviour:
   m_ObjectHideFlags: 0

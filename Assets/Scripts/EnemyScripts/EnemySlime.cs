@@ -1,14 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
-
-[RequireComponent(typeof(Health))]
-public class EnemySlime : MonoBehaviour
+public class EnemySlime : Enemy
 {
     [Header("Visuals")]
     public Material HurtMat;                 // Material shown when the bag is hit
     public Material IdleMat;                 // Default material when idle
-    public TextMeshProUGUI damageTakenText;  // UI text showing total damage taken
 
     [Header("Combo Settings")]
     [SerializeField] private float comboWindow = 3.0f; // Time before combo resets
@@ -21,10 +18,25 @@ public class EnemySlime : MonoBehaviour
     public GameObject itemDrop;
     public Rigidbody itemRigid;
 
+    // Movement
+    private Rigidbody rb;
+    public Transform target;
+    public float maxSpeed = 20f;
+    public float moveSpeed = 0f;
+
+    // Transparency
+    private Renderer objectRenderer;
+    private float transparencyValue;
+
     private void Start()
     {
+        objectRenderer = GetComponent<Renderer>();
+        transparencyValue = 1f;
         rend = GetComponent<Renderer>();
         health = GetComponent<Health>();
+        rend.material = IdleMat;
+        rb = GetComponent<Rigidbody>();
+        target = GameObject.Find("Player").transform;
 
         // Listen for damage events from the Health script
         health.OnDamaged += HandleDamageTaken;
@@ -39,6 +51,21 @@ public class EnemySlime : MonoBehaviour
         //itemDrop = ItemData.
     }
 
+    private void move()
+    {
+        if (!rb || !target) return;
+
+        float direction = 1f;
+        float dist = Vector3.Distance(transform.position, target.position);
+        moveSpeed = Mathf.Min(maxSpeed, dist * 3f);
+
+        Vector3 targetPosXZ = new Vector3(target.position.x, transform.position.y, target.position.z);
+        Vector3 nextPos = Vector3.MoveTowards(transform.position, targetPosXZ, direction * moveSpeed * Time.deltaTime);
+
+        rb.MovePosition(nextPos);
+        transform.LookAt(targetPosXZ);
+    }
+
     private void OnDisable()
     {
         // Stop timers and unsubscribe when disabled
@@ -49,13 +76,14 @@ public class EnemySlime : MonoBehaviour
 
     private void Update()
     {
-        
+        move();
+        UpdateTransparency();
         // Safely update UI text if assigned
-        if (damageTakenText != null)
+        /*if (damageTakenText != null)
         {
             // Use SetText to avoid GC from ToString allocations in tight loops
             damageTakenText.SetText(totalDamageTaken.ToString());
-        }
+        }*/
 
         // Manual reset if flag is triggered (optional feature)
         if (resetDamage)
@@ -109,7 +137,15 @@ public class EnemySlime : MonoBehaviour
 
         // Spawn the item's specific prefab in place of slime
         Vector3 dropPosition = transform.position;
-        dropPosition.y += 0.3f;
-        Instantiate(itemDrop, dropPosition, Quaternion.identity);
+        itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
+        itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+    }
+
+    private void UpdateTransparency()
+    {
+        transparencyValue = health.currentHP / health.maxHP;
+        Color currentColor = objectRenderer.material.color;
+        currentColor.a = transparencyValue; // Set the alpha channel
+        objectRenderer.material.color = currentColor; // Apply the new color
     }
 }
