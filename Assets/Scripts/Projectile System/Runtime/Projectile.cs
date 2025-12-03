@@ -66,9 +66,11 @@ public class Projectile : MonoBehaviour
 
         Debug.Log($"[Projectile] Trigger hit: {other.name} (Layer: {LayerMask.LayerToName(other.gameObject.layer)})", this);
 
-        //------------------------------------------------------------------
-        // 1. DAMAGE + STATUS
-        //------------------------------------------------------------------
+        var responder = other.GetComponentInParent<GolemSpellResponder>();
+        if (responder != null)
+            responder.OnHitBySpell(cfg.stats, cfg.owner);
+
+
         var hp = other.GetComponentInParent<Health>();
         var status = other.GetComponentInParent<StatusController>();
 
