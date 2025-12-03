@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Collections;
 
 public class GolemMeleeAttack : MonoBehaviour
 {
     public float damage = 20f;
     public float knockbackForce = 5f;
+    public float knockbackDuration = 0.2f;
     public float attackRadius = 3f;
     public LayerMask playerMask;
 
@@ -22,10 +24,6 @@ public class GolemMeleeAttack : MonoBehaviour
                 Debug.Log($"[GolemMelee] Applying damage {damage} to {hp.name}");
                 hp.TakeDamage(damage, DamageType.Physical, this);
             }
-            else
-            {
-                Debug.Log("[GolemMelee] No Health found on hit target");
-            }
 
             var rb = h.GetComponentInParent<Rigidbody>();
             var controller = h.GetComponentInParent<CharacterController>();
@@ -40,13 +38,24 @@ public class GolemMeleeAttack : MonoBehaviour
             }
             else if (controller != null)
             {
-                Debug.Log("[GolemMelee] Applying CharacterController knockback");
-                controller.Move(dir * knockbackForce);
+                Debug.Log("[GolemMelee] Applying CharacterController knockback (push)");
+                StartCoroutine(DoControllerKnockback(controller, dir));
             }
             else
             {
                 Debug.Log("[GolemMelee] No Rigidbody or CharacterController for knockback");
             }
+        }
+    }
+
+    private IEnumerator DoControllerKnockback(CharacterController controller, Vector3 dir)
+    {
+        float elapsed = 0f;
+        while (elapsed < knockbackDuration)
+        {
+            controller.Move(dir * (knockbackForce / knockbackDuration) * Time.deltaTime);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
     }
 

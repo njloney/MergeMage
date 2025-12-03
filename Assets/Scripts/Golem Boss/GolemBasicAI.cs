@@ -10,16 +10,35 @@ public class GolemBasicAI : MonoBehaviour
     public float meleeRange = 5f;
     public float stopMovingDistance = 3f;
 
+    public float detectionRange = 30f;
+    public LayerMask losMask;
+    public float losLoseDelay = 0.2f;
+    public float losGainDelay = 0.05f;
+    float losTimer;
+    bool losState;
+
+
     public float moveSpeed = 5f;
     public float rotationSpeed = 7f;
 
     public float meleeCooldown = 2f;
     public float rangedCooldown = 1.2f;
 
-    private float meleeTimer = 0f;
-    private float rangedTimer = 0f;
+    public float wanderRadius = 10f;
+    public float wanderMoveSpeed = 2f;
+    public float wanderMinPause = 1f;
+    public float wanderMaxPause = 3f;
 
-    private void Awake()
+    float meleeTimer;
+    float rangedTimer;
+
+    Vector3 startPosition;
+    Vector3 wanderTarget;
+    bool hasWanderTarget;
+    float wanderPauseTimer;
+    bool lastHasLos;
+
+    void Awake()
     {
         if (responder == null)
             responder = GetComponent<GolemSpellResponder>();
@@ -27,24 +46,76 @@ public class GolemBasicAI : MonoBehaviour
             ranged = GetComponent<GolemRangedAttack>();
         if (melee == null)
             melee = GetComponent<GolemMeleeAttack>();
+
+        startPosition = transform.position;
     }
 
-    private void Update()
+    void Update()
     {
         if (player == null)
             return;
 
-        meleeTimer -= Time.deltaTime;
-        rangedTimer -= Time.deltaTime;
+        float dt = Time.deltaTime;
+        meleeTimer -= dt;
+        rangedTimer -= dt;
 
-        float d = Vector3.Distance(transform.position, player.position);
+        bool rawLos = HasLineOfSight();
 
-        RotateTowardPlayer();
+        if (rawLos)
+            losTimer += dt;
+        else
+            losTimer -= dt;
 
-        if (d > stopMovingDistance)
-            MoveTowardPlayer();
+        losTimer = Mathf.Clamp(losTimer, -losLoseDelay, losGainDelay);
 
-        if (d <= meleeRange && meleeTimer <= 0f)
+        bool newLosState = losState;
+        if (!losState && losTimer >= losGainDelay)
+            newLosState = true;
+        else if (losState && losTimer <= -losLoseDelay)
+            newLosState = false;
+
+        if (newLosState && !losState)
+            Debug.Log("[GolemAI] Gained line of sight");
+        if (!newLosState && losState)
+            Debug.Log("[GolemAI] Lost line of sight");
+
+        losState = newLosState;
+
+        if (losState)
+            ChaseAndAttack();
+        else
+            Wander();
+    }
+
+    bool HasLineOfSight()
+    {
+        Vector3 origin = transform.position + Vector3.up * 1.5f;
+
+        Vector3 center = player.position;
+        center.y += 0.9f;
+
+        Debug.DrawLine(origin, center, Color.red);
+
+        Vector3 dir = center - origin;
+        float dist = dir.magnitude;
+
+        if (Physics.Raycast(origin, dir.normalized, out RaycastHit hit, dist, losMask))
+            return hit.transform == player || hit.transform.IsChildOf(player);
+
+        return false;
+    }
+
+
+    void ChaseAndAttack()
+    {
+        float dist = Vector3.Distance(transform.position, player.position);
+
+        RotateToward(player.position);
+
+        if (dist > stopMovingDistance)
+            MoveToward(player.position, moveSpeed);
+
+        if (dist <= meleeRange && meleeTimer <= 0f)
         {
             Debug.Log("[GolemAI] Melee attack");
             melee.DoMelee();
@@ -52,9 +123,9 @@ public class GolemBasicAI : MonoBehaviour
             return;
         }
 
-        if (d > meleeRange && rangedTimer <= 0f)
+        if (dist > meleeRange && rangedTimer <= 0f)
         {
-            if (responder.HasStoredSpell)
+            if (responder != null && responder.HasStoredSpell)
                 Debug.Log("[GolemAI] Ranged (stored spell)");
             else
                 Debug.Log("[GolemAI] Ranged (basic)");
@@ -64,23 +135,44 @@ public class GolemBasicAI : MonoBehaviour
         }
     }
 
-    private void MoveTowardPlayer()
+    void Wander()
     {
-        Vector3 t = new Vector3(player.position.x, transform.position.y, player.position.z);
-        Vector3 dir = (t - transform.position).normalized;
-        transform.position += dir * moveSpeed * Time.deltaTime;
+        if (wanderPauseTimer > 0f)
+        {
+            wanderPauseTimer -= Time.deltaTime;
+            return;
+        }
+
+        if (!hasWanderTarget || Vector3.Distance(transform.position, wanderTarget) < 0.5f)
+        {
+            Vector2 circle = Random.insideUnitCircle * wanderRadius;
+            Vector3 basePos = startPosition;
+            wanderTarget = new Vector3(basePos.x + circle.x, transform.position.y, basePos.z + circle.y);
+            hasWanderTarget = true;
+            wanderPauseTimer = 0f;
+            Debug.Log("[GolemAI] New wander target");
+        }
+
+        RotateToward(wanderTarget);
+        MoveToward(wanderTarget, wanderMoveSpeed);
 
         if (Random.value < 0.01f)
-            Debug.Log("[GolemAI] Moving");
+            Debug.Log("[GolemAI] Wandering");
     }
 
-    private void RotateTowardPlayer()
+    void MoveToward(Vector3 targetPos, float speed)
     {
-        Vector3 dir = (player.position - transform.position).normalized;
-        dir.y = 0f;
-        if (dir.sqrMagnitude < 0.01f)
-            return;
+        Vector3 flatTarget = new Vector3(targetPos.x, transform.position.y, targetPos.z);
+        Vector3 dir = (flatTarget - transform.position).normalized;
+        transform.position += dir * speed * Time.deltaTime;
+    }
 
+    void RotateToward(Vector3 targetPos)
+    {
+        Vector3 dir = (targetPos - transform.position).normalized;
+        dir.y = 0f;
+        if (dir.sqrMagnitude < 0.0001f)
+            return;
         Quaternion q = Quaternion.LookRotation(dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, q, Time.deltaTime * rotationSpeed);
     }
