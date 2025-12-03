@@ -27,6 +27,8 @@ public class EnemyIdol : Enemy
     private string Touching;
     private Coroutine currRoutine;
 
+    private float direction;
+
     private void Start()
     {
         rend = GetComponent<Renderer>();
@@ -49,12 +51,13 @@ public class EnemyIdol : Enemy
         //itemDrop = ItemData.
 
         //start Movement
-        
-        currRoutine = StartCoroutine(MoveTowards());
+        direction = 1f;
+        currRoutine = StartCoroutine(Move());
     }
 
-    private IEnumerator MoveTowards()
+    private IEnumerator Move()
     {
+        direction = 1f;
         Debug.Log("Move");
         if (!rb || !target) Debug.LogError("Can't find rigidBody or Target");
 
@@ -64,29 +67,18 @@ public class EnemyIdol : Enemy
             dist = Vector3.Distance(transform.position, target.position);
             moveSpeed = Mathf.Min(maxSpeed, Mathf.Abs(dist - 4f) * 3f);
 
-            Move(1f, moveSpeed);
-            yield return null;
+            MoveTowards(direction, new Vector3(target.transform.position.x, target.transform.position.y + 2, target.transform.position.z));
+            yield return new WaitForFixedUpdate();
         }
         currRoutine = StartCoroutine(Attack());
-        yield return null;
+        yield return new WaitForFixedUpdate();
     }
 
-    private void Move(float direction, float moveSpeed)
+    private void MoveTowards(float direction, Vector3 targetPos)
     {
-        Vector3 targetPos = new Vector3(target.transform.position.x, direction * (target.transform.position.y + 2), target.transform.position.z);
         Vector3 nextPos = Vector3.MoveTowards(transform.position, targetPos, direction * moveSpeed * Time.deltaTime);
 
         rb.MovePosition(nextPos);
-        transform.LookAt(direction * target.transform.position);
-    }
-
-    private void MoveAway(float direction, float moveSpeed)
-    {
-        Vector3 direction = transform.position - target.position;
-        
-        direction.Normalize();
-
-        transform.position += direction * speed * Time.deltaTime;
     }
 
 
@@ -96,11 +88,12 @@ public class EnemyIdol : Enemy
         yield return new WaitForSeconds(3f);
         while(Touching != "Player")
         {
-            Move(1f, 10f);
-            yield return null;
+            moveSpeed = 5f;
+            MoveTowards(direction, target.position);
+            yield return new WaitForFixedUpdate();
         }
         currRoutine = StartCoroutine(Run());
-        yield return null;
+        yield return new WaitForFixedUpdate();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -123,7 +116,13 @@ public class EnemyIdol : Enemy
 
     private void Update()
     {
-        Debug.Log(health);
+        if (direction == -1f)
+        {
+            transform.LookAt(2 * transform.position - target.position);
+        } else
+        {
+            transform.LookAt(target.position);
+        }
         // Safely update UI text if assigned
         /*if (damageTakenText != null)
         {
@@ -169,16 +168,18 @@ public class EnemyIdol : Enemy
 
     private IEnumerator Run()
     {
+        direction = -1f;
         Debug.Log("Run");
         float dist = Vector3.Distance(transform.position, target.position);
         while (dist < 20f)
         {
             dist = Vector3.Distance(transform.position, target.position);
-            Move(-1f, Mathf.Min(maxSpeed, Mathf.Abs(dist - 4f) * 3f));
-            yield return null;
+            moveSpeed = 3f;
+            MoveTowards(direction, target.position);
+            yield return new WaitForFixedUpdate();
         }
-        currRoutine = StartCoroutine(MoveTowards());
-        yield return null;
+        currRoutine = StartCoroutine(Move());
+        yield return new WaitForFixedUpdate();
     }
 
     // Resets the combo damage total after time runs out

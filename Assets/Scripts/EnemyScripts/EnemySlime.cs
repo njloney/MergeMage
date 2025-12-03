@@ -57,7 +57,7 @@ public class EnemySlime : Enemy
 
         float direction = 1f;
         float dist = Vector3.Distance(transform.position, target.position);
-        moveSpeed = Mathf.Min(maxSpeed, dist * 3f);
+        moveSpeed = Mathf.Min(maxSpeed, dist + 0.1f);
 
         Vector3 targetPosXZ = new Vector3(target.position.x, transform.position.y, target.position.z);
         Vector3 nextPos = Vector3.MoveTowards(transform.position, targetPosXZ, direction * moveSpeed * Time.deltaTime);
@@ -74,7 +74,7 @@ public class EnemySlime : Enemy
             health.OnDamaged -= HandleDamageTaken;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         move();
         UpdateTransparency();
