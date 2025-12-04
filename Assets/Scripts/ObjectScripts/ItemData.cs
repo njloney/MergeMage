@@ -26,8 +26,6 @@ public class ItemData : ScriptableObject
     [Tooltip("Leave this as 'None' if this item is a Consumable")]
     public CrystalType crystalType;
 
-    public GameObject wandModelPrefab;
-
     [Header("Spell Binding (for unstable combo crystals, spell scrolls, etc.)")]
     [Tooltip("If true, this item directly represents a spell, not just a base crystal.")]
     public bool isSpellItem = false;
