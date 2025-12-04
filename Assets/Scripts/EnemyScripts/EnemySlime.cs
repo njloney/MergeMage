@@ -28,6 +28,9 @@ public class EnemySlime : Enemy
     private Renderer objectRenderer;
     private float transparencyValue;
 
+    private string Touching;
+
+
     private void Start()
     {
         objectRenderer = GetComponent<Renderer>();
@@ -106,6 +109,39 @@ public class EnemySlime : Enemy
 
         // Flash red to show impact
         StartCoroutine(FlashRed());
+    }
+
+    private Coroutine damageCoroutine;
+
+    void OnCollisionEnter(Collision collision)
+    {
+        damageCoroutine = StartCoroutine(DealDamage(collision));
+    }
+    private IEnumerator DealDamage(Collision collision)
+    {
+        Touching = collision.gameObject.name;
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Health playerHealth = collision.gameObject.GetComponent<Health>();
+            while (true)
+            {
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(10f, DamageType.Physical, null);
+                }
+                yield return new WaitForSeconds(1f);
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        Touching = "";
+        if (damageCoroutine != null)
+        {
+            StopCoroutine(damageCoroutine);
+            damageCoroutine = null;
+        }
     }
 
     // Quick red flash when hit

@@ -86,7 +86,7 @@ public class EnemyIdol : Enemy
     {
         Debug.Log("Attack");
         yield return new WaitForSeconds(3f);
-        while(Touching != "Player")
+        while( Touching != "Player")
         {
             moveSpeed = 5f;
             MoveTowards(direction, target.position);
@@ -95,15 +95,36 @@ public class EnemyIdol : Enemy
         currRoutine = StartCoroutine(Run());
         yield return new WaitForFixedUpdate();
     }
+    private Coroutine damageCoroutine;
 
     void OnCollisionEnter(Collision collision)
     {
+        damageCoroutine = StartCoroutine(DealDamage(collision));
+    }
+    private IEnumerator DealDamage(Collision collision)
+    {
         Touching = collision.gameObject.name;
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Health playerHealth = collision.gameObject.GetComponent<Health>();
+            while (true)
+            {
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(10f, DamageType.Physical, null);
+                }
+                yield return new WaitForSeconds(1f);
+            }
+        }
     }
 
-    void OnCollisionExit(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
         Touching = " ";
+        if (damageCoroutine != null)
+        {
+            StopCoroutine(damageCoroutine);
+        }
     }
 
     private void OnDisable()
