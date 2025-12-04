@@ -67,7 +67,7 @@ Transform:
   m_GameObject: {fileID: 4922914811409382623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.45, y: 2.9510977, z: -14.328897}
+  m_LocalPosition: {x: 14.864361, y: 0, z: -0.5029259}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -258,6 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   responseResolver: {fileID: 11400000, guid: fc0f93c0826814f448e4b49009c5b93b, type: 2}
   basicRangedSpell: {fileID: 11400000, guid: 67e07e3a704e59d42ba5ab0f6117b454, type: 2}
+  storedSpellDuration: 8
 --- !u!114 &6993627816005888401
 MonoBehaviour:
   m_ObjectHideFlags: 0

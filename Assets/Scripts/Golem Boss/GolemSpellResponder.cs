@@ -4,14 +4,33 @@ public class GolemSpellResponder : MonoBehaviour
 {
     [SerializeField] private GolemSpellResponseResolver responseResolver;
     [SerializeField] private ProjectileStats basicRangedSpell;
+    [SerializeField] private float storedSpellDuration = 8f;
 
     public ProjectileStats StoredRangedSpell { get; private set; }
     public bool HasStoredSpell { get; private set; }
 
-    private void Awake()
+    float storedTimer;
+
+    void Awake()
     {
         StoredRangedSpell = null;
         HasStoredSpell = false;
+        storedTimer = 0f;
+    }
+
+    void Update()
+    {
+        if (!HasStoredSpell)
+            return;
+
+        storedTimer -= Time.deltaTime;
+
+        if (storedTimer <= 0f)
+        {
+            StoredRangedSpell = null;
+            HasStoredSpell = false;
+            Debug.Log("[GolemResponder] Stored spell expired reverting to basic");
+        }
     }
 
     public void OnHitBySpell(ProjectileStats incomingStats, Object source)
@@ -37,6 +56,9 @@ public class GolemSpellResponder : MonoBehaviour
 
         StoredRangedSpell = next;
         HasStoredSpell = true;
+        storedTimer = storedSpellDuration;
+
+        Debug.Log($"[GolemResponder] New stored spell: {StoredRangedSpell.name}");
     }
 
     public ProjectileStats GetCurrentRangedSpell()
