@@ -861,6 +861,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4282101227085849694, guid: 40fb56d4c0181f945adbc0603c161c33, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.066
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282101227085849694, guid: 40fb56d4c0181f945adbc0603c161c33, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.65
+      objectReference: {fileID: 0}
     - target: {fileID: 4922914811409382623, guid: 40fb56d4c0181f945adbc0603c161c33, type: 3}
       propertyPath: m_Name
       value: _Golem_
