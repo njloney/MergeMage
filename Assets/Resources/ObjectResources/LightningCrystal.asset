@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LightningCrystal
   m_EditorClassIdentifier: 
   itemName: LightningCrystal
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: c36dc5034185248dbbef04e529839700, type: 3}
   itemType: 0
   pickupPrefab: {fileID: 6910248453384626302, guid: 58b58243095ee4367828976c32896034, type: 3}
   castType: 1

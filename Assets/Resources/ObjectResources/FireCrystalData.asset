@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FireCrystalData
   m_EditorClassIdentifier: 
   itemName: Fire Crystal
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 678a36669df4a4088b1487a55ace44fb, type: 3}
   itemType: 0
   pickupPrefab: {fileID: 8160803480469275100, guid: 632319e08c4a44d25b561cfee7628478, type: 3}
   castType: 1
