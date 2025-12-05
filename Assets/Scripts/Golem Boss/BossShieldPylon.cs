@@ -7,8 +7,9 @@ public class BossShieldPylon : MonoBehaviour
     public float channelTime = 3f;
     public LayerMask playerMask;
 
+    public bool IsActive { get; private set; } = true;
+
     float progress;
-    bool isActive = true;
 
     void Start()
     {
@@ -16,15 +17,9 @@ public class BossShieldPylon : MonoBehaviour
             bossShield.RegisterPylon(this);
     }
 
-    void OnDestroy()
-    {
-        if (bossShield != null)
-            bossShield.UnregisterPylon(this);
-    }
-
     void Update()
     {
-        if (!isActive)
+        if (!IsActive)
             return;
 
         bool inRange = Physics.CheckSphere(transform.position, radius, playerMask);
@@ -32,26 +27,28 @@ public class BossShieldPylon : MonoBehaviour
         if (inRange)
         {
             progress += Time.deltaTime;
-            Debug.Log($"[Pylon] Channel progress {progress:F2}/{channelTime:F2}");
-
             if (progress >= channelTime)
                 Deactivate();
         }
         else if (progress > 0f)
         {
             progress -= Time.deltaTime;
-            if (progress < 0f) progress = 0f;
+            if (progress < 0f)
+                progress = 0f;
         }
     }
 
     void Deactivate()
     {
-        if (!isActive)
+        if (!IsActive)
             return;
 
-        isActive = false;
-        Debug.Log("[Pylon] Deactivated and destroyed");
-        Destroy(gameObject);
+        IsActive = false;
+
+        if (bossShield != null)
+            bossShield.UnregisterPylon(this);
+
+        Debug.Log("[Pylon] Deactivated");
     }
 
     void OnDrawGizmosSelected()

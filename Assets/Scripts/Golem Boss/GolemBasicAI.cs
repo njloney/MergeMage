@@ -6,6 +6,8 @@ public class GolemBasicAI : MonoBehaviour
     public GolemMeleeAttack melee;
     public GolemRangedAttack ranged;
     public GolemSpellResponder responder;
+    MovementModifiersPlaceholder mods;
+
 
     public float meleeRange = 5f;
     public float stopMovingDistance = 3f;
@@ -19,6 +21,7 @@ public class GolemBasicAI : MonoBehaviour
 
 
     public float moveSpeed = 5f;
+    float speedMult = 1f;
     public float rotationSpeed = 7f;
 
     public float meleeCooldown = 2f;
@@ -48,12 +51,20 @@ public class GolemBasicAI : MonoBehaviour
             melee = GetComponent<GolemMeleeAttack>();
 
         startPosition = transform.position;
+        mods = GetComponent<MovementModifiersPlaceholder>();
+
     }
 
     void Update()
     {
         if (player == null)
             return;
+
+        float speedMult = mods != null ? mods.speedMultiplier : 1f;
+        bool frozen = speedMult == 0f;
+        if (frozen)
+            return;
+
 
         float dt = Time.deltaTime;
         meleeTimer -= dt;
@@ -113,7 +124,7 @@ public class GolemBasicAI : MonoBehaviour
         RotateToward(player.position);
 
         if (dist > stopMovingDistance)
-            MoveToward(player.position, moveSpeed);
+            MoveToward(player.position, moveSpeed * speedMult);
 
         if (dist <= meleeRange && meleeTimer <= 0f)
         {
@@ -154,7 +165,8 @@ public class GolemBasicAI : MonoBehaviour
         }
 
         RotateToward(wanderTarget);
-        MoveToward(wanderTarget, wanderMoveSpeed);
+        MoveToward(wanderTarget, wanderMoveSpeed * speedMult);
+
 
         if (Random.value < 0.01f)
             Debug.Log("[GolemAI] Wandering");
@@ -164,7 +176,8 @@ public class GolemBasicAI : MonoBehaviour
     {
         Vector3 flatTarget = new Vector3(targetPos.x, transform.position.y, targetPos.z);
         Vector3 dir = (flatTarget - transform.position).normalized;
-        transform.position += dir * speed * Time.deltaTime;
+        transform.position += dir * (moveSpeed * speedMult) * Time.deltaTime;
+
     }
 
     void RotateToward(Vector3 targetPos)

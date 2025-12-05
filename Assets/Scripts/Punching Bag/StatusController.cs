@@ -14,12 +14,6 @@ public class StatusController : MonoBehaviour
     // Expose Health so effects can deal damage, heal, etc.
     public Health Health => _health;
 
-    /// <summary>
-    /// Apply (or re-apply) an effect to this target.
-    /// duration  = how long the effect should last (seconds)
-    /// magnitude = strength of the effect (e.g., DPS, slow %, etc.)
-    /// source    = who applied it (player, enemy, etc.)
-    /// </summary>
     public void ApplyEffect(StatusEffect effect, float duration, float magnitude, Object source = null)
     {
         // If only one of this effect is allowed at a time, try to find it
