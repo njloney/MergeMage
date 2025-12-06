@@ -55,6 +55,7 @@ public class WandVisuals : MonoBehaviour
 
             currentModel.transform.localPosition = Vector3.zero;
             currentModel.transform.localRotation = Quaternion.identity;
+            currentModel.transform.localScale = Vector3.one * 2;
         }
 
     }

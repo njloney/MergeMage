@@ -21,7 +21,7 @@ public class Mana : MonoBehaviour
         _mana = runtimeStats.maxMana;
 
         // Subscribe to max mana changes from passive items
-        runtimeStats.OnMaxManaChanged += OnMaxManaIncrease;
+        runtimeStats.OnMaxManaChanged += RestoreMana;
     }
 
     private void OnDestroy()
@@ -29,16 +29,8 @@ public class Mana : MonoBehaviour
         // Unsubscribe to prevent memory leaks
         if (runtimeStats != null)
         {
-            runtimeStats.OnMaxManaChanged -= OnMaxManaIncrease;
+            runtimeStats.OnMaxManaChanged -= RestoreMana;
         }
-    }
-
-    private void OnMaxManaIncrease(float manaIncrease)
-    {
-        // When max mana increases from passive items, restore by that amount
-        _mana += manaIncrease;
-        OnManaChanged?.Invoke(_mana);
-        Debug.Log($"Max mana increased! Current: {_mana}/{maxMana}");
     }
 
     public float currentMana => _mana;

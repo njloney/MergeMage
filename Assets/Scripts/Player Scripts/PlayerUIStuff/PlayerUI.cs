@@ -10,6 +10,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Health playerHealth;  //Player's Health
     [SerializeField] private Mana playerMana;  //Player's Mana
 
+    [SerializeField] private RuntimePlayerStats playerStats;
+
     [Header("UI Sliders")]
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider manaSlider;
@@ -32,36 +34,33 @@ public class PlayerUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if(itemManager != null)
+        if (playerStats != null && playerHealth != null && playerMana != null && itemManager != null)
         {
+            //Update at the Start
+            updateHealthUI();
+            updateManaUI();
+
+            //Connect when damaged
+            playerHealth.OnDamaged += HandleDamage;
+
+            //Connect when mana used
+            playerMana.OnManaChanged += HandleManaChange;
+
+            //Connect when maxHealth Changes
+            playerStats.OnMaxHealthChanged += HandleStatsChange;
+
+            //Connect when maxMana Changes
+            playerStats.OnMaxManaChanged += HandleStatsChange;
+
+            //Connect when Death
+            playerHealth.OnDied += HandleDeath;
+            
+            //Connecting to ItemManager when Passive Items are acquired and Stacked
             itemManager.OnPassiveItemAcquired += HandleItemAcquired;
             itemManager.OnPassiveItemStacked += HandleItemStacked;
+
+        }
         
-        }
-
-
-        if (playerHealth != null)
-        {
-            Debug.Log(playerHealth.maxHP);
-            healthSlider.maxValue = playerHealth.maxHP;
-            healthSlider.value = playerHealth.currentHP;
-
-            healthText.text = $"{playerHealth.currentHP:0} / {playerHealth.maxHP}";
-
-            playerHealth.OnDamaged += HandleDamageTaken;
-            playerHealth.OnDied += HandleDeath;
-        }
-
-        if (playerMana != null)
-        {
-            manaSlider.maxValue = playerMana.maxMana;
-            manaSlider.value = playerMana.currentMana;
-
-            manaText.text = $"{playerMana.currentMana:0} / {playerMana.maxMana}";
-
-            playerMana.OnManaChanged += HandleManaChanged;
-
-        }
     }
 
     private void HandleItemAcquired(ItemData item, int count)
@@ -78,7 +77,7 @@ public class PlayerUI : MonoBehaviour
         
     }
 
-    private void HandleItemStacked(ItemData item, int count)
+     private void HandleItemStacked(ItemData item, int count)
     {
         if(passiveSlots.ContainsKey(item))
         {
@@ -87,24 +86,42 @@ public class PlayerUI : MonoBehaviour
         
     }
 
+    private void HandleDamage(float amount, DamageType type, UnityEngine.Object source)
+    {
+        updateHealthUI();
+    }
 
-    private void HandleDamageTaken(float dmgAmount, DamageType type, UnityEngine.Object source)
+
+    private void HandleManaChange(float amount)
     {
 
-        healthSlider.value = playerHealth.currentHP;
-
-        healthText.text = $"{playerHealth.currentHP:0} / {playerHealth.maxHP}";
-
+        updateManaUI();
 
     }
 
-    private void HandleManaChanged(float amount)
+
+    private void HandleStatsChange(float amount)
     {
+
+        updateHealthUI();
+        updateManaUI();
+
+    }
+
+    private void updateHealthUI()
+    {
+        if (playerHealth == null || playerStats == null) return;
+        healthSlider.maxValue = playerStats.maxHealth;
+        healthSlider.value = playerHealth.currentHP;
+        healthText.text = $"{playerHealth.currentHP:0} / {playerStats.maxHealth:0}";
+    }
+
+    private void updateManaUI()
+    {
+        if (playerMana == null || playerStats == null) return;
+        manaSlider.maxValue = playerStats.maxMana;
         manaSlider.value = playerMana.currentMana;
-
-        manaText.text = $"{playerMana.currentMana:0} / {playerMana.maxMana}";
-
-        
+        manaText.text = $"{playerMana.currentMana:0} / {playerStats.maxMana}";
     }
 
 
@@ -117,22 +134,17 @@ public class PlayerUI : MonoBehaviour
     
     private void OnDisable()
     {
-        if (playerHealth != null)
+        if (playerHealth != null && playerMana != null && itemManager != null && playerStats != null)
         {
-            playerHealth.OnDamaged -= HandleDamageTaken;
+            playerHealth.OnDamaged -= HandleDamage;
             playerHealth.OnDied -= HandleDeath;
+            playerMana.OnManaChanged -= HandleManaChange;
+            playerStats.OnMaxHealthChanged -= HandleStatsChange;
+            playerStats.OnMaxManaChanged -= HandleStatsChange;
+            itemManager.OnPassiveItemAcquired -= HandleItemAcquired;
+            itemManager.OnPassiveItemStacked -= HandleItemStacked;
+
         }
 
-        if (playerMana != null)
-        {
-            playerMana.OnManaChanged -= HandleManaChanged;
-        }
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
