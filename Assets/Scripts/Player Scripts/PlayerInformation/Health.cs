@@ -22,7 +22,7 @@ public class Health : MonoBehaviour
                 Debug.Log("Hp " + runtimeStats.maxHealth);
 
                 // Subscribe to max health changes from passive items
-                runtimeStats.OnMaxHealthChanged += OnMaxHealthIncrease;
+                runtimeStats.OnMaxHealthChanged += Heal;
             }
             else
             {
@@ -42,15 +42,8 @@ public class Health : MonoBehaviour
         // Unsubscribe to prevent memory leaks
         if (runtimeStats != null)
         {
-            runtimeStats.OnMaxHealthChanged -= OnMaxHealthIncrease;
+            runtimeStats.OnMaxHealthChanged -= Heal;
         }
-    }
-
-    private void OnMaxHealthIncrease(float healthIncrease)
-    {
-        // When max health increases from passive items, heal by that amount
-        _hp += healthIncrease;
-        Debug.Log($"Max health increased! Current HP: {_hp}/{maxHP}");
     }
 
     public float currentHP => _hp;
