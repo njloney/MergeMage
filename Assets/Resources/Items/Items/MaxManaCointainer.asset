@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
+  m_Name: MaxManaCointainer
+  m_EditorClassIdentifier: 
+  itemName: Max Mana Container
+  itemIcon: {fileID: 21300000, guid: 4af0949bf351048fd9aa4b20e8df20ee, type: 3}
+  itemType: 2
+  pickupPrefab: {fileID: 0}
+  castType: 0
+  spellPrefab: {fileID: 0}
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  crystalType: 7
+  isSpellItem: 0
+  projectileStats: {fileID: 0}
+  passiveEffect: {fileID: 11400000, guid: 74df1d759e8844124853ab25f3316c29, type: 2}

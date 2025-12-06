@@ -1,6 +1,7 @@
 public enum SpellCastType
 {
-    None,       
+    None,
     Projectile,
-    Beam        
+    Beam,
+    Ground,
 }

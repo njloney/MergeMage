@@ -34,7 +34,7 @@ public class ProjectileStats : ScriptableObject
     public bool enablePierce = false;     // if true, the projectile can pass through targets
     public int pierceCount = 0;           // how many distinct targets it can hit before despawning
 
-    
+
     [Header("Spawn Object On Impact (Earth Rupture / Void field, etc.)")]
     public bool spawnObjectOnHit = false;
     public GameObject onHitPrefab;   // GroundSpikeField prefab
@@ -59,6 +59,18 @@ public class ProjectileStats : ScriptableObject
     [Header("Prefab Override")]
     public GameObject projectileOverridePrefab;
 
+    [Header("Ground Target Spell (e.g. Lightning Strike)")]
+    public bool isGroundSpell = false;
+    [Tooltip("The ghost/reticle to show on the ground where the player is aiming.")]
+    public GameObject ghostIndicatorPrefab;
+    [Tooltip("The actual spell prefab to spawn at the target point (must have LightningStrike script or similar).")]
+    public GameObject groundSpellPrefab;
+    [Tooltip("Max distance to cast this spell.")]
+    public float maxCastDistance = 20f;
+
+    [Header("Screen Shake")]
+    public float impactShakeMagnitude = 0.5f;
+    public float impactShakeDuration = 0.2f;
 }
 
 [System.Serializable]

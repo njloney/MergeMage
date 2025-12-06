@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EarthCrystalData
   m_EditorClassIdentifier: 
   itemName: Earth Crystal
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 86887a4766b2b43219a85f0c7cf085b3, type: 3}
   itemType: 0
   pickupPrefab: {fileID: 2311387377485178826, guid: d8f17e3654ffe4eeaaae0e3c29223b6d, type: 3}
   castType: 1

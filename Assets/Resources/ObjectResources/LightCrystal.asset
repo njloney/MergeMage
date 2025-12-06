@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LightCrystal
   m_EditorClassIdentifier: 
   itemName: LightCrystal
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: d18130fcf06954ce3a5bca0889ae69bb, type: 3}
   itemType: 0
   pickupPrefab: {fileID: 1709855936003842395, guid: d970a6fbf0fd543868ebc7890c372c57, type: 3}
   castType: 2

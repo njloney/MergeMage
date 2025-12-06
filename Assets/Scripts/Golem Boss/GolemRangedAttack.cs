@@ -7,6 +7,8 @@ public class GolemRangedAttack : MonoBehaviour
     [SerializeField] private GolemSpellResponder responder;
     [SerializeField] private Transform player;
 
+    [SerializeField] private float aimUpOffset = 1.0f;
+
     void Awake()
     {
         if (responder == null)
@@ -27,8 +29,10 @@ public class GolemRangedAttack : MonoBehaviour
 
         if (player != null)
         {
-            Vector3 toPlayer = player.position - firePoint.position;
-            toPlayer.y = 0f;
+            Vector3 targetPos = player.position;
+            targetPos.y += aimUpOffset;
+
+            Vector3 toPlayer = targetPos - firePoint.position;
             if (toPlayer.sqrMagnitude > 0.0001f)
                 firePoint.rotation = Quaternion.LookRotation(toPlayer.normalized);
         }

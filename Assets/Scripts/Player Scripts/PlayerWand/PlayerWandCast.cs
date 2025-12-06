@@ -5,53 +5,47 @@ public class PlayerWandCast : MonoBehaviour
     [Header("Casting")]
     [SerializeField] private Transform firePoint;
     [SerializeField] private InventoryManager inventoryManager;
-
     [SerializeField] private MergeMode mergeController;
-
     [SerializeField] private Mana manaPool;
 
+    [Header("Targeting")]
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private LayerMask groundMask;
+
     [Header("Projectile Casting")]
-    [Tooltip("Fallback projectile prefab if the spell's stats don't override it.")]
     [SerializeField] private GameObject projectilePrefab;
+    public bool debugDisableConsumption = false;
 
     private ItemData currentActive;
-    private ItemData currentInactive;
     private bool mergeMode = false;
+
+    // Ground Targeting State
+    private GameObject currentGhost;
+    private bool validTargetFound;
+    private Vector3 currentTargetPoint;
+    private Quaternion currentTargetRotation;
+
 
     private void Start()
     {
-        if (inventoryManager != null)
-        {
-            inventoryManager.OnActiveItemChanged += OnActiveItemChanged;
-        }
-
-        if (mergeController != null)
-        {
-            mergeController.OnMergeModeChanged += OnMergeModeChanged;
-        }
+        if (inventoryManager != null) inventoryManager.OnActiveItemChanged += OnActiveItemChanged;
+        if (mergeController != null) mergeController.OnMergeModeChanged += OnMergeModeChanged;
     }
 
     private void OnDestroy()
     {
-        if (inventoryManager != null)
-        {
-            inventoryManager.OnActiveItemChanged -= OnActiveItemChanged;
-        }
-
-        if (mergeController != null)
-        {
-            mergeController.OnMergeModeChanged -= OnMergeModeChanged;
-        }
+        if (inventoryManager != null) inventoryManager.OnActiveItemChanged -= OnActiveItemChanged;
+        if (mergeController != null) mergeController.OnMergeModeChanged -= OnMergeModeChanged;
     }
 
     private void OnActiveItemChanged(ItemData item)
     {
+        if (currentGhost != null)
+        {
+            Destroy(currentGhost);
+            currentGhost = null;
+        }
         currentActive = item;
-
-        if (item == null)
-            Debug.Log("[WandCast] Active item is NULL");
-        else
-            Debug.Log("[WandCast] Active item set to: " + item.itemName);
     }
 
     private void OnMergeModeChanged(bool isMerge)
@@ -61,132 +55,150 @@ public class PlayerWandCast : MonoBehaviour
 
     private void Update()
     {
+        HandleGroundTargeting();
         if (Input.GetMouseButtonDown(0))
         {
             TryCast();
         }
     }
 
-    private void TryCast()
+    private void HandleGroundTargeting()
     {
-        if (firePoint == null)
+        if (currentActive == null || currentActive.projectileStats == null || !currentActive.projectileStats.isGroundSpell)
         {
-            Debug.LogError("[WandCast] firePoint missing.");
+            if (currentGhost != null) currentGhost.SetActive(false);
             return;
         }
 
-        if (currentActive == null || !currentActive.isSpellItem || currentActive.spellPrefab == null)
+        ProjectileStats stats = currentActive.projectileStats;
+
+        if (currentGhost == null && stats.ghostIndicatorPrefab != null)
         {
-            Debug.Log("[WandCast] No valid spell on active item.");
-            return;
+            currentGhost = Instantiate(stats.ghostIndicatorPrefab);
         }
 
-        // Check if we are in merge mode
-        if (mergeMode)
-        {
-            Debug.Log("[WandCast] In merge mode, using merged spell data.");
-            ItemData mergedSpell = currentActive;
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
-            if (mergedSpell != null)
+        if (Physics.Raycast(ray, out RaycastHit hit, stats.maxCastDistance, groundMask))
+        {
+            validTargetFound = true;
+            currentTargetPoint = hit.point;
+
+            // [UPDATED ROTATION LOGIC]
+            // 1. Calculate the direction from the player to the hit point
+            Vector3 forward = hit.point - transform.position;
+
+            // 2. Flatten it so we don't tilt weirdly if aiming up/down a hill
+            //    (Project the direction onto the ground plane defined by the normal)
+            Vector3 forwardOnGround = Vector3.ProjectOnPlane(forward, hit.normal).normalized;
+
+            // 3. Create a rotation that looks in that direction, with Up aligned to ground normal
+            if (forwardOnGround != Vector3.zero)
             {
-                CastMergedSpell(mergedSpell);
-                inventoryManager.ConsumeMergeSpell();
+                currentTargetRotation = Quaternion.LookRotation(forwardOnGround, hit.normal);
             }
             else
             {
-                Debug.LogError("[WandCast] No merged spell available.");
+                currentTargetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
             }
-            return;
-        }
 
-        // Directly cast the spell based on the current active item
-        if (currentActive.castType == SpellCastType.Beam)
-        {
-            Debug.Log("[WandCast] Attempting to cast beam spell.");
-            CastBeamSpell(currentActive.projectileStats);
-        }
-        else if (currentActive.castType == SpellCastType.Projectile)
-        {
-            Debug.Log("[WandCast] Attempting to cast projectile spell.");
-            CastProjectileSpell(currentActive.projectileStats);
+            if (currentGhost != null)
+            {
+                currentGhost.SetActive(true);
+                currentGhost.transform.position = hit.point + Vector3.up * 0.1f;
+                currentGhost.transform.rotation = currentTargetRotation; // Apply calculation
+            }
         }
         else
         {
-            Debug.LogError("[WandCast] Invalid spell type for casting.");
+            validTargetFound = false;
+            if (currentGhost != null) currentGhost.SetActive(false);
         }
     }
 
-    // Check if merge mode is active
-
-    // Method to cast the merged spell
-    private void CastMergedSpell(ItemData mergedSpell)
+    private void TryCast()
     {
-        GameObject spellPrefab = Instantiate(mergedSpell.spellPrefab, firePoint.position, firePoint.rotation);
-        Debug.Log($"Cast merged spell: {mergedSpell.itemName}");
+        if (firePoint == null || currentActive == null || !currentActive.isSpellItem) return;
+
+        ProjectileStats stats = currentActive.projectileStats;
+        if (stats == null) return;
+
+        if (stats.isGroundSpell || currentActive.castType == SpellCastType.Ground)
+        {
+            if (validTargetFound)
+            {
+                CastGroundSpell(stats, currentTargetPoint, currentTargetRotation);
+                ConsumeIfMerged();
+            }
+        }
+        else if (stats.isBeamSpell || currentActive.castType == SpellCastType.Beam)
+        {
+            CastBeamSpell(stats);
+            ConsumeIfMerged();
+        }
+        else
+        {
+            CastProjectileSpell(stats);
+            ConsumeIfMerged();
+        }
     }
 
-    // ---------- PROJECTILE SPELLS ----------
+    private void ConsumeIfMerged()
+    {
+        if (debugDisableConsumption) return;
+        if (mergeMode) inventoryManager.ConsumeMergeSpell();
+    }
+
+    // [UPDATED ARGUMENTS] Added rotation parameter
+    private void CastGroundSpell(ProjectileStats stats, Vector3 location, Quaternion rotation)
+    {
+        if (manaPool != null)
+        {
+            if (!manaPool.hasMana(stats.manaCost)) return;
+            manaPool.useMana(stats.manaCost);
+        }
+
+        if (stats.groundSpellPrefab != null)
+        {
+            // Use the rotation we calculated
+            Instantiate(stats.groundSpellPrefab, location, rotation);
+        }
+    }
 
     private void CastProjectileSpell(ProjectileStats stats)
     {
         if (manaPool != null)
         {
-            // Check if we have enough
-            if (manaPool.currentMana < stats.manaCost)
-            {
-                Debug.Log("Not enough mana!");
-                return; 
-            }
-
-            // Consume the mana
+            if (!manaPool.hasMana(stats.manaCost)) return;
             manaPool.useMana(stats.manaCost);
         }
-        // Optional override per spell
-        GameObject prefabToUse = stats.projectileOverridePrefab != null
-            ? stats.projectileOverridePrefab
-            : projectilePrefab;
 
-        if (prefabToUse == null)
+        GameObject prefabToUse = stats.projectileOverridePrefab != null ? stats.projectileOverridePrefab : projectilePrefab;
+
+        if (prefabToUse != null)
         {
-            Debug.LogError("[WandCast] No projectile prefab available.");
-            return;
+            var go = Instantiate(prefabToUse, firePoint.position, firePoint.rotation);
+            if (go.TryGetComponent<ProjectileConfig>(out var cfg))
+            {
+                cfg.stats = stats;
+                cfg.owner = this;
+            }
+            go.SetActive(true);
         }
-
-        var go = Instantiate(prefabToUse, firePoint.position, firePoint.rotation);
-
-        if (go.TryGetComponent<ProjectileConfig>(out var cfg))
-        {
-            cfg.stats = stats;
-            cfg.owner = this;
-        }
-
-        go.SetActive(true);
     }
-
-    // ---------- BEAM SPELLS ----------
 
     private void CastBeamSpell(ProjectileStats stats)
     {
         if (manaPool != null)
         {
-            // Check if we have enough
-            if (manaPool.currentMana < stats.manaCost)
-            {
-                Debug.Log("Not enough mana!");
-                return;
-            }
-
-            // Consume the mana
+            if (!manaPool.hasMana(stats.manaCost)) return;
             manaPool.useMana(stats.manaCost);
         }
-        
-        if (stats.beamPrefab == null || stats.beamConfig == null)
-        {
-            Debug.LogWarning($"[WandCast] Beam spell '{stats.name}' missing prefab or config.");
-            return;
-        }
 
-        LightRayBeam beam = Instantiate(stats.beamPrefab);
-        beam.Init(firePoint, this, stats.beamConfig);
+        if (stats.beamPrefab != null && stats.beamConfig != null)
+        {
+            LightRayBeam beam = Instantiate(stats.beamPrefab);
+            beam.Init(firePoint, this, stats.beamConfig);
+        }
     }
 }
