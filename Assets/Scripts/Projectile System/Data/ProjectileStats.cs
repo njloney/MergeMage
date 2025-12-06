@@ -68,6 +68,12 @@ public class ProjectileStats : ScriptableObject
     [Tooltip("Max distance to cast this spell.")]
     public float maxCastDistance = 20f;
 
+    [Header("Multishot / Shotgun")]
+    public int projectileCount = 1;
+    [Range(0f, 90f)]
+    public float spreadAngle = 0f;
+
+
     [Header("Screen Shake")]
     public float impactShakeMagnitude = 0.5f;
     public float impactShakeDuration = 0.2f;
