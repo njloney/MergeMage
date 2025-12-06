@@ -2,7 +2,7 @@
 - Project name: CMSC425-Game
 - Unity version: Unity 6000.0.59f2
 - Active game object:
-  - Name: Plane
+  - Name: GolemBoss
   - Tag: Untagged
-  - Layer: PlayerProjectile
+  - Layer: Enemy
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
