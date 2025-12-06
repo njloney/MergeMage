@@ -23,8 +23,8 @@ public class SpellRecipe
     public CrystalType element2;
 
     [Header("Merged Spell Prefab")]
-    [Tooltip("Prefab to spawn for the merged spell (e.g. Fireball projectile prefab).")]
-    public GameObject mergedSpellPrefab;
+    [Tooltip("The Stats object defining damage, cast type, and prefabs.")]
+    public ProjectileStats mergedSpellStats;
 
     [Header("Unstable item visuals (for inventory UI)")]
     [Tooltip("Name shown for the unstable merged spell item.")]
@@ -50,7 +50,7 @@ public class SpellCombinationResolver : ScriptableObject
 
         foreach (var recipe in spellRecipes)
         {
-            if (recipe == null || recipe.mergedSpellPrefab == null)
+            if (recipe == null || recipe.mergedSpellStats == null)
                 continue;
 
             var key = GetNormalizedKey(recipe.element1, recipe.element2);
@@ -84,7 +84,7 @@ public class SpellCombinationResolver : ScriptableObject
             return null;
         }
 
-        if (recipe.mergedSpellPrefab == null)
+        if (recipe.mergedSpellStats == null)
         {
             Debug.LogWarning($"[Resolver] Merge recipe {item1.crystalType}+{item2.crystalType} has no mergedSpellPrefab.");
             return null;
@@ -102,11 +102,26 @@ public class SpellCombinationResolver : ScriptableObject
         unstable.crystalType = item1.crystalType; // arbitrary, main thing is isSpellItem + spellPrefab
 
         unstable.isSpellItem = true;
-        unstable.spellPrefab = recipe.mergedSpellPrefab;  
+
+        unstable.projectileStats = recipe.mergedSpellStats;
+        unstable.castType = recipe.mergedSpellStats.castType;
+        if (unstable.castType == SpellCastType.Ground)
+        {
+
+        }
+        else if (unstable.castType == SpellCastType.Beam)
+        {
+            unstable.beamPrefab = recipe.mergedSpellStats.beamPrefab;
+            unstable.beamConfig = recipe.mergedSpellStats.beamConfig;
+        }
+        else
+        {
+            unstable.spellPrefab = recipe.mergedSpellStats.projectileOverridePrefab;
+        }
 
         unstable.pickupPrefab = null; // you don't drop this as a world pickup
 
-        Debug.Log($"[Resolver] Built unstable combo item for {item1.crystalType}+{item2.crystalType} using prefab '{recipe.mergedSpellPrefab.name}'");
+        Debug.Log($"[Resolver] Built unstable combo item for {item1.crystalType}+{item2.crystalType} using stats '{recipe.mergedSpellStats}'");
 
         return unstable;
     }

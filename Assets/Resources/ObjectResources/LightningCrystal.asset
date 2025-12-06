@@ -24,3 +24,4 @@ MonoBehaviour:
   wandModelPrefab: {fileID: 7189669997616419143, guid: c1a5177d25af7d54b9b1ca3495d4cbae, type: 3}
   isSpellItem: 1
   projectileStats: {fileID: 11400000, guid: a0942033e4667d546b0b74fe00394c88, type: 2}
+  passiveEffect: {fileID: 0}

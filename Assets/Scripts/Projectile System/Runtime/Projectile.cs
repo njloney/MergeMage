@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
     [SerializeField] private MeshRenderer visualRenderer;
+    [SerializeField] private TrailRenderer trail;
 
     private ProjectileConfig cfg;
     private float elapsed;
@@ -110,8 +111,8 @@ public class Projectile : MonoBehaviour
                 );
             }
         }
-         
-        
+
+
         //------------------------------------------------------------------
         // 3. PIERCE LOGIC
         //------------------------------------------------------------------
@@ -195,9 +196,32 @@ public class Projectile : MonoBehaviour
 
         return pick;
     }
-
     private void Despawn()
     {
+        // Check if we have a trail that needs to finish fading
+        if (trail != null && trail.enabled)
+        {
+            StartCoroutine(SoftDespawn());
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    private System.Collections.IEnumerator SoftDespawn()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        if (TryGetComponent<Collider>(out var col)) col.enabled = false;
+
+        if (visualRenderer != null) visualRenderer.enabled = false;
+
+        yield return new WaitForSeconds(trail.time);
+        if (col != null) col.enabled = true;
+        if (visualRenderer != null) visualRenderer.enabled = true;
+        trail.Clear();
+
         gameObject.SetActive(false);
     }
 }

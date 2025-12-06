@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588aa9d01efbe324a9bf3d9b921c8b3a, type: 3}
+  m_Name: ThermalBeamConfig
+  m_EditorClassIdentifier: 
+  dps: 100
+  damageType: 1
+  maxRange: 30
+  duration: 0.5
+  tickInterval: 0.1
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  followOrigin: 1
+  stopOnHit: 1
+  hitEffectPrefab: {fileID: 8232426407144258356, guid: 4182bc901079bf6489cd98c3083d9c0a, type: 3}

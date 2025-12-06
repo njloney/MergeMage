@@ -4,8 +4,8 @@ using UnityEngine;
 public class LightRayBeam : MonoBehaviour
 {
     private LightRayConfig _cfg;
-    private Transform _origin;              // where the beam starts (muzzle/caster/camera)
-    private Object _owner;                  // for damage source
+    private Transform _origin;
+    private Object _owner;
     private LineRenderer _lr;
 
     private float _timeAlive;
@@ -13,6 +13,9 @@ public class LightRayBeam : MonoBehaviour
 
     private Vector3 _fixedStart;
     private Vector3 _fixedDir;
+
+    // [NEW] Track the instantiated visual
+    private GameObject _activeHitEffect;
 
     public void Init(Transform origin, Object owner, LightRayConfig config)
     {
@@ -32,16 +35,29 @@ public class LightRayBeam : MonoBehaviour
             _fixedDir = _origin.forward;
         }
 
-        // ensure beam is visible immediately
+        // [NEW] Instantiate the hit effect if one exists
+        if (_cfg.hitEffectPrefab != null)
+        {
+            _activeHitEffect = Instantiate(_cfg.hitEffectPrefab);
+            _activeHitEffect.SetActive(false); // Hide until we hit something
+        }
+
         UpdateBeamVisuals(0f);
         gameObject.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        if (_activeHitEffect != null)
+        {
+            Destroy(_activeHitEffect);
+        }
     }
 
     private void Update()
     {
         if (_cfg == null)
         {
-            // No config assigned = disable to avoid errors
             gameObject.SetActive(false);
             return;
         }
@@ -49,14 +65,12 @@ public class LightRayBeam : MonoBehaviour
         _timeAlive += Time.deltaTime;
         if (_timeAlive >= _cfg.duration)
         {
-            gameObject.SetActive(false); // poolable
+            gameObject.SetActive(false);
             return;
         }
 
-        // Visuals update every frame for smoothness
         UpdateBeamVisuals(Time.deltaTime);
 
-        // Damage on ticks
         _tick += Time.deltaTime;
         while (_tick >= _cfg.tickInterval)
         {
@@ -82,14 +96,33 @@ public class LightRayBeam : MonoBehaviour
         }
 
         Vector3 end = start + dir * _cfg.maxRange;
+        bool hitSomething = false;
 
+        // Raycast
         if (Physics.Raycast(start, dir, out var hit, _cfg.maxRange, _cfg.hitMask, QueryTriggerInteraction.Ignore))
         {
             end = hit.point;
+            hitSomething = true;
+
+            // [NEW] Move the hit effect to the wall
+            if (_activeHitEffect != null)
+            {
+                if (!_activeHitEffect.activeSelf) _activeHitEffect.SetActive(true);
+                _activeHitEffect.transform.position = hit.point;
+                _activeHitEffect.transform.rotation = Quaternion.LookRotation(hit.normal);
+            }
+
             if (!_cfg.stopOnHit)
             {
-                // draw through the hit but continue full length (purely visual)
+                // If penetrating, visual beam might go further, but hit effect stays on first hit
                 end = start + dir * _cfg.maxRange;
+            }
+        }
+        else
+        {
+            if (_activeHitEffect != null && _activeHitEffect.activeSelf)
+            {
+                _activeHitEffect.SetActive(false);
             }
         }
 
@@ -100,7 +133,6 @@ public class LightRayBeam : MonoBehaviour
 
     private void ApplyDamage(float tick)
     {
-        // Use the same aim as visuals this frame
         Vector3 start, dir;
         if (_cfg.followOrigin && _origin != null)
         {
@@ -113,7 +145,6 @@ public class LightRayBeam : MonoBehaviour
             dir = _fixedDir;
         }
 
-        // We apply damage at the first hit point only (typical hitscan).
         if (Physics.Raycast(start, dir, out var hit, _cfg.maxRange, _cfg.hitMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.TryGetComponent<Health>(out var hp))
@@ -125,12 +156,9 @@ public class LightRayBeam : MonoBehaviour
 
     public static LightRayBeam Spawn(Transform origin, Object owner, LightRayConfig cfg, Vector3? overrideDir = null)
     {
-        var prefab = Resources.Load<LightRayBeam>("LightRayBeam"); // OPTIONAL pattern if you use Resources
-        if (prefab == null)
-        {
-            Debug.LogError("LightRayBeam prefab not found in Resources. Prefer manual Instantiate.");
-            return null;
-        }
+        // (Your existing Spawn method remains unchanged)
+        var prefab = Resources.Load<LightRayBeam>("LightRayBeam");
+        if (prefab == null) return null;
         var beam = Instantiate(prefab);
         if (overrideDir.HasValue && cfg != null && !cfg.followOrigin && origin != null)
         {

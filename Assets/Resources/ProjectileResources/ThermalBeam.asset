@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
+  m_Name: ThermalBeam
+  m_EditorClassIdentifier: 
+  speed: 20
+  lifetime: 5
+  manaCost: 25
+  projectileMaterial: {fileID: 0}
+  baseDamage: 10
+  damageType: 0
+  destroyOnHit: 1
+  castType: 0
+  effects: []
+  spawnExplosion: 0
+  explosion:
+    explosionPrefab: {fileID: 0}
+    damage: 0
+    effects: []
+    startRadius: 0
+    maxRadius: 0
+    expandSpeed: 0
+    lifetime: 0
+    startVisualScale: 0
+    maxVisualScale: 0
+  enablePierce: 0
+  pierceCount: 0
+  spawnObjectOnHit: 0
+  onHitPrefab: {fileID: 0}
+  chainOnHit: 0
+  chainMaxJumps: 3
+  chainRadius: 6
+  chainDamagePerJump: 8
+  chainMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  isBeamSpell: 1
+  beamPrefab: {fileID: 7403284914773055412, guid: 8a4dbdbdc0b9c0f46a89b03cd7f3c8d8, type: 3}
+  beamConfig: {fileID: 11400000, guid: 6474acb9809d5b041b957f8b8019a28f, type: 2}
+  projectileOverridePrefab: {fileID: 238820685342930439, guid: 8a4dbdbdc0b9c0f46a89b03cd7f3c8d8, type: 3}
+  isGroundSpell: 0
+  ghostIndicatorPrefab: {fileID: 0}
+  groundSpellPrefab: {fileID: 0}
+  maxCastDistance: 20
