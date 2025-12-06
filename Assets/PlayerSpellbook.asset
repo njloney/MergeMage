@@ -78,3 +78,8 @@ MonoBehaviour:
     mergedSpellStats: {fileID: 11400000, guid: 6635807a082c3504aa8c2fa5e2d04b74, type: 2}
     unstableDisplayName: Unstable Spell
     unstableIcon: {fileID: 21300000, guid: 6918dc0b434c642eca217a98446c5d62, type: 3}
+  - element1: 1
+    element2: 3
+    mergedSpellStats: {fileID: 11400000, guid: 5092226910fcda54eb4f7d4f044e3cde, type: 2}
+    unstableDisplayName: Unstable Spell
+    unstableIcon: {fileID: 21300000, guid: 6918dc0b434c642eca217a98446c5d62, type: 3}
