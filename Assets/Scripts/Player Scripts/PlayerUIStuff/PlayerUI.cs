@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using System;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -12,11 +14,13 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider manaSlider;
 
-    [Header("Stat Pick up Items")]
+    [Header("Passive Items UI")]
 
-    private RuntimePlayerStats playerStats;
+    [SerializeField] private PassiveItemManager itemManager;
+    [SerializeField] private Transform passiveItemsPanel;   
+    [SerializeField] private GameObject passiveIconPrefab;
 
-     
+    private Dictionary<ItemData, PassiveItemSlot> passiveSlots = new Dictionary<ItemData, PassiveItemSlot>();
 
 
     [Header("UI Text")]
@@ -28,6 +32,14 @@ public class PlayerUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if(itemManager != null)
+        {
+            itemManager.OnPassiveItemAcquired += HandleItemAcquired;
+            itemManager.OnPassiveItemStacked += HandleItemStacked;
+        
+        }
+
+
         if (playerHealth != null)
         {
             Debug.Log(playerHealth.maxHP);
@@ -51,6 +63,30 @@ public class PlayerUI : MonoBehaviour
 
         }
     }
+
+    private void HandleItemAcquired(ItemData item, int count)
+    {
+        GameObject passiveItemIcon = Instantiate(passiveIconPrefab, passiveItemsPanel);
+        PassiveItemSlot passiveSlot = passiveItemIcon.GetComponent<PassiveItemSlot>();
+
+        if(passiveSlot != null)
+        {
+            passiveSlot.setSlot(item, count);
+            passiveSlots.Add(item, passiveSlot);
+
+        }
+        
+    }
+
+    private void HandleItemStacked(ItemData item, int count)
+    {
+        if(passiveSlots.ContainsKey(item))
+        {
+            passiveSlots[item].updateStackCount(count);
+        }
+        
+    }
+
 
     private void HandleDamageTaken(float dmgAmount, DamageType type, UnityEngine.Object source)
     {

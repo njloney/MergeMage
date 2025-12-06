@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02de429a9ad8b684587d2d881cf642d5, type: 3}
-  m_Name: Mana RegenRate
+  m_Name: MaxHealthContainer
   m_EditorClassIdentifier: 
-  effectName: Increase Mana Recovery Rate
-  effectDescription: Increases Mana Recovery Rate by 10%
+  effectName: Increase Max Health by Alot
+  effectDescription: Increases Max Health by 100
   canStack: 1
   stackingType: 0
   statModifiers:
-  - statType: 2
-    modifierType: 1
-    value: 10
+  - statType: 0
+    modifierType: 0
+    value: 100

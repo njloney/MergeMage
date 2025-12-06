@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02de429a9ad8b684587d2d881cf642d5, type: 3}
-  m_Name: Max Mana Container
+  m_Name: SpeedIncrease
   m_EditorClassIdentifier: 
-  effectName: Increase Max Health by Alot
-  effectDescription: Increases Max Mana by 25
+  effectName: Increase Max Speed
+  effectDescription: Increases Max Speed by 10%
   canStack: 1
   stackingType: 0
   statModifiers:
-  - statType: 1
-    modifierType: 0
-    value: 100
+  - statType: 3
+    modifierType: 1
+    value: 10

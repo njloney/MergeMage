@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
-  m_Name: HeartCointainer
+  m_Name: SpeedIncreaser
   m_EditorClassIdentifier: 
-  itemName: Heart Container
-  itemIcon: {fileID: 21300000, guid: a468f33b9819c4157aa184f0eac30124, type: 3}
+  itemName: Speed Increaser
+  itemIcon: {fileID: 21300000, guid: 7a1869dd2831341faa7af033e2f779f4, type: 3}
   itemType: 2
   pickupPrefab: {fileID: 0}
   castType: 0
@@ -23,4 +23,4 @@ MonoBehaviour:
   crystalType: 7
   isSpellItem: 0
   projectileStats: {fileID: 0}
-  passiveEffect: {fileID: 11400000, guid: 38dbe2c75f78a114aa2439c43f51cae1, type: 2}
+  passiveEffect: {fileID: 11400000, guid: 27714960035154062934ca34179589f3, type: 2}

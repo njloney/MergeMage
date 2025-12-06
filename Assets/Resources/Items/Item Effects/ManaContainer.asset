@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02de429a9ad8b684587d2d881cf642d5, type: 3}
-  m_Name: Mana Container
+  m_Name: ManaContainer
   m_EditorClassIdentifier: 
   effectName: Increase Max Mana
   effectDescription: Increases Max Mana by 25
