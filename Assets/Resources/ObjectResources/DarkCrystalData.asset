@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DarkCrystalData
   m_EditorClassIdentifier: 
   itemName: Dark Crystal
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 4bcf46c1f9e5243a1b7c26997911dbce, type: 3}
   itemType: 0
   pickupPrefab: {fileID: 4062007991657684499, guid: 1022a52c0738d4810bef4d1786d6b2a1, type: 3}
   castType: 1

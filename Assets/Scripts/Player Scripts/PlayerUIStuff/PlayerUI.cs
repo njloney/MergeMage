@@ -12,6 +12,13 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider manaSlider;
 
+    [Header("Stat Pick up Items")]
+
+    private RuntimePlayerStats playerStats;
+
+     
+
+
     [Header("UI Text")]
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private TextMeshProUGUI manaText;
