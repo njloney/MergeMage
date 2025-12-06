@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
+  m_Name: DarkCrystalData
+  m_EditorClassIdentifier: 
+  itemName: Dark Crystal
+  itemIcon: {fileID: 21300000, guid: 4bcf46c1f9e5243a1b7c26997911dbce, type: 3}
+  itemType: 0
+  pickupPrefab: {fileID: 4062007991657684499, guid: 1022a52c0738d4810bef4d1786d6b2a1, type: 3}
+  castType: 1
+  spellPrefab: {fileID: 598582465201453231, guid: dcc6d9366eda4874091ee1e934e1ac3d, type: 3}
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  crystalType: 4
+  isSpellItem: 1
+  projectileStats: {fileID: 11400000, guid: f40060806465c2a43b4aa44ec9a5105c, type: 2}
+  passiveEffect: {fileID: 0}

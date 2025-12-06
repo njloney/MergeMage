@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0dcfc6c6af0148c3943e5d7fc81e6bf, type: 3}
+  m_Name: WindCrystalData
+  m_EditorClassIdentifier: 
+  itemName: Wind Crystal
+  itemIcon: {fileID: 21300000, guid: 7d6248a85147746879a36cee4aec1b3d, type: 3}
+  itemType: 0
+  pickupPrefab: {fileID: 8019440649962505898, guid: 560f9a28e73614da996bf8977d399139, type: 3}
+  castType: 1
+  spellPrefab: {fileID: 608184424722468891, guid: 0c125347a290f984a9609e8b9f15dfad, type: 3}
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  crystalType: 2
+  isSpellItem: 1
+  projectileStats: {fileID: 11400000, guid: 2036df098649a3841b9aa97ad7d58336, type: 2}
+  passiveEffect: {fileID: 0}

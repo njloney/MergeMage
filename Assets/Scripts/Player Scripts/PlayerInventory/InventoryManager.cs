@@ -236,6 +236,8 @@ public class InventoryManager : MonoBehaviour
         }
 
         Vector3 dropPosition = transform.position + (transform.forward * 1.5f);
-        Instantiate(itemDrop.pickupPrefab, dropPosition, Quaternion.identity);
+
+        GameObject droppedObject = Instantiate(itemDrop.pickupPrefab, dropPosition, Quaternion.identity);
+        droppedObject.transform.localScale = itemDrop.pickupPrefab.transform.localScale;
     }
 }
