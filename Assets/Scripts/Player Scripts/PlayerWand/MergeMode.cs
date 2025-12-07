@@ -5,7 +5,6 @@ using System.Collections;
 public class MergeMode : MonoBehaviour
 {
      private InventoryManager inventory;
-    [SerializeField] private SpellCombinationResolver resolver;
 
 
     [Header("Player Components")]
@@ -15,11 +14,7 @@ public class MergeMode : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float manaRegenRate;      
-    [SerializeField] private float baseSelfDamage = 2f;     
-    [SerializeField] private float damageRampUp = 2f;
-    [SerializeField] private float spellPowerDecay = 0.1f;  
     
-
     private Coroutine mergeRoutine;
 
     public event Action<bool> OnMergeModeChanged;
@@ -53,6 +48,8 @@ public class MergeMode : MonoBehaviour
         {
             if (mergeRoutine != null) StopCoroutine(mergeRoutine);
         }
+
+        inventory.UpdateSlotHighlights();
     }
     
     private void exitMergeMode()
@@ -63,19 +60,8 @@ public class MergeMode : MonoBehaviour
 
     private void TryEnterMergeMode()
     {
+        ToggleMergeMode();
 
-        ItemData item1 = inventory.getCrystalSlot1();
-        ItemData item2 = inventory.getCrystalSlot2();
-
-        if (item1 == null || item2 == null) return;
-
-        ItemData result = resolver.BuildComboSpell(item1, item2);
-        if (result != null)
-        {
-            inventory.addToMergeSlot(result);
-            ToggleMergeMode();
-
-        }
     }
     
     private IEnumerator MergeModeEffects()
@@ -89,12 +75,6 @@ public class MergeMode : MonoBehaviour
             if (playerMana != null)
             {
                 playerMana.RestoreMana(manaRegenRate * Time.deltaTime);
-            }
-
-            if (playerHealth != null)
-            {
-                float currentDamage = baseSelfDamage + (damageRampUp * timeInMode);
-                playerHealth.TakeDamage(currentDamage * Time.deltaTime);
             }
 
              yield return null;

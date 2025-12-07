@@ -24,4 +24,4 @@ MonoBehaviour:
   isSpellItem: 0
   projectileStats: {fileID: 0}
   passiveEffect: {fileID: 0}
-  consumableEffect: {fileID: 0}
+  consumableEffect: {fileID: 11400000, guid: 869f89376b0594ec59fe2696099dc490, type: 2}

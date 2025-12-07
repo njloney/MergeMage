@@ -7,19 +7,18 @@ public class InventoryManager : MonoBehaviour
     [Header("Consumable Slot")]
     [SerializeField] private InventorySlot consumableSlot;
 
-    [Header("Crystal Slots")]
-    [SerializeField] private InventorySlot crystalSlot1;
-    [SerializeField] private InventorySlot crystalSlot2;
+    [Header("Slots")]
 
-    [Header("Merge Slot")]
-    [SerializeField] private InventorySlot mergeSlot;
+    [SerializeField] private List<InventorySlot> crystalSlots = new List<InventorySlot>(); 
+    [SerializeField] private List<InventorySlot> mergeSlots = new List<InventorySlot>();   
 
     [Header("Passive Items")]
     [SerializeField] private PassiveItemManager passiveItemManager;
 
+    [SerializeField] private SpellCombinationResolver resolver;
     private MergeMode mergeController;
 
-    private int activeCrystalSlotIndex = 0;
+    private int activeSlotIndex = 0;
     private bool mergeMode = false;
 
     public event Action<ItemData> OnActiveItemChanged;
@@ -35,7 +34,10 @@ public class InventoryManager : MonoBehaviour
         {
             mergeController = GetComponent<MergeMode>();
         }
-
+        if(resolver == null)
+        {
+            resolver = GetComponent<SpellCombinationResolver>();
+        }
         // Ensure PassiveItemManager exists
         if (passiveItemManager == null)
         {
@@ -60,17 +62,28 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    private void UpdateSlotHighlights()
+    public void UpdateSlotHighlights()
     {
-        crystalSlot1.setSlotHighLight(activeCrystalSlotIndex == 1);
-        crystalSlot2.setSlotHighLight(activeCrystalSlotIndex == 0);
+        if (mergeMode)
+        {
+            for(int i = 0; i < mergeSlots.Count; i++)
+            {
+            mergeSlots[i].setSlotHighLight(i == activeSlotIndex);
+            }
+        }
+        else
+        {
+            for(int i = 0; i < crystalSlots.Count; i++)
+            {
+            crystalSlots[i].setSlotHighLight(i == activeSlotIndex);
+            }
+        }
     }
-
     private void setActiveSlot(int index)
     {
-        if (activeCrystalSlotIndex == index) return;
+        if (activeSlotIndex == index) return;
 
-        activeCrystalSlotIndex = index;
+        activeSlotIndex = index;
         UpdateSlotHighlights();
         sendUpdates();
     }
@@ -80,75 +93,82 @@ public class InventoryManager : MonoBehaviour
         return consumableSlot.currentItem;
     }
 
-    public ItemData getCrystalSlot1()
-    {
-        return crystalSlot1.currentItem;
-    }
-
-    public ItemData getCrystalSlot2()
-    {
-        return crystalSlot2.currentItem;
-    }
-
     private void sendUpdates()
     {
-        OnCrystalSlotsChanged?.Invoke(crystalSlot1.currentItem, crystalSlot2.currentItem);
+        OnCrystalSlotsChanged?.Invoke(crystalSlots[0].currentItem, crystalSlots[1].currentItem);
 
         ItemData itemToSend = null;
-        Debug.Log("Merge Mode Active " + mergeMode);
+
         if (mergeMode)
         {
-            itemToSend = mergeSlot.currentItem;
-            if(mergeSlot.currentItem == null)
-            {
-                Debug.Log("Merge is not null??????");
-            }
+            itemToSend = mergeSlots[activeSlotIndex].currentItem;
         }
         else
         {
-            if (activeCrystalSlotIndex == 0)
+            itemToSend = crystalSlots[activeSlotIndex].currentItem;
+        }
+
+            OnActiveItemChanged?.Invoke(itemToSend);
+        
+    }
+
+
+
+
+    private void AttemptAutoMerge()
+    {
+        if (crystalSlots[0].currentItem == null || crystalSlots[1].currentItem == null) return;
+
+        ItemData item1 = crystalSlots[0].currentItem;
+        ItemData item2 = crystalSlots[1].currentItem;
+
+        ItemData result = resolver.BuildComboSpell(item1, item2);
+
+        if (result == null) return;
+
+        for(int i = 0; i < mergeSlots.Count; i++)
+        {
+            if (mergeSlots[i].currentItem == null)
             {
-                itemToSend = crystalSlot1.currentItem;
-            }
-            else
-            {
-                itemToSend = crystalSlot2.currentItem;
+                mergeSlots[i].AddItemToSlot(result);
+                crystalSlots[0].RemoveItemFromSlot();
+                crystalSlots[1].RemoveItemFromSlot();
+                break;
             }
         }
-            OnActiveItemChanged?.Invoke(itemToSend);
+
+        sendUpdates();
         
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            setActiveSlot(0);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            setActiveSlot(1);
-        }
-
+        if (Input.GetKeyDown(KeyCode.Alpha1)) setActiveSlot(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) setActiveSlot(1);
     }
 
     public void ConsumeMergeSpell()
     {
-        if (mergeSlot != null)
-        {
-            mergeSlot.RemoveItemFromSlot();
-        }
-
         OnMergeConsumed?.Invoke();
         sendUpdates();
     }
 
     public void addToMergeSlot(ItemData item)
     {
-        mergeSlot.AddItemToSlot(item);
-        crystalSlot1.RemoveItemFromSlot();
-        crystalSlot2.RemoveItemFromSlot();
+        for(int i = 0; i < crystalSlots.Count; i++)
+            {            
+            crystalSlots[i].RemoveItemFromSlot();
+            }
+
+        for(int i = 0; i < mergeSlots.Count; i++)
+        {
+            if(mergeSlots[i].currentItem == null)
+            {
+                mergeSlots[i].AddItemToSlot(item);
+                break;
+            }
+        }
+        sendUpdates();
     }
 
     public bool addItem(ItemData item)
@@ -168,45 +188,41 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        ItemData oldItem = null;
+        if (item.itemType == ItemType.Consumable)
+        {
+            consumableSlot.AddItemToSlot(item);
+            return true;
+        }
 
         if (item.itemType == ItemType.Crystal)
         {
-            // Check if active slot is full and other slot is empty
-            if (activeCrystalSlotIndex == 0)
-            {
-                // Active slot is crystalSlot1
-                if (crystalSlot1.currentItem != null && crystalSlot2.currentItem == null)
-                {
-                    // Slot 1 is full, slot 2 is empty - add to slot 2
-                    crystalSlot2.AddItemToSlot(item);
-                }
-                else
-                {
-                    // Normal behavior - add to active slot (slot 1)
-                    oldItem = crystalSlot1.currentItem;
-                    crystalSlot1.AddItemToSlot(item);
+             ItemData oldItem = null;
 
-                    if (oldItem != null)
-                    {
-                        dropItem(oldItem);
-                    }
-                }
+            if(crystalSlots[activeSlotIndex].currentItem == null)
+            {
+                crystalSlots[activeSlotIndex].AddItemToSlot(item);
+
             }
             else
             {
-                // Active slot is crystalSlot2
-                if (crystalSlot2.currentItem != null && crystalSlot1.currentItem == null)
+                int emptySlot = -1;
+                for(int i = 0; i < crystalSlots.Count; i++)
                 {
-                    // Slot 2 is full, slot 1 is empty - add to slot 1
-                    crystalSlot1.AddItemToSlot(item);
+                    if(crystalSlots[i].currentItem == null)
+                    {
+                        emptySlot = i;
+                        break;
+                    }
+                }
+
+                if(emptySlot != -1)
+                {
+                    crystalSlots[emptySlot].AddItemToSlot(item);
                 }
                 else
                 {
-                    // Normal behavior - add to active slot (slot 2)
-                    oldItem = crystalSlot2.currentItem;
-                    crystalSlot2.AddItemToSlot(item);
-
+                    oldItem = crystalSlots[activeSlotIndex].currentItem;
+                    crystalSlots[activeSlotIndex].AddItemToSlot(item);
                     if (oldItem != null)
                     {
                         dropItem(oldItem);
@@ -214,18 +230,8 @@ public class InventoryManager : MonoBehaviour
                 }
             }
 
+            AttemptAutoMerge();
             sendUpdates();
-            return true;
-        }
-        else if (item.itemType == ItemType.Consumable)
-        {
-            oldItem = consumableSlot.currentItem;
-            consumableSlot.AddItemToSlot(item);
-            if (oldItem != null)
-            {
-                dropItem(oldItem);
-            }
-
             return true;
         }
 

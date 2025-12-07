@@ -1,6 +1,7 @@
 using UnityEngine;
-using System;
+using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 using TMPro;
 
 
@@ -10,12 +11,12 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private ConsumableManager consumable;
 
     [Header("UI References")]
-    [SerializeField] private RectTransform crystalBackground;
-    [SerializeField] private GameObject crystalPanel;
-    [SerializeField] private GameObject mergePanel;
+    [SerializeField] private GameObject crystalActive;
+    [SerializeField] private GameObject mergeActive;
     [SerializeField] private TextMeshProUGUI cooldownText;
-    [SerializeField] private float normalWidth = 220f;
-    [SerializeField] private float mergeWidth = 125f;
+
+    [SerializeField] private List<GameObject> crystalSlotHighlights = new List<GameObject>();
+    [SerializeField] private List<GameObject> mergeSlotHighlights = new List<GameObject>();
 
 
     void Start()
@@ -35,11 +36,19 @@ public class InventoryUI : MonoBehaviour
 
     private void UpdateInventoryView(bool mergeMode)
     {
-        float updatedWidth = mergeMode ? mergeWidth : normalWidth;
-        crystalPanel.SetActive(!mergeMode);
-        mergePanel.SetActive(mergeMode);  
-        crystalBackground.sizeDelta = new Vector2(updatedWidth, crystalBackground.sizeDelta.y);
-       
+
+
+        Debug.Log("Updating Inventory View and merge is" + mergeMode.ToString());
+        mergeActive.SetActive(!mergeMode);
+        crystalActive.SetActive(mergeMode);
+
+
+        for (int i = 0; i < crystalSlotHighlights.Count; i++)
+        {
+            crystalSlotHighlights[i].SetActive(!mergeMode);
+            mergeSlotHighlights[i].SetActive(mergeMode);
+        }
+    
     }
 
     private void UpdateCoolDown(float cooldown)

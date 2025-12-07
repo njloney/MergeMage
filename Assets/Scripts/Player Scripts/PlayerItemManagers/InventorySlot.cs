@@ -24,8 +24,8 @@ public class InventorySlot : MonoBehaviour
     {
         if (highlightBorder != null)
         {
-            highlightBorder.SetActive(isHighLight);
-        }
+            highlightBorder.SetActive(!isHighLight);
+        } 
           
     }
 
