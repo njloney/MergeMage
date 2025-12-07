@@ -220,6 +220,7 @@ public class GolemBasicAI : MonoBehaviour
         MoveToward(wanderTarget, wanderMoveSpeed * speedMult);
 
         if (animator)
+            Debug.Log("[GolemAI] Setting walk animation to true while Wandering");
             animator.SetBool(walkBoolName, true);
 
         if (Random.value < 0.01f)

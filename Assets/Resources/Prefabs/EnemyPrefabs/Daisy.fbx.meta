@@ -22,7 +22,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -31,67 +31,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: IDLE
-      takeName: Control Leg Poll Vector L|Idle
-      internalID: -6492781420565394174
-      firstFrame: 0
-      lastFrame: 286
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: WALK
-      takeName: Control Leg Poll Vector L|Walk
-      internalID: 8907598667294768731
-      firstFrame: 0
-      lastFrame: 23
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
       name: CAST SPELL
-      takeName: Control Leg Poll Vector L|CAST SPELL
-      internalID: 8475275368227910769
+      takeName: Control Leg Poll Vector L|Control Leg Poll Vector L|CAST SPELL
+      internalID: -6492781420565394174
       firstFrame: 0
       lastFrame: 96
       wrapMode: 0
@@ -118,8 +60,37 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
+      name: IDLE
+      takeName: Control Leg Poll Vector L|Control Leg Poll Vector L|Idle.001
+      internalID: 8475275368227910769
+      firstFrame: 0
+      lastFrame: 286
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
       name: MELEE
-      takeName: Control Leg Poll Vector L|MELEE
+      takeName: Control Leg Poll Vector L|Control Leg Poll Vector L|MELEE.001
       internalID: -6446484940237301343
       firstFrame: 0
       lastFrame: 108
@@ -130,6 +101,35 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: WALK
+      takeName: Control Leg Poll Vector L|Control Leg Poll Vector L|Walk
+      internalID: -4985658243005301619
+      firstFrame: 0
+      lastFrame: 23
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -196,7 +196,312 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: Daisy(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Control Leg Poll Vector L
+      parentName: Daisy(Clone)
+      position: {x: -0.2159961, y: 2.108569, z: -0.39370966}
+      rotation: {x: -0.7071069, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 126.520386, y: 126.520386, z: 126.520386}
+    - name: Spine
+      parentName: Control Leg Poll Vector L
+      position: {x: 0.00007261919, y: -0.00026062955, z: -0.0010549718}
+      rotation: {x: 0.6608491, y: -0.22392428, z: 0.23347495, w: 0.6772192}
+      scale: {x: 1.0000007, y: 1.0000017, z: 1.0000014}
+    - name: head
+      parentName: Spine
+      position: {x: 9.783252e-10, y: 0.012435244, z: -1.8626451e-11}
+      rotation: {x: -0.014720589, y: 0.004172623, z: 0.39797246, w: 0.9172698}
+      scale: {x: 1.000001, y: 1.0000013, z: 0.99999887}
+    - name: head_end
+      parentName: head
+      position: {x: 1.0375515e-10, y: 0.0038474335, z: 1.6298145e-11}
+      rotation: {x: 0.000000026077027, y: -0.000000093132236, z: 0.000000029591313, w: 1}
+      scale: {x: 1.0000018, y: 1.0000023, z: 1.0000005}
+    - name: head_end_end
+      parentName: head_end
+      position: {x: -0, y: 0.0038474351, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg1L
+      parentName: Spine
+      position: {x: 0.00020248366, y: -0.0012488206, z: -0.007166271}
+      rotation: {x: 0.9362683, y: -0.34994066, z: 0.027457241, w: 0.013763756}
+      scale: {x: 0.9999988, y: 1.0000054, z: 1.0000068}
+    - name: Leg2L
+      parentName: Leg1L
+      position: {x: -7.4505804e-11, y: 0.010590565, z: 3.0733643e-10}
+      rotation: {x: 0.046245836, y: 0.099344075, z: 0.047355257, w: 0.9928493}
+      scale: {x: 0.99999845, y: 0.9999997, z: 0.9999996}
+    - name: LEG3L
+      parentName: Leg2L
+      position: {x: -7.4505804e-11, y: 0.005386234, z: -8.5681673e-10}
+      rotation: {x: -0.07285034, y: -0.0499515, z: -0.17674595, w: 0.9802849}
+      scale: {x: 1.0000074, y: 1.0000005, z: 1.0000054}
+    - name: Leg4L
+      parentName: LEG3L
+      position: {x: -3.72529e-10, y: 0.0019530724, z: 2.6077032e-10}
+      rotation: {x: -0.41675887, y: -0.4699182, z: 0.47956532, w: 0.6127855}
+      scale: {x: 0.99999994, y: 1.0000072, z: 1.0000042}
+    - name: Leg4L_end
+      parentName: Leg4L
+      position: {x: -7.0780515e-10, y: 0.005448216, z: -0.0000000012153759}
+      rotation: {x: -0.000000052154054, y: -0.00000010477376, z: 0.000000028754577, w: 1}
+      scale: {x: 1.0000018, y: 1.0000014, z: 1.0000036}
+    - name: Leg4L_end_end
+      parentName: Leg4L_end
+      position: {x: -0, y: 0.0054482156, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg1
+      parentName: Spine
+      position: {x: -0.0014329677, y: -0.0014908115, z: 0.0054796515}
+      rotation: {x: -0.03883154, y: 0.06112248, z: 0.95980114, w: 0.27117878}
+      scale: {x: 1.0000067, y: 1.000005, z: 0.99999917}
+    - name: LEG2
+      parentName: Leg1
+      position: {x: -8.1956386e-10, y: 0.00920797, z: 0.0000000015646219}
+      rotation: {x: -0.033822883, y: 0.017221568, z: -0.03557714, w: 0.9986459}
+      scale: {x: 0.9999982, y: 1.000004, z: 0.9999979}
+    - name: LEG2_end
+      parentName: LEG2
+      position: {x: -7.4505804e-11, y: 0.009430158, z: 7.4505804e-11}
+      rotation: {x: 0.00000008195639, y: 0.00000008568168, z: 0.000000010768417, w: 1}
+      scale: {x: 1.0000006, y: 0.99999905, z: 1.0000004}
+    - name: LEG2_end_end
+      parentName: LEG2_end
+      position: {x: -0, y: 0.009430159, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ARM1L
+      parentName: Spine
+      position: {x: 0.0073786215, y: 0.008923602, z: -0.011416176}
+      rotation: {x: 0.231271, y: 0.13866045, z: 0.28828898, w: -0.91879076}
+      scale: {x: 0.9999991, y: 1.0000048, z: 1.0000042}
+    - name: ARM2L
+      parentName: ARM1L
+      position: {x: 8.9406965e-10, y: 0.015203148, z: 8.1956386e-10}
+      rotation: {x: -0.2811889, y: -0.035762485, z: -0.5251904, w: 0.80238944}
+      scale: {x: 0.99999917, y: 1.0000036, z: 1.0000054}
+    - name: ARM2L_end
+      parentName: ARM2L
+      position: {x: 5.9604643e-10, y: 0.0058183335, z: 0.000000001117587}
+      rotation: {x: -0, y: 0.0000000016589181, z: 0.00000008944333, w: 1}
+      scale: {x: 1.0000007, y: 1.0000029, z: 1.0000029}
+    - name: ARM2L_end_end
+      parentName: ARM2L_end
+      position: {x: -0, y: 0.0058183353, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ARM1.001
+      parentName: Spine
+      position: {x: 0.0013053057, y: 0.00028574376, z: 0.013508627}
+      rotation: {x: 0.026092913, y: -0.011947034, z: -0.31617653, w: 0.9482662}
+      scale: {x: 0.9999991, y: 0.9999992, z: 0.9999984}
+    - name: ARM1.001_end
+      parentName: ARM1.001
+      position: {x: -9.307405e-10, y: 0.000000021575252, z: -0.0000000018546671}
+      rotation: {x: 0.0000065062186, y: 0.000000010244547, z: -0.0000047771314, w: 1}
+      scale: {x: 1.0000008, y: 0.9999991, z: 1.0000002}
+    - name: ARM1.001_end_end
+      parentName: ARM1.001_end
+      position: {x: -0, y: 0.000099999874, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ARM1
+      parentName: Spine
+      position: {x: 0.0031241798, y: 0.00025510555, z: 0.0129207205}
+      rotation: {x: -0.56734085, y: 0.24389425, z: 0.72352505, w: 0.30846646}
+      scale: {x: 1.0000015, y: 1.000003, z: 1}
+    - name: Spine.005
+      parentName: ARM1
+      position: {x: 5.122274e-10, y: 0.0076425546, z: -2.2351741e-10}
+      rotation: {x: 0.51782024, y: -0.39799988, z: -0.6590432, w: 0.37298852}
+      scale: {x: 0.9999992, y: 1.0000015, z: 1.0000002}
+    - name: ARM2
+      parentName: Spine.005
+      position: {x: 0.0000000013038516, y: 2.4214386e-10, z: 0.0000000024056135}
+      rotation: {x: 0.7522653, y: -0.275917, z: -0.47966078, w: -0.35762027}
+      scale: {x: 1.0000004, y: 0.99999696, z: 1.0000036}
+    - name: staff top
+      parentName: ARM2
+      position: {x: 8.5681673e-10, y: 0.0038402285, z: -4.4703483e-10}
+      rotation: {x: -0.71168005, y: -0.038602706, z: -0.6932993, w: 0.10657144}
+      scale: {x: 1.0000066, y: 1.0000001, z: 1.0000031}
+    - name: Staff Gem
+      parentName: staff top
+      position: {x: 1.4901161e-10, y: 0.017958935, z: 0}
+      rotation: {x: -0.029934146, y: -0.00061296666, z: 0.10451757, w: 0.9940723}
+      scale: {x: 1.0000025, y: 1.0000058, z: 1.000004}
+    - name: Staff Gem_end
+      parentName: Staff Gem
+      position: {x: -0, y: 0.0050213495, z: 5.9604643e-10}
+      rotation: {x: 0.00000021234149, y: -0.00000003905733, z: 0.00000006130357, w: 1}
+      scale: {x: 1.0000043, y: 0.9999996, z: 1.0000044}
+    - name: Staff Gem_end_end
+      parentName: Staff Gem_end
+      position: {x: -0, y: 0.0050213477, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine.002
+      parentName: Control Leg Poll Vector L
+      position: {x: 0.0003109086, y: 0.011718098, z: 0.011269131}
+      rotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine.002_end
+      parentName: Spine.002
+      position: {x: -0, y: 0.000000020740645, z: 5.4820803e-10}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine.002_end_end
+      parentName: Spine.002_end
+      position: {x: -0, y: 0.0000999999, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LEGIK
+      parentName: Control Leg Poll Vector L
+      position: {x: 0.0011400183, y: -0.0070896368, z: -0.020413963}
+      rotation: {x: 0.5233547, y: 0.5233547, z: -0.47549963, w: 0.47549963}
+      scale: {x: 1.0000044, y: 1.0000033, z: 1.0000001}
+    - name: LEGIK_end
+      parentName: LEGIK
+      position: {x: -6.2410094e-10, y: 0.010372026, z: 2.6670931e-12}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000008, y: 1.0000029, z: 1.0000001}
+    - name: LEGIK_end_end
+      parentName: LEGIK_end
+      position: {x: -0, y: 0.010372025, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ARMIKL
+      parentName: Control Leg Poll Vector L
+      position: {x: 0.00910944, y: 0.01586871, z: -0.009665036}
+      rotation: {x: 0.5387142, y: 0.5387141, z: 0.45802525, w: -0.45802528}
+      scale: {x: 1.0000018, y: 1.0000014, z: 1.0000033}
+    - name: ARMIKL_end
+      parentName: ARMIKL
+      position: {x: 2.7442815e-10, y: 0.010675441, z: -8.1142815e-10}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1.0000024, y: 1.0000031, z: 1.000005}
+    - name: ARMIKL_end_end
+      parentName: ARMIKL_end
+      position: {x: -0, y: 0.010675441, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: ARMIK
+      parentName: Control Leg Poll Vector L
+      position: {x: -0.008542343, y: -0.013117033, z: -0.0019284516}
+      rotation: {x: 0.053625636, y: -0.053625576, z: -0.70507044, w: -0.70507044}
+      scale: {x: 1.0000029, y: 1.000002, z: 1.0000031}
+    - name: ARMIK_end
+      parentName: ARMIK
+      position: {x: 6.93977e-10, y: 0.0126917325, z: 2.893873e-10}
+      rotation: {x: -0, y: 0.0000000074505797, z: -0.0000000095460555, w: 1}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: ARMIK_end_end
+      parentName: ARMIK_end
+      position: {x: -0, y: 0.012691733, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LEGIKL
+      parentName: Control Leg Poll Vector L
+      position: {x: -0.0034277725, y: 0.0070527717, z: -0.019483944}
+      rotation: {x: 0.56594473, y: -0.56594473, z: -0.42391804, w: -0.42391807}
+      scale: {x: 1.000002, y: 1.0000017, z: 1.0000044}
+    - name: LEGIKL_end
+      parentName: LEGIKL
+      position: {x: -6.5624717e-10, y: 0.009396017, z: 9.845621e-10}
+      rotation: {x: 0.000000014901161, y: -0.000000014901161, z: -0, w: 1}
+      scale: {x: 1.0000013, y: 1.0000011, z: 1.000003}
+    - name: LEGIKL_end_end
+      parentName: LEGIKL_end
+      position: {x: -0, y: 0.009396017, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg1L.001
+      parentName: Control Leg Poll Vector L
+      position: {x: -0.0024870385, y: 0.006795523, z: -0.011619343}
+      rotation: {x: -0.5216422, y: 0.5216422, z: 0.47737765, w: 0.47737768}
+      scale: {x: 1.0000021, y: 1.0000015, z: 1.0000027}
+    - name: Leg1L.001_end
+      parentName: Leg1L.001
+      position: {x: 4.6053578e-11, y: 0.00667729, z: -3.7257109e-10}
+      rotation: {x: 0.000000029802322, y: -0, z: -0.000000029802322, w: -1}
+      scale: {x: 1.0000021, y: 1.000003, z: 1.0000039}
+    - name: Leg1L.001_end_end
+      parentName: Leg1L.001_end
+      position: {x: -0, y: 0.00667729, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cylinder
+      parentName: Daisy(Clone)
+      position: {x: -0.9406377, y: -0.23411201, z: 1.5837301}
+      rotation: {x: -0.6356175, y: 0.08371017, z: -0.068887524, w: 0.76435435}
+      scale: {x: 101.21121, y: 98.716286, z: 92.54758}
+    - name: Icosphere
+      parentName: Daisy(Clone)
+      position: {x: -0.40324968, y: 2.1110432, z: 1.9897577}
+      rotation: {x: -0.017725253, y: 0.077787384, z: -0.78572565, w: 0.6134086}
+      scale: {x: 36.196007, y: 24.53269, z: 24.977291}
+    - name: Sphere
+      parentName: Daisy(Clone)
+      position: {x: 0.079125136, y: 0.78051114, z: 0.17570396}
+      rotation: {x: -0.7071069, y: 0, z: 0, w: 0.7071067}
+      scale: {x: 119.40967, y: 125.4835, z: 149.81674}
+    - name: Sphere.001
+      parentName: Daisy(Clone)
+      position: {x: -1.2304085, y: 1.3063438, z: -0.054978177}
+      rotation: {x: -0.7071069, y: 0, z: 0, w: 0.7071067}
+      scale: {x: 119.40962, y: 125.48345, z: 128.84232}
+    - name: Sphere.002
+      parentName: Daisy(Clone)
+      position: {x: 0.035140876, y: -1.1963232, z: 0.8252338}
+      rotation: {x: -0.7071069, y: 0, z: 0, w: 0.7071067}
+      scale: {x: 119.40967, y: 125.48349, z: 453.51944}
+    - name: Sphere.003
+      parentName: Daisy(Clone)
+      position: {x: 0.03306206, y: -0.78352773, z: -0.9234607}
+      rotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: -202.11604, y: -169.48283, z: -341.142}
+    - name: Sphere.004
+      parentName: Daisy(Clone)
+      position: {x: 0.107082784, y: -2.0397964, z: 0.8526814}
+      rotation: {x: -0.7071069, y: 0, z: 0, w: 0.7071067}
+      scale: {x: 100.51011, y: 99.0722, z: 291.3765}
+    - name: Sphere.005
+      parentName: Daisy(Clone)
+      position: {x: 0.002726593, y: -1.9051423, z: -0.90519863}
+      rotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: -116.32605, y: -118.683395, z: -171.45786}
+    - name: Sphere.006
+      parentName: Daisy(Clone)
+      position: {x: -0.15133773, y: -2.4463584, z: -0.86286217}
+      rotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: -258.3508, y: -109.46282, z: -85.4495}
+    - name: Sphere.007
+      parentName: Daisy(Clone)
+      position: {x: -0.17373043, y: 0.09320063, z: 1.6956296}
+      rotation: {x: 0.63215184, y: 0.36165154, z: 0.66803163, w: 0.15272886}
+      scale: {x: 128.80196, y: 125.4102, z: 172.1962}
+    - name: Sphere.008
+      parentName: Daisy(Clone)
+      position: {x: -0.8269629, y: -0.15610805, z: 1.6244465}
+      rotation: {x: -0.51059234, y: -0.09265064, z: 0.71258074, w: -0.47216523}
+      scale: {x: 101.69454, y: 104.31422, z: 81.091606}
+    - name: Sphere.009
+      parentName: Daisy(Clone)
+      position: {x: -0.010075265, y: 1.0487236, z: -1.6460847}
+      rotation: {x: -0.60751796, y: 0, z: -0, w: 0.7943059}
+      scale: {x: 389.7405, y: 221.04529, z: 617.99133}
+    - name: Sphere.010
+      parentName: Daisy(Clone)
+      position: {x: 0.09485844, y: -0.87629765, z: -2.0311103}
+      rotation: {x: -0.60772645, y: 0, z: -0, w: 0.7941464}
+      scale: {x: -163.89488, y: -134.62537, z: -172.99095}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -207,13 +512,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
