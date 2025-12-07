@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -22,9 +23,9 @@ public class Projectile : MonoBehaviour
 
         // Make sure collider + rigidbody are configured correctly
         var col = GetComponent<Collider>();
-        col.isTrigger = true;                       // projectile uses triggers
-        rb.useGravity = false;                     // no falling
-        rb.isKinematic = false;                    // dynamic body
+        col.isTrigger = true;
+        rb.useGravity = false;
+        rb.isKinematic = false;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
 
@@ -71,7 +72,6 @@ public class Projectile : MonoBehaviour
         if (responder != null)
             responder.OnHitBySpell(cfg.stats, cfg.owner);
 
-
         var hp = other.GetComponentInParent<Health>();
         var status = other.GetComponentInParent<StatusController>();
 
@@ -89,9 +89,8 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        //------------------------------------------------------------------
-        // 2. EXPLOSION (if you use it)
-        //------------------------------------------------------------------
+
+        // 2. EXPLOSION
         if (cfg.stats.spawnExplosion)
         {
             var data = cfg.stats.explosion;
@@ -114,10 +113,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
-
-        //------------------------------------------------------------------
         // 3. PIERCE LOGIC
-        //------------------------------------------------------------------
         if (cfg.stats.enablePierce)
         {
             hitsSoFar++;
@@ -128,34 +124,36 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        //------------------------------------------------------------------
         // 4. EXTRA BEHAVIOR (EARTH SPIKES / CHAIN LIGHTNING / ETC.)
-        //------------------------------------------------------------------
-        TrySpawnOnHitObject();
+        Vector3 hitPoint = other.ClosestPoint(transform.position);
+
+        TrySpawnOnHitObject(hitPoint);
         TryChainLightning(other);
 
         if (cfg.stats.destroyOnHit)
             Despawn();
     }
 
-    private void TrySpawnOnHitObject()
+    void TrySpawnOnHitObject(Vector3 hitPoint)
     {
-        if (!cfg.stats.spawnObjectOnHit || !cfg.stats.onHitPrefab)
+        if (!cfg.stats.spawnObjectOnHit || cfg.stats.onHitPrefab == null)
             return;
 
-        Vector3 spawnPos = transform.position;
+        Vector3 spawnPos = hitPoint;
         Quaternion spawnRot = Quaternion.identity;
 
-        int groundMask = 1 << LayerMask.NameToLayer("Ground");
-        Vector3 startPos = transform.position + Vector3.up * 2f;
-
-        if (Physics.Raycast(startPos, Vector3.down, out RaycastHit hit, 20f, groundMask))
+        if (Physics.Raycast(
+            hitPoint + Vector3.up * 2f,
+            Vector3.down,
+            out RaycastHit groundHit,
+            10f,
+            cfg.stats.groundMask,
+            QueryTriggerInteraction.Ignore))
         {
-            spawnPos = hit.point;
-            spawnRot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            spawnPos = groundHit.point;
+            spawnRot = Quaternion.FromToRotation(Vector3.up, groundHit.normal);
         }
 
-        spawnPos += Vector3.up * 0.05f;
         Instantiate(cfg.stats.onHitPrefab, spawnPos, spawnRot);
     }
 
@@ -198,6 +196,7 @@ public class Projectile : MonoBehaviour
 
         return pick;
     }
+
     private void Despawn()
     {
         // Check if we have a trail that needs to finish fading

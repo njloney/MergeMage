@@ -7,6 +7,9 @@ public class Health : MonoBehaviour
     private float _hp;
     private RuntimePlayerStats runtimeStats;
 
+    [Header("Damage Filtering")]
+    [SerializeField] private LayerMask ignoredSourceLayers; // sources on these layers won't deal damage
+
     public event Action<float, DamageType, UnityEngine.Object> OnDamaged;
     public event Action OnDied;
 
@@ -62,9 +65,32 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount, DamageType type = DamageType.Physical, UnityEngine.Object source = null)
     {
-        if (source == this.gameObject)
+        // Ignore damage from certain sources / layers
+        if (source != null)
         {
-            return;
+            Transform srcTransform = null;
+
+            if (source is Component comp)
+                srcTransform = comp.transform;
+            else if (source is GameObject go)
+                srcTransform = go.transform;
+
+            if (srcTransform != null)
+            {
+                // Ignore self or any of our own children (e.g. our own hitboxes / attacks)
+                if (srcTransform == transform || srcTransform.IsChildOf(transform))
+                    return;
+
+                // Ignore if the source (or any of its parents) is on an ignored layer
+                Transform t = srcTransform;
+                while (t != null)
+                {
+                    if (((1 << t.gameObject.layer) & ignoredSourceLayers) != 0)
+                        return;
+
+                    t = t.parent;
+                }
+            }
         }
 
         float damageToTake = Mathf.Max(0f, amount);

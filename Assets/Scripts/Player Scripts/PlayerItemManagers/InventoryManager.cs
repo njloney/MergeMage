@@ -75,6 +75,11 @@ public class InventoryManager : MonoBehaviour
         sendUpdates();
     }
 
+    public ItemData getConsumableSlot()
+    {
+        return consumableSlot.currentItem;
+    }
+
     public ItemData getCrystalSlot1()
     {
         return crystalSlot1.currentItem;
