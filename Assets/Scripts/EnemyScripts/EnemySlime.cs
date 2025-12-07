@@ -46,12 +46,17 @@ public class EnemySlime : Enemy
         health.OnDied += Die;
         GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
         Debug.Log(prefabs.Length);
-        itemDrop = Instantiate(prefabs[UnityEngine.Random.Range(0, prefabs.Length)]);
-        itemDrop.transform.SetParent(transform);
-        itemDrop.transform.localScale = Vector3.one;
-        itemRigid = itemDrop.GetComponent<Rigidbody>();
-        Destroy(itemRigid);
-        //itemDrop = ItemData.
+        itemDrop = null;
+        if (Random.value <= 0.1f)
+        {
+            itemDrop = Instantiate(prefabs[UnityEngine.Random.Range(0, prefabs.Length)]);
+            itemDrop.transform.SetParent(transform);
+            itemDrop.transform.localScale = Vector3.one;
+            itemRigid = itemDrop.GetComponent<Rigidbody>();
+            Component animScript = itemDrop.GetComponent("SimpleGemsAnim");
+            if (animScript != null) Destroy(animScript);
+            Destroy(itemRigid);
+        }
     }
 
     private void move()
@@ -81,12 +86,6 @@ public class EnemySlime : Enemy
     {
         move();
         UpdateTransparency();
-        // Safely update UI text if assigned
-        /*if (damageTakenText != null)
-        {
-            // Use SetText to avoid GC from ToString allocations in tight loops
-            damageTakenText.SetText(totalDamageTaken.ToString());
-        }*/
 
         // Manual reset if flag is triggered (optional feature)
         if (resetDamage)
@@ -167,7 +166,7 @@ public class EnemySlime : Enemy
     {
         if (itemDrop == null)
         {
-            Debug.LogError(itemDrop.name + " has no pickup prefab assigned!");
+            Debug.LogError("No pickup prefab assigned!");
             return;
         }
 

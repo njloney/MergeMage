@@ -8,7 +8,7 @@ public class Health : MonoBehaviour
     private RuntimePlayerStats runtimeStats;
 
     [Header("Damage Filtering")]
-    [SerializeField] private LayerMask ignoredSourceLayers; // sources on these layers won't deal damage
+    [SerializeField] public LayerMask ignoredSourceLayers; // sources on these layers won't deal damage
 
     public event Action<float, DamageType, UnityEngine.Object> OnDamaged;
     public event Action OnDied;
