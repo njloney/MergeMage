@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
+  m_Name: Boss Fireball
+  m_EditorClassIdentifier: 
+  speed: 20
+  lifetime: 5
+  manaCost: 25
+  projectileMaterial: {fileID: 0}
+  baseDamage: 10
+  damageType: 1
+  destroyOnHit: 1
+  castType: 1
+  effects:
+  - effect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
+    duration: 10
+    magnitude: 1
+  spawnExplosion: 1
+  explosion:
+    explosionPrefab: {fileID: 219149504652278787, guid: 8aa832d33ed5bd84caf0dcfcece6f2da, type: 3}
+    damage: 10
+    effects:
+    - effect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
+      duration: 10
+      magnitude: 8
+    startRadius: 10
+    maxRadius: 50
+    expandSpeed: 100
+    lifetime: 0.15
+    startVisualScale: 10
+    maxVisualScale: 50
+  enablePierce: 0
+  pierceCount: 0
+  spawnObjectOnHit: 1
+  onHitPrefab: {fileID: 3978694083657473365, guid: 892e4c48d46be06409818bc5cde6989a, type: 3}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  chainOnHit: 0
+  chainMaxJumps: 3
+  chainRadius: 6
+  chainDamagePerJump: 8
+  chainMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  isBeamSpell: 0
+  beamPrefab: {fileID: 0}
+  beamConfig: {fileID: 0}
+  projectileOverridePrefab: {fileID: 1301353255995590632, guid: 949ff35e2116ee847937cf67ff2f60bb, type: 3}
+  isGroundSpell: 0
+  ghostIndicatorPrefab: {fileID: 0}
+  groundSpellPrefab: {fileID: 0}
+  maxCastDistance: 20
+  impactShakeMagnitude: 3
+  impactShakeDuration: 0.2

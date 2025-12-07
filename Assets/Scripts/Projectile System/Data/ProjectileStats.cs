@@ -29,15 +29,16 @@ public class ProjectileStats : ScriptableObject
     public bool spawnExplosion = false;           // enable/disable explosion
     public ExplosionSettings explosion;           // holds explosion data
 
-    // In your ProjectileStats ScriptableObject
     [Header("Piercing (for things like Wind Bullet)")]
     public bool enablePierce = false;     // if true, the projectile can pass through targets
     public int pierceCount = 0;           // how many distinct targets it can hit before despawning
 
 
-    [Header("Spawn Object On Impact (Earth Rupture / Void field, etc.)")]
+    [Header("Spawn Object On Impact (Earth / Fire zones)")]
     public bool spawnObjectOnHit = false;
-    public GameObject onHitPrefab;   // GroundSpikeField prefab
+    public GameObject onHitPrefab;
+    public LayerMask groundMask;
+
 
     [Header("Chain Lightning (Lightning Spell)")]
     public bool chainOnHit = false;

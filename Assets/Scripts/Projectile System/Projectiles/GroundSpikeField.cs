@@ -1,18 +1,16 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-// Stationary AoE that applies damage + slow each tick.
-[RequireComponent(typeof(SphereCollider))]
+// Stationary AoE that applies damage + slow each tick (BOX VERSION).
+[RequireComponent(typeof(BoxCollider))]
 public class GroundSpikeField : MonoBehaviour
 {
     [Header("AoE")]
-    [SerializeField] private float radius = 3f;
     [SerializeField] private float lifetime = 4f;
 
     [Header("Ticking")]
     [SerializeField] private float damagePerTick = 4f;
     [SerializeField] private DamageType damageType = DamageType.Physical;
-    [SerializeField] private float tickInterval = 1f; // match your burn if you prefer
+    [SerializeField] private float tickInterval = 1f;
 
     [Header("Effects")]
     [SerializeField] private StatusEffect slowEffect; // assign SlowEffect asset
@@ -21,34 +19,46 @@ public class GroundSpikeField : MonoBehaviour
 
     [SerializeField] private LayerMask hitMask = ~0;
 
-    private SphereCollider col;
-    private float time, tick;
+    private BoxCollider boxCol;
+    private float timeAlive;
+    private float tickTimer;
 
     private void Awake()
     {
-        col = GetComponent<SphereCollider>();
-        col.isTrigger = true;
-        col.radius = radius;
+        boxCol = GetComponent<BoxCollider>();
+        boxCol.isTrigger = true;
     }
 
     private void Update()
     {
         // lifetime
-        time += Time.deltaTime;
-        if (time >= lifetime) { Destroy(gameObject); return; }
-
-        // ticks
-        tick += Time.deltaTime;
-        if (tick >= tickInterval)
+        timeAlive += Time.deltaTime;
+        if (timeAlive >= lifetime)
         {
-            tick -= tickInterval;
+            Destroy(gameObject);
+            return;
+        }
+
+        // ticking
+        tickTimer += Time.deltaTime;
+        if (tickTimer >= tickInterval)
+        {
+            tickTimer -= tickInterval;
             DoTick();
         }
     }
 
     private void DoTick()
     {
-        var hits = Physics.OverlapSphere(transform.position, radius, hitMask, QueryTriggerInteraction.Ignore);
+        // Use OverlapBox so scale + rotation are respected
+        Collider[] hits = Physics.OverlapBox(
+            boxCol.bounds.center,
+            boxCol.bounds.extents,
+            boxCol.transform.rotation,
+            hitMask,
+            QueryTriggerInteraction.Ignore
+        );
+
         for (int i = 0; i < hits.Length; i++)
         {
             var h = hits[i];
@@ -56,7 +66,8 @@ public class GroundSpikeField : MonoBehaviour
 
             if (h.TryGetComponent<Health>(out var hp))
             {
-                if (damagePerTick > 0f) hp.TakeDamage(damagePerTick, damageType, this);
+                if (damagePerTick > 0f)
+                    hp.TakeDamage(damagePerTick, damageType, this);
 
                 if (slowEffect && h.TryGetComponent<StatusController>(out var status))
                 {
@@ -64,5 +75,14 @@ public class GroundSpikeField : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!TryGetComponent<BoxCollider>(out var bc)) return;
+
+        Gizmos.color = new Color(1f, 0f, 0f, 0.35f);
+        Gizmos.matrix = bc.transform.localToWorldMatrix;
+        Gizmos.DrawCube(bc.center, bc.size);
     }
 }

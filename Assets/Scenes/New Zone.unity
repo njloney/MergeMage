@@ -1360,7 +1360,7 @@ GameObject:
   - component: {fileID: 761573379}
   - component: {fileID: 761573378}
   - component: {fileID: 761573377}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1959,7 +1959,7 @@ MonoBehaviour:
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 1025
   groundAcceleration: 60
   groundDeceleration: 25
   airAcceleration: 20
@@ -5202,6 +5202,10 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 530445651}
+    - target: {fileID: 28578938998433238, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
+      propertyPath: rangedAttackDelay
+      value: 1.4
+      objectReference: {fileID: 0}
     - target: {fileID: 2526489758455334125, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -5282,6 +5286,10 @@ PrefabInstance:
       propertyPath: firePoint
       value: 
       objectReference: {fileID: 2060227646}
+    - target: {fileID: 6365025994680180027, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 1301353255995590632, guid: 949ff35e2116ee847937cf67ff2f60bb, type: 3}
     - target: {fileID: 6505396626376576785, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -5298,6 +5306,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 82f7f53e8a9425041ac1e8f84abb27b7, type: 2}
+    - target: {fileID: 7478545514406224708, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
+      propertyPath: basicRangedSpell
+      value: 
+      objectReference: {fileID: 11400000, guid: 65488c76da8536e4ea30ad2435a6a486, type: 2}
     - target: {fileID: 8215585373573400966, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
