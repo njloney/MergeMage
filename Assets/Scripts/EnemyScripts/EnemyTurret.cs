@@ -6,35 +6,22 @@ public class EnemyTurret : Enemy
     [Header("Visuals")]
     public Material HurtMat;                 // Material shown when the bag is hit
     public Material IdleMat;                 // Default material when idle
-
-    [Header("Combo Settings")]
-    [SerializeField] private float comboWindow = 3.0f; // Time before combo resets
-
     private Renderer rend;    // Cached renderer for color/material changes
     private Health health;    // Reference to the Health component
-
-    private int totalDamageTaken = 0; // Tracks running total of recent hits
-    private bool resetDamage;         // Flag for manual reset (unused but left in)
     public GameObject itemDrop;
     public Rigidbody itemRigid;
 
     // Movement
-    private Rigidbody rb;
     public Transform target;
     public float maxSpeed = 20f;
     public float moveSpeed = 0f;
-
-    private string Touching;
     private Coroutine currRoutine;
-
-    private float direction;
 
     private Rigidbody bodyRB;
 
     private Transform bodyT;
     private Transform armT;
     private Component animScript;
-
     private ItemPickup itemScript;
 
     private void Start()
@@ -53,7 +40,6 @@ public class EnemyTurret : Enemy
         health.OnDied += Die;
 
         GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
-        Debug.Log(prefabs.Length);
         itemDrop = null;
         while (itemDrop == null)
         {
@@ -71,20 +57,18 @@ public class EnemyTurret : Enemy
         animScript = itemDrop.GetComponent("SimpleGemsAnim");
         if (animScript != null) Destroy(animScript);
         itemRigid = itemDrop.GetComponent<Rigidbody>();
-        itemScript = (ItemPickup)itemDrop.GetComponent("ItemPickup");
         
         Destroy(itemRigid);
-        //itemDrop = ItemData.
 
         currRoutine = StartCoroutine(Move());
     }
     // Move towards until within shooting range
-    public float moveTorque = 10f;   // Rolling force
     private IEnumerator Move()
     {
         Debug.Log("Move");
         if (!bodyRB || !target) Debug.LogError("Can't find rigidBody or Target");
         bodyRB.constraints = RigidbodyConstraints.None;
+        health.ignoredSourceLayers = ~0;
 
         float dist = Vector3.Distance(transform.position, target.position);
         while (dist > 5f)
@@ -107,18 +91,8 @@ public class EnemyTurret : Enemy
         bodyRB.angularVelocity = Vector3.zero;
         bodyRB.linearVelocity = Vector3.zero;
         bodyRB.constraints = RigidbodyConstraints.FreezeAll;
+        health.ignoredSourceLayers = 0;
         currRoutine = StartCoroutine(Show());
-    }
-
-    private void move()
-    {
-        Vector3 lookDirection = target.position - armT.position;
-        lookDirection.y = 0;
-        if (lookDirection != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-            armT.rotation = Quaternion.Slerp(armT.rotation, targetRotation, 5f * Time.deltaTime);
-        }
     }
 
     private IEnumerator Show()
@@ -138,13 +112,13 @@ public class EnemyTurret : Enemy
         currRoutine = StartCoroutine(Attack());
     }
 
-    private void moveArm(float direction, Vector3 endPos)
+    /*private void moveArm(float direction, Vector3 endPos)
     {
         // Move upward by riseSpeed * deltaTime
         float newY = armT.position.y + direction * 0.5f * Time.deltaTime;
         armT.position = new Vector3(endPos.x, newY, endPos.z);
         armT.rotation = Quaternion.identity;
-    }
+    }*/
 
     private IEnumerator Hide()
     {
@@ -208,7 +182,6 @@ public class EnemyTurret : Enemy
     private Coroutine damageCoroutine;
     private IEnumerator DealDamage(Collision collision)
     {
-        Touching = collision.gameObject.name;
         if (collision.gameObject.CompareTag("Player"))
         {
             Health playerHealth = collision.gameObject.GetComponent<Health>();
@@ -223,39 +196,17 @@ public class EnemyTurret : Enemy
         }
     }
 
-    private void OnDisable()
-    {
-        // Stop timers and unsubscribe when disabled
-        CancelInvoke();
-        if (health != null)
-            health.OnDamaged -= HandleDamageTaken;
-    }
-
     private void Update()
     {
         if (itemDrop == null)
         {
             Die();
         }
-        // Manual reset if flag is triggered (optional feature)
-        if (resetDamage)
-        {
-            totalDamageTaken = 0;
-            resetDamage = false;
-        }
-        //itemDrop.transform.localPosition = Vector3.zero;
     }
 
     // Called whenever this object takes damage
     private void HandleDamageTaken(float amount, DamageType type, Object source)
     {
-        // Add this hit’s damage to the running total
-        totalDamageTaken += Mathf.RoundToInt(amount);
-
-        // Restart combo reset timer
-        CancelInvoke(nameof(ResetCombo));
-        Invoke(nameof(ResetCombo), comboWindow);
-
         // Flash red to show impact
         StartCoroutine(FlashRed());
         if (currRoutine != null)
@@ -271,12 +222,6 @@ public class EnemyTurret : Enemy
         rend.material = HurtMat;
         yield return new WaitForSeconds(0.2f);
         rend.material = IdleMat;
-    }
-
-    // Resets the combo damage total after time runs out
-    private void ResetCombo()
-    {
-        totalDamageTaken = 0;
     }
 
     private void Die()
@@ -297,158 +242,4 @@ public class EnemyTurret : Enemy
         itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
         itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
-
-
-   /*private IEnumerator Move()
-    {
-        direction = 1f;
-        Debug.Log("Move");
-        if (!bodyT || !target) Debug.LogError("Can't find rigidBody or Target");
-
-        float dist = Vector3.Distance(transform.position, target.position);
-        while (dist > 5f)
-        {
-            moveSpeed = Mathf.Min(maxSpeed, Mathf.Abs(dist - 4f) * 3f);
-
-            Vector3 force = direction * (target.position - transform.position).normalized * moveSpeed;
-
-            Velocity(direction, force);
-            yield return new WaitForFixedUpdate();
-        }
-        currRoutine = StartCoroutine(Attack());
-        yield return new WaitForFixedUpdate();
-    }
-
-    private void Velocity(float direction, Vector3 targetPos)
-    {
-        bodyRB.AddForce(targetPos);
-    }
-
-
-    private IEnumerator Attack()
-    {
-        Debug.Log("Attack");
-        yield return new WaitForSeconds(3f);
-        /*while( Touching != "Player")
-        {
-            moveSpeed = 5f;
-            MoveTowards(direction, target.position);
-            yield return new WaitForFixedUpdate();
-        }
-        currRoutine = StartCoroutine(Move());
-        yield return new WaitForFixedUpdate();
-    }
-    private Coroutine damageCoroutine;
-
-    private IEnumerator DealDamage(Collision collision)
-    {
-        Touching = collision.gameObject.name;
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Health playerHealth = collision.gameObject.GetComponent<Health>();
-            while (true)
-            {
-                if (playerHealth != null)
-                {
-                    playerHealth.TakeDamage(10f, DamageType.Physical, null);
-                }
-                yield return new WaitForSeconds(1f);
-            }
-        }
-    }
-
-    private void OnDisable()
-    {
-        // Stop timers and unsubscribe when disabled
-        CancelInvoke();
-        if (health != null)
-            health.OnDamaged -= HandleDamageTaken;
-    }
-
-    private void Update()
-    {
-        if (direction == -1f)
-        {
-            transform.LookAt(2 * transform.position - target.position);
-        } else
-        {
-            transform.LookAt(target.position);
-        }
-
-        // Manual reset if flag is triggered (optional feature)
-        if (resetDamage)
-        {
-            totalDamageTaken = 0;
-            resetDamage = false;
-        }
-        //itemDrop.transform.localPosition = Vector3.zero;
-    }
-
-    // Called whenever this object takes damage
-    private void HandleDamageTaken(float amount, DamageType type, Object source)
-    {
-        // Add this hit’s damage to the running total
-        totalDamageTaken += Mathf.RoundToInt(amount);
-
-        // Restart combo reset timer
-        CancelInvoke(nameof(ResetCombo));
-        Invoke(nameof(ResetCombo), comboWindow);
-
-        // Flash red to show impact
-        StartCoroutine(FlashRed());
-        if (currRoutine != null)
-        {
-            StopCoroutine(currRoutine);
-            currRoutine = StartCoroutine(Run());
-        }
-    }
-
-    // Quick red flash when hit
-    private IEnumerator FlashRed()
-    {
-        rend.material = HurtMat;
-        yield return new WaitForSeconds(0.2f);
-        rend.material = IdleMat;
-    }
-
-    private IEnumerator Run()
-    {
-        direction = -1f;
-        Debug.Log("Run");
-        float dist = Vector3.Distance(transform.position, target.position);
-        while (dist < 20f)
-        {
-            dist = Vector3.Distance(transform.position, target.position);
-            moveSpeed = 3f;
-            Velocity(direction, target.position);
-            yield return new WaitForFixedUpdate();
-        }
-        currRoutine = StartCoroutine(Move());
-        yield return new WaitForFixedUpdate();
-    }
-
-    // Resets the combo damage total after time runs out
-    private void ResetCombo()
-    {
-        totalDamageTaken = 0;
-    }
-
-    private void Die()
-    {
-        //dropItem(itemDrop);
-        Destroy(gameObject);
-    }
-    /*private void dropItem(GameObject itemDrop)
-    {
-        if (itemDrop == null)
-        {
-            Debug.LogError(itemDrop.name + " has no pickup prefab assigned!");
-            return;
-        }
-
-        // Spawn the item's specific prefab in place of slime
-        Vector3 dropPosition = transform.position;
-        dropPosition.y += 0.3f;
-        Instantiate(itemDrop, dropPosition, Quaternion.identity);
-    }*/
 }

@@ -7,16 +7,11 @@ public class EnemyIdol : Enemy
     public Material HurtMat;                 // Material shown when the bag is hit
     public Material IdleMat;                 // Default material when idle
 
-    [Header("Combo Settings")]
-    [SerializeField] private float comboWindow = 3.0f; // Time before combo resets
-
     private Renderer rend;    // Cached renderer for color/material changes
     private Health health;    // Reference to the Health component
 
-    private int totalDamageTaken = 0; // Tracks running total of recent hits
-    private bool resetDamage;         // Flag for manual reset (unused but left in)
-    //public GameObject itemDrop;
-    //public Rigidbody itemRigid;
+    public GameObject itemDrop;
+    public Rigidbody itemRigid;
 
     // Movement
     private Rigidbody rb;
@@ -41,15 +36,14 @@ public class EnemyIdol : Enemy
         health.OnDamaged += HandleDamageTaken;
         health.OnDied += Die;
 
-        /*GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
+        GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
         Debug.Log(prefabs.Length);
-        itemDrop = Instantiate(prefabs[UnityEngine.Random.Range(0, prefabs.Length)]);
-        itemDrop.transform.SetParent(transform);
-        itemDrop.transform.localScale = Vector3.one;
-        itemRigid = itemDrop.GetComponent<Rigidbody>();
-        Destroy(itemRigid);*/
-        //itemDrop = ItemData.
-
+        itemDrop = null;
+        if (Random.value <= 0.3f)
+        {
+            itemDrop = prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
+        }
+    
         //start Movement
         direction = 1f;
         currRoutine = StartCoroutine(Move());
@@ -86,7 +80,7 @@ public class EnemyIdol : Enemy
     {
         Debug.Log("Attack");
         yield return new WaitForSeconds(3f);
-        while( Touching != "Player")
+        while(Touching != "Player")
         {
             moveSpeed = 5f;
             MoveTowards(direction, target.position);
@@ -99,12 +93,13 @@ public class EnemyIdol : Enemy
 
     void OnCollisionEnter(Collision collision)
     {
+        Touching = collision.gameObject.name;
         damageCoroutine = StartCoroutine(DealDamage(collision));
     }
     private IEnumerator DealDamage(Collision collision)
     {
         Touching = collision.gameObject.name;
-        if (collision.gameObject.CompareTag("Player"))
+        if (Touching == "Player")
         {
             Health playerHealth = collision.gameObject.GetComponent<Health>();
             while (true)
@@ -116,6 +111,7 @@ public class EnemyIdol : Enemy
                 yield return new WaitForSeconds(1f);
             }
         }
+        yield return null;
     }
 
     private void OnCollisionExit(Collision collision)
@@ -127,14 +123,6 @@ public class EnemyIdol : Enemy
         }
     }
 
-    private void OnDisable()
-    {
-        // Stop timers and unsubscribe when disabled
-        CancelInvoke();
-        if (health != null)
-            health.OnDamaged -= HandleDamageTaken;
-    }
-
     private void Update()
     {
         if (direction == -1f)
@@ -144,32 +132,11 @@ public class EnemyIdol : Enemy
         {
             transform.LookAt(target.position);
         }
-        // Safely update UI text if assigned
-        /*if (damageTakenText != null)
-        {
-            // Use SetText to avoid GC from ToString allocations in tight loops
-            damageTakenText.SetText(totalDamageTaken.ToString());
-        }*/
-
-        // Manual reset if flag is triggered (optional feature)
-        if (resetDamage)
-        {
-            totalDamageTaken = 0;
-            resetDamage = false;
-        }
-        //itemDrop.transform.localPosition = Vector3.zero;
     }
 
     // Called whenever this object takes damage
     private void HandleDamageTaken(float amount, DamageType type, Object source)
     {
-        // Add this hit’s damage to the running total
-        totalDamageTaken += Mathf.RoundToInt(amount);
-
-        // Restart combo reset timer
-        CancelInvoke(nameof(ResetCombo));
-        Invoke(nameof(ResetCombo), comboWindow);
-
         // Flash red to show impact
         StartCoroutine(FlashRed());
         if (currRoutine != null)
@@ -203,22 +170,16 @@ public class EnemyIdol : Enemy
         yield return new WaitForFixedUpdate();
     }
 
-    // Resets the combo damage total after time runs out
-    private void ResetCombo()
-    {
-        totalDamageTaken = 0;
-    }
-
     private void Die()
     {
-        //dropItem(itemDrop);
+        dropItem(itemDrop);
         Destroy(gameObject);
     }
-    /*private void dropItem(GameObject itemDrop)
+    private void dropItem(GameObject itemDrop)
     {
         if (itemDrop == null)
         {
-            Debug.LogError(itemDrop.name + " has no pickup prefab assigned!");
+            Debug.Log(itemDrop.name + " has no pickup prefab assigned!");
             return;
         }
 
@@ -226,5 +187,5 @@ public class EnemyIdol : Enemy
         Vector3 dropPosition = transform.position;
         dropPosition.y += 0.3f;
         Instantiate(itemDrop, dropPosition, Quaternion.identity);
-    }*/
+    }
 }
