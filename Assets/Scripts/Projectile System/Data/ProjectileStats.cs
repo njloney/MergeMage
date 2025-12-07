@@ -77,6 +77,13 @@ public class ProjectileStats : ScriptableObject
     public bool isWindPullSpell = false;
     public GameObject windPullPrefab;
 
+    [Header("Earth Spike Path")]
+    public bool isEarthPathSpell = false;
+    public GameObject earthPathPrefab;
+    public float earthPathMaxLength = 12f;
+    public float earthPathWidth = 3f;
+
+
 }
 
 [System.Serializable]

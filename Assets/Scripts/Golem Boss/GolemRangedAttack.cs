@@ -69,41 +69,17 @@ public class GolemRangedAttack : MonoBehaviour
             return;
         }
 
-        // Lightning / generic ground spell centered on the player
-        if (stats.isGroundSpell && stats.groundSpellPrefab != null && player != null)
+        if (stats.isEarthPathSpell && stats.earthPathPrefab != null && player != null)
         {
-            Transform center = player;
-            Vector3 centerPos = center.position;
-            Vector3 spawnPos = centerPos;
+            Transform bossBase = floorOfBoss != null ? floorOfBoss : transform;
+            GameObject pathObj = Instantiate(stats.earthPathPrefab, bossBase.position, Quaternion.identity);
 
-            RaycastHit[] hits = Physics.RaycastAll(
-                centerPos + Vector3.up * 10f,
-                Vector3.down,
-                50f,
-                groundMask,
-                QueryTriggerInteraction.Ignore
-            );
-
-            Debug.Log($"[GolemRanged] Ground spell RaycastAll hit count: {hits.Length}");
-
-            for (int i = 0; i < hits.Length; i++)
+            if (pathObj.TryGetComponent<EarthSpikeField>(out var path))
             {
-                var h = hits[i];
-                if (h.collider == null) continue;
-
-                Debug.Log($"[GolemRanged] Ground spell Hit #{i}: {h.collider.name} (layer {h.collider.gameObject.layer})");
-
-                // Skip the player’s own colliders so we hit the floor under them
-                if (h.collider.transform == center || h.collider.transform.IsChildOf(center))
-                    continue;
-
-                spawnPos = h.point;
-                break;
+                path.Init(bossBase, player, stats.earthPathMaxLength, stats.earthPathWidth);
             }
 
-            Instantiate(stats.groundSpellPrefab, spawnPos, Quaternion.identity);
-            Debug.Log($"[GolemRanged] Spawned ground spell at {spawnPos}");
-
+            Debug.Log("[GolemRanged] Spawned earth spike path");
             return;
         }
 
@@ -131,5 +107,5 @@ public class GolemRangedAttack : MonoBehaviour
         go.SetActive(true);
     }
 
-
 }
+
