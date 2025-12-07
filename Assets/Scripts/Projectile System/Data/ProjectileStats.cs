@@ -72,6 +72,11 @@ public class ProjectileStats : ScriptableObject
     [Header("Screen Shake")]
     public float impactShakeMagnitude = 0.5f;
     public float impactShakeDuration = 0.2f;
+
+    [Header("Wind Pull (Boss AoE)")]
+    public bool isWindPullSpell = false;
+    public GameObject windPullPrefab;
+
 }
 
 [System.Serializable]

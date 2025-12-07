@@ -6,31 +6,32 @@ using TMPro;
 public class PunchingBag : MonoBehaviour
 {
     [Header("Visuals")]
-    public Material HurtMat;                 // Material shown when the bag is hit
-    public Material IdleMat;                 // Default material when idle
-    public TextMeshProUGUI damageTakenText;  // UI text showing total damage taken
+    public Material HurtMat;
+    public Material IdleMat;
+    public TextMeshProUGUI damageTakenText;
 
     [Header("Combo Settings")]
-    [SerializeField] private float comboWindow = 3.0f; // Time before combo resets
+    [SerializeField] private float comboWindow = 3.0f;
 
-    private Renderer rend;    // Cached renderer for color/material changes
-    private Health health;    // Reference to the Health component
+    [Header("Collision Filtering")]
+    [SerializeField] private LayerMask ignoredDamageLayers;
 
-    private int totalDamageTaken = 0; // Tracks running total of recent hits
-    private bool resetDamage;         // Flag for manual reset (unused but left in)
+    private Renderer rend;
+    private Health health;
+
+    private int totalDamageTaken = 0;
+    private bool resetDamage;
 
     private void Start()
     {
         rend = GetComponent<Renderer>();
         health = GetComponent<Health>();
 
-        // Listen for damage events from the Health script
         health.OnDamaged += HandleDamageTaken;
     }
 
     private void OnDisable()
     {
-        // Stop timers and unsubscribe when disabled
         CancelInvoke();
         if (health != null)
             health.OnDamaged -= HandleDamageTaken;
@@ -38,15 +39,11 @@ public class PunchingBag : MonoBehaviour
 
     private void Update()
     {
-        
-        // Safely update UI text if assigned
         if (damageTakenText != null)
         {
-            // Use SetText to avoid GC from ToString allocations in tight loops
             damageTakenText.SetText(totalDamageTaken.ToString());
         }
 
-        // Manual reset if flag is triggered (optional feature)
         if (resetDamage)
         {
             totalDamageTaken = 0;
@@ -54,21 +51,28 @@ public class PunchingBag : MonoBehaviour
         }
     }
 
-    // Called whenever this object takes damage
     private void HandleDamageTaken(float amount, DamageType type, Object source)
     {
-        // Add this hit’s damage to the running total
+        if (source is Component comp)
+        {
+            Transform t = comp.transform;
+            while (t != null)
+            {
+                if (((1 << t.gameObject.layer) & ignoredDamageLayers) != 0)
+                    return;
+
+                t = t.parent;
+            }
+        }
+
         totalDamageTaken += Mathf.RoundToInt(amount);
 
-        // Restart combo reset timer
         CancelInvoke(nameof(ResetCombo));
         Invoke(nameof(ResetCombo), comboWindow);
 
-        // Flash red to show impact
         StartCoroutine(FlashRed());
     }
 
-    // Quick red flash when hit
     private IEnumerator FlashRed()
     {
         rend.material = HurtMat;
@@ -76,7 +80,6 @@ public class PunchingBag : MonoBehaviour
         rend.material = IdleMat;
     }
 
-    // Resets the combo damage total after time runs out
     private void ResetCombo()
     {
         totalDamageTaken = 0;

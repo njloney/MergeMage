@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entries:
   - incomingSpell: {fileID: 11400000, guid: 75e46bb9c3987e94f982ec2a3663aa95, type: 2}
-    optionA: {fileID: 11400000, guid: 75e46bb9c3987e94f982ec2a3663aa95, type: 2}
-    optionB: {fileID: 11400000, guid: 75e46bb9c3987e94f982ec2a3663aa95, type: 2}
+    optionA: {fileID: 11400000, guid: 65488c76da8536e4ea30ad2435a6a486, type: 2}
+    optionB: {fileID: 11400000, guid: 65488c76da8536e4ea30ad2435a6a486, type: 2}
+  - incomingSpell: {fileID: 11400000, guid: 2036df098649a3841b9aa97ad7d58336, type: 2}
+    optionA: {fileID: 11400000, guid: 74e322cb0c99df44c9655b80b838c3f9, type: 2}
+    optionB: {fileID: 11400000, guid: 74e322cb0c99df44c9655b80b838c3f9, type: 2}
