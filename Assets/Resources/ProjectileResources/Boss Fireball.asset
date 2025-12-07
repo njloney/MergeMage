@@ -62,3 +62,9 @@ MonoBehaviour:
   maxCastDistance: 20
   impactShakeMagnitude: 3
   impactShakeDuration: 0.2
+  isWindPullSpell: 0
+  windPullPrefab: {fileID: 0}
+  isEarthPathSpell: 0
+  earthPathPrefab: {fileID: 0}
+  earthPathMaxLength: 12
+  earthPathWidth: 3

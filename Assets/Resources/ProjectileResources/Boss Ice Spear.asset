@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
-  m_Name: Boss Lightning
+  m_Name: Boss Ice Spear
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 40
   lifetime: 5
   manaCost: 25
   projectileMaterial: {fileID: 0}
-  baseDamage: 10
-  damageType: 6
+  baseDamage: 50
+  damageType: 2
   destroyOnHit: 1
-  castType: 3
+  castType: 1
   effects: []
   spawnExplosion: 0
   explosion:
@@ -38,7 +38,7 @@ MonoBehaviour:
   onHitPrefab: {fileID: 0}
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
@@ -49,11 +49,11 @@ MonoBehaviour:
   isBeamSpell: 0
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
-  projectileOverridePrefab: {fileID: 0}
-  isGroundSpell: 1
+  projectileOverridePrefab: {fileID: 6095657618681121977, guid: f176e3ab649107e4db54a54bc591f87a, type: 3}
+  isGroundSpell: 0
   ghostIndicatorPrefab: {fileID: 0}
-  groundSpellPrefab: {fileID: 752067902596444815, guid: 7192f91db9edd6b4982ceba76901b106, type: 3}
-  maxCastDistance: 1000
+  groundSpellPrefab: {fileID: 0}
+  maxCastDistance: 20
   impactShakeMagnitude: 0.5
   impactShakeDuration: 0.2
   isWindPullSpell: 0
