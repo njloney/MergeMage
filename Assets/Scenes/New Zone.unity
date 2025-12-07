@@ -3640,6 +3640,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4097919054888786740, guid: 9649f6663d4ac4835b412b6c84b13863, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 31
+      objectReference: {fileID: 0}
     - target: {fileID: 4191750814710037706, guid: 9649f6663d4ac4835b412b6c84b13863, type: 3}
       propertyPath: consumable
       value: 
@@ -4443,7 +4447,9 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2980107463431339451, guid: cec3597bab1925a44804434afffe40d1, type: 3}
+    - {fileID: 3819867465337748240, guid: cec3597bab1925a44804434afffe40d1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

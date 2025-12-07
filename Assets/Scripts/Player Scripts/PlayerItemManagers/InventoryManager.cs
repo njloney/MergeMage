@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 
@@ -115,16 +116,20 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private void AttemptAutoMerge()
+    private IEnumerator AttemptAutoMergeRoutine()
     {
-        if (crystalSlots[0].currentItem == null || crystalSlots[1].currentItem == null) return;
+        if (crystalSlots[0].currentItem == null || crystalSlots[1].currentItem == null) yield break;
 
         ItemData item1 = crystalSlots[0].currentItem;
         ItemData item2 = crystalSlots[1].currentItem;
 
         ItemData result = resolver.BuildComboSpell(item1, item2);
 
-        if (result == null) return;
+        if (result == null) yield break;
+
+        yield return new WaitForSeconds(1.0f);
+
+        if (crystalSlots[0].currentItem != item1 || crystalSlots[1].currentItem != item2) yield break;
 
         for(int i = 0; i < mergeSlots.Count; i++)
         {
@@ -230,7 +235,7 @@ public class InventoryManager : MonoBehaviour
                 }
             }
 
-            AttemptAutoMerge();
+            StartCoroutine(AttemptAutoMergeRoutine());
             sendUpdates();
             return true;
         }
