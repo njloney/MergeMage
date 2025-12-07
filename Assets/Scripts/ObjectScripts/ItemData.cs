@@ -37,4 +37,11 @@ public class ItemData : ScriptableObject
     [Header("Passive Item Effects")]
     [Tooltip("For Passive items: the effect this item provides when collected.")]
     public PassiveItemEffect passiveEffect;
+
+    [Header("Consumable Item Effects")]
+    [Tooltip("Consumable items: the effect this item provides when collected.")]
+
+    public ConsumableEffect consumableEffect;
+
+    
 }
