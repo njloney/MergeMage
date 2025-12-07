@@ -9,6 +9,12 @@ public class FirstPersonController : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
+    [Header("Sound")]
+    [Tooltip("The audio when the player lands")]
+    public AudioClip landingSound;
+    private AudioSource audioSource;
+    private bool wasGrounded;
+
     [Header("Movement Feel")]
     [Tooltip("How fast you reach top speed. High = Snappy start.")]
     [SerializeField] private float groundAcceleration = 60f;
@@ -34,6 +40,14 @@ public class FirstPersonController : MonoBehaviour
     {
         playerStats = GetComponent<RuntimePlayerStats>();
         if (playerStats == null) Debug.LogError("RuntimePlayerStats component not found!");
+
+        //jump sound
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
     }
 
     public void SetGeyserState(bool active, float liftForce)
@@ -57,7 +71,14 @@ public class FirstPersonController : MonoBehaviour
     {
         if (playerStats == null) return;
 
+        wasGrounded = isGrounded;
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        
+        if (!wasGrounded && isGrounded)
+        {
+            PlayLandingSound();
+        }
 
         // 1. Vertical Logic
         HandleVerticalMovement();
@@ -139,5 +160,13 @@ public class FirstPersonController : MonoBehaviour
         verticalVelocity = Vector3.zero;
         horizontalVelocity = Vector3.zero;
         controller.enabled = true;
+    }
+
+    private void PlayLandingSound()
+    {
+        if (landingSound != null && audioSource != null)
+        {          
+            audioSource.PlayOneShot(landingSound);
+        }
     }
 }
