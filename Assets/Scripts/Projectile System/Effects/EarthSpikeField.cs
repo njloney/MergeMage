@@ -36,12 +36,13 @@ public class EarthSpikeField : MonoBehaviour
         a.y = b.y;
 
         Vector3 dir = b - a;
-        if (dir.sqrMagnitude < 0.01f)
+        float dist = dir.magnitude;
+        if (dist < 0.01f)
             dir = boss.forward;
         else
-            dir.Normalize();
+            dir /= dist;
 
-        pathLength = maxLength > 0f ? maxLength : defaultLength;
+        pathLength = Mathf.Min(maxLength, dist);
         pathWidth = width > 0f ? width : defaultWidth;
 
         transform.position = a + dir * (pathLength * 0.5f);
