@@ -19,3 +19,6 @@ MonoBehaviour:
   - incomingSpell: {fileID: 11400000, guid: 2036df098649a3841b9aa97ad7d58336, type: 2}
     optionA: {fileID: 11400000, guid: 74e322cb0c99df44c9655b80b838c3f9, type: 2}
     optionB: {fileID: 11400000, guid: 74e322cb0c99df44c9655b80b838c3f9, type: 2}
+  - incomingSpell: {fileID: 11400000, guid: a0942033e4667d546b0b74fe00394c88, type: 2}
+    optionA: {fileID: 11400000, guid: eae5eec4a681f8749b5e4c5bfc6f8240, type: 2}
+    optionB: {fileID: 11400000, guid: eae5eec4a681f8749b5e4c5bfc6f8240, type: 2}

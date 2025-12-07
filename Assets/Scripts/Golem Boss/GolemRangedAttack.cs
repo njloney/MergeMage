@@ -6,9 +6,8 @@ public class GolemRangedAttack : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private GolemSpellResponder responder;
     [SerializeField] private Transform player;
-    [SerializeField] private Transform bossCenter;
+    [SerializeField] private Transform floorOfBoss;
     [SerializeField] private LayerMask groundMask = ~0;
-
     [SerializeField] private float aimUpOffset = 1.0f;
 
     void Awake()
@@ -32,7 +31,7 @@ public class GolemRangedAttack : MonoBehaviour
         {
             Debug.Log("[GolemRanged] Wind spell branch entered");
 
-            Transform center = bossCenter != null ? bossCenter : transform;
+            Transform center = floorOfBoss != null ? floorOfBoss : transform;
             Vector3 centerPos = center.position;
             Vector3 spawnPos = centerPos;
 
@@ -70,6 +69,44 @@ public class GolemRangedAttack : MonoBehaviour
             return;
         }
 
+        // Lightning / generic ground spell centered on the player
+        if (stats.isGroundSpell && stats.groundSpellPrefab != null && player != null)
+        {
+            Transform center = player;
+            Vector3 centerPos = center.position;
+            Vector3 spawnPos = centerPos;
+
+            RaycastHit[] hits = Physics.RaycastAll(
+                centerPos + Vector3.up * 10f,
+                Vector3.down,
+                50f,
+                groundMask,
+                QueryTriggerInteraction.Ignore
+            );
+
+            Debug.Log($"[GolemRanged] Ground spell RaycastAll hit count: {hits.Length}");
+
+            for (int i = 0; i < hits.Length; i++)
+            {
+                var h = hits[i];
+                if (h.collider == null) continue;
+
+                Debug.Log($"[GolemRanged] Ground spell Hit #{i}: {h.collider.name} (layer {h.collider.gameObject.layer})");
+
+                // Skip the player’s own colliders so we hit the floor under them
+                if (h.collider.transform == center || h.collider.transform.IsChildOf(center))
+                    continue;
+
+                spawnPos = h.point;
+                break;
+            }
+
+            Instantiate(stats.groundSpellPrefab, spawnPos, Quaternion.identity);
+            Debug.Log($"[GolemRanged] Spawned ground spell at {spawnPos}");
+
+            return;
+        }
+
         if (stats.castType == SpellCastType.Beam || stats.isBeamSpell)
             return;
 
@@ -93,5 +130,6 @@ public class GolemRangedAttack : MonoBehaviour
 
         go.SetActive(true);
     }
+
 
 }

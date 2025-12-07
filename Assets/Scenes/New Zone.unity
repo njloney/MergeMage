@@ -5552,9 +5552,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 382195762}
     - target: {fileID: 6365025994680180027, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
+      propertyPath: floorOfBoss
+      value: 
+      objectReference: {fileID: 382195762}
+    - target: {fileID: 6365025994680180027, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
       propertyPath: projectilePrefab
       value: 
-      objectReference: {fileID: 7855230155840578728, guid: 44edf47ac302b1e42b3db56af23548a6, type: 3}
+      objectReference: {fileID: 170102889184293530, guid: 814af66c602476443b6a3d67d82a719e, type: 3}
     - target: {fileID: 6365025994680180027, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
       propertyPath: groundMask.m_Bits
       value: 1
@@ -5602,7 +5606,7 @@ PrefabInstance:
     - target: {fileID: 7478545514406224708, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
       propertyPath: basicRangedSpell
       value: 
-      objectReference: {fileID: 11400000, guid: 75e46bb9c3987e94f982ec2a3663aa95, type: 2}
+      objectReference: {fileID: 11400000, guid: 39f2b3278d296414788a374ab0a9d6c8, type: 2}
     - target: {fileID: 7511081661399451753, guid: 11aefe85bef2cd1468da1210cac37aa3, type: 3}
       propertyPath: m_Layer
       value: 8
