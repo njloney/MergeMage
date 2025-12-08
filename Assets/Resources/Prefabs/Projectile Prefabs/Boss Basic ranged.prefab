@@ -177,6 +177,7 @@ MonoBehaviour:
   rb: {fileID: 1709781317429458689}
   visualRenderer: {fileID: 1827528912993211215}
   trail: {fileID: 0}
+  useGravity: 0
 --- !u!82 &3822259423441483336
 AudioSource:
   m_ObjectHideFlags: 0
@@ -288,8 +289,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   impactClips:
   - {fileID: 8300000, guid: cd4250bd3e64d7c46b3edb0c9ac22eb6, type: 3}
-  volume: 0.9
+  volume: 0.5
   pitchRange: {x: 0.95, y: 1.05}
+  playOnlyOncePerInstance: 1
 --- !u!23 &1827528912993211215 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 0522f8c36e0752e418ed7f350538adff, type: 3}

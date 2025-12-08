@@ -1,26 +1,23 @@
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
 public class SpellImpactAudio : MonoBehaviour
 {
     [Header("Impact Sounds")]
     [SerializeField] private AudioClip[] impactClips;
     [SerializeField, Range(0f, 1f)] private float volume = 0.9f;
     [SerializeField] private Vector2 pitchRange = new Vector2(0.95f, 1.05f);
+    [SerializeField] private bool playOnlyOncePerInstance = true;
 
-    private AudioSource source;
     private bool played;
 
-    private void Awake()
+    private void OnEnable()
     {
-        source = GetComponent<AudioSource>();
-        source.playOnAwake = false;
-        source.loop = false;
+        played = false;
     }
 
     public void PlayImpactSound()
     {
-        if (played)
+        if (playOnlyOncePerInstance && played)
             return;
 
         played = true;
@@ -32,7 +29,31 @@ public class SpellImpactAudio : MonoBehaviour
         if (!clip)
             return;
 
-        source.pitch = Random.Range(pitchRange.x, pitchRange.y);
-        source.PlayOneShot(clip, volume);
+        Debug.Log("[SpellImpactAudio] PlayImpactSound on " + name);
+
+        // Create a temporary audio object at this position
+        // This is independent of the projectile's own GameObject.
+        float pitch = Random.Range(pitchRange.x, pitchRange.y);
+
+        // Use a helper coroutine runner
+        PlayClipAtPointWithPitch(clip, transform.position, volume, pitch);
+    }
+
+    private void PlayClipAtPointWithPitch(AudioClip clip, Vector3 pos, float vol, float pitch)
+    {
+        var go = new GameObject("SpellImpactAudio_" + clip.name);
+        go.transform.position = pos;
+
+        var src = go.AddComponent<AudioSource>();
+        src.clip = clip;
+        src.spatialBlend = 1f; // 3D
+        src.volume = vol;
+        src.pitch = pitch;
+        src.rolloffMode = AudioRolloffMode.Linear;
+        src.minDistance = 5f;
+        src.maxDistance = 40f;
+        src.Play();
+
+        Object.Destroy(go, clip.length / Mathf.Max(0.1f, pitch));
     }
 }

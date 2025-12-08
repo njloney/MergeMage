@@ -29,7 +29,8 @@ public class LightningStrike : MonoBehaviour
 
         var impactAudio = GetComponent<SpellImpactAudio>();
         if (impactAudio != null)
-            impactAudio.PlayImpactSound();
+            Debug.Log("Playing impact sound for LightningStrike.");
+        impactAudio.PlayImpactSound();
 
         if (impactEffect) Instantiate(impactEffect, transform.position, Quaternion.identity);
 
