@@ -7,11 +7,15 @@ public class ProjectileStats : ScriptableObject
     [Header("Projectile Motion")]
     public float speed = 20f;
     public float lifetime = 5f;
+    public bool useGravity = false;
 
     [Header("Mana Effects")]
     public float manaCost = 25f;
+
     [Header("Projectile Visuals")]
     public Material projectileMaterial;
+    [Tooltip("VFX to spawn immediately on impact")]
+    public GameObject impactVFX;
 
     [Header("Direct Hit Damage")]
     public int baseDamage = 10;
@@ -25,54 +29,40 @@ public class ProjectileStats : ScriptableObject
     public List<EffectSpec> effects = new();
 
     [Header("Explosion Settings")]
-    public bool spawnExplosion = false;           // enable/disable explosion
-    public ExplosionSettings explosion;           // holds explosion data
+    public bool spawnExplosion = false;
+    public ExplosionSettings explosion;
 
-    [Header("Piercing (for things like Wind Bullet)")]
-    public bool enablePierce = false;     // if true, the projectile can pass through targets
-    public int pierceCount = 0;           // how many distinct targets it can hit before despawning
+    [Header("Piercing")]
+    public bool enablePierce = false;
+    public int pierceCount = 0;
 
-
-    [Header("Spawn Object On Impact (Earth / Fire zones)")]
+    [Header("Spawn Object On Impact (Persistent Zones)")]
     public bool spawnObjectOnHit = false;
     public GameObject onHitPrefab;
     public LayerMask groundMask;
 
-
-    [Header("Chain Lightning (Lightning Spell)")]
+    [Header("Chain Lightning")]
     public bool chainOnHit = false;
     public int chainMaxJumps = 3;
     public float chainRadius = 6f;
     public float chainDamagePerJump = 8f;
     public LayerMask chainMask = ~0;
 
-    [Header("Light Ray Beam (non-projectile spell)")]
-    [Tooltip("If true, this spell will cast a LightRayBeam instead of spawning a projectile.")]
+    [Header("Light Ray Beam")]
     public bool isBeamSpell = false;
-
-    [Tooltip("Prefab that has a LightRayBeam component.")]
     public LightRayBeam beamPrefab;
-
-    [Tooltip("Config asset that defines DPS, range, duration, etc.")]
     public LightRayConfig beamConfig;
 
     [Header("Prefab Override")]
     public GameObject projectileOverridePrefab;
 
-    [Header("Ground Target Spell (e.g. Lightning Strike)")]
+    [Header("Ground Target Spell")]
     public bool isGroundSpell = false;
-    [Tooltip("The ghost/reticle to show on the ground where the player is aiming.")]
     public GameObject ghostIndicatorPrefab;
-    [Tooltip("The actual spell prefab to spawn at the target point (must have LightningStrike script or similar).")]
     public GameObject groundSpellPrefab;
-    [Tooltip("Max distance to cast this spell.")]
     public float maxCastDistance = 20f;
 
-    [Header("Screen Shake")]
-    public float impactShakeMagnitude = 0.5f;
-    public float impactShakeDuration = 0.2f;
-
-    [Header("Wind Pull (Boss AoE)")]
+    [Header("Wind Pull")]
     public bool isWindPullSpell = false;
     public GameObject windPullPrefab;
 
@@ -81,8 +71,6 @@ public class ProjectileStats : ScriptableObject
     public GameObject earthPathPrefab;
     public float earthPathMaxLength = 12f;
     public float earthPathWidth = 3f;
-
-
 }
 
 [System.Serializable]

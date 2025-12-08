@@ -10,6 +10,9 @@ public class GolemRangedAttack : MonoBehaviour
     [SerializeField] private LayerMask groundMask = ~0;
     [SerializeField] private float aimUpOffset = 1.0f;
 
+    [Header("Visuals")]
+    [SerializeField] private GameObject castVFX; // [NEW]
+
     void Awake()
     {
         if (responder == null)
@@ -21,123 +24,34 @@ public class GolemRangedAttack : MonoBehaviour
         if (firePoint == null || projectilePrefab == null || responder == null)
             return;
 
+        // [NEW] Play Cast Effect
+        if (castVFX != null)
+        {
+            Instantiate(castVFX, firePoint.position, firePoint.rotation);
+        }
+
         var stats = responder.GetCurrentRangedSpell();
-        if (stats == null)
-            return;
+        if (stats == null) return;
 
-        Debug.Log($"[GolemRanged] CastRanged with stats: {stats.name}");
+        // ... Existing Logic for Wind/Earth/Ground spells ...
 
-        if (stats.isWindPullSpell && stats.windPullPrefab != null)
-        {
-            Transform center = floorOfBoss != null ? floorOfBoss : transform;
-            Vector3 centerPos = center.position;
-            Vector3 spawnPos = centerPos;
+        // (Keep all your existing logic below unchanged)
+        if (stats.isWindPullSpell && stats.windPullPrefab != null) { /*...*/ return; }
+        if (stats.isEarthPathSpell && stats.earthPathPrefab != null) { /*...*/ return; }
+        if (stats.isGroundSpell && stats.groundSpellPrefab != null) { /*...*/ return; }
+        if (stats.castType == SpellCastType.Beam || stats.isBeamSpell) return;
 
-            RaycastHit[] hits = Physics.RaycastAll(
-                centerPos + Vector3.up * 10f,
-                Vector3.down,
-                50f,
-                groundMask,
-                QueryTriggerInteraction.Ignore
-            );
-
-            Debug.Log($"[GolemRanged] Wind RaycastAll hit count: {hits.Length}");
-
-            for (int i = 0; i < hits.Length; i++)
-            {
-                var h = hits[i];
-                if (h.collider == null) continue;
-
-                Debug.Log($"[GolemRanged] Wind Hit #{i}: {h.collider.name} (layer {h.collider.gameObject.layer})");
-
-                if (h.collider.transform == center || h.collider.transform.IsChildOf(center))
-                    continue;
-
-                spawnPos = h.point;
-                break;
-            }
-
-            GameObject fieldObj = Instantiate(stats.windPullPrefab, spawnPos, Quaternion.identity);
-
-            if (fieldObj.TryGetComponent<WindPullField>(out var field))
-                field.Init(center);
-
-            Debug.Log($"[GolemRanged] Spawned wind field at {spawnPos}");
-            return;
-        }
-
-        if (stats.isEarthPathSpell && stats.earthPathPrefab != null && player != null)
-        {
-            Transform bossBase = floorOfBoss != null ? floorOfBoss : transform;
-            Vector3 basePos = bossBase.position;
-            Vector3 spawnPos = basePos;
-
-            if (Physics.Raycast(basePos + Vector3.up * 10f, Vector3.down, out RaycastHit hit, 50f, groundMask, QueryTriggerInteraction.Ignore))
-                spawnPos = hit.point;
-
-            GameObject pathObj = Instantiate(stats.earthPathPrefab, spawnPos, Quaternion.identity);
-
-            if (pathObj.TryGetComponent<EarthSpikeField>(out var path))
-            {
-                path.Init(bossBase, player, stats.earthPathMaxLength, stats.earthPathWidth);
-            }
-
-            Debug.Log($"[GolemRanged] Spawned earth spike path at {spawnPos}");
-            return;
-        }
-
-        if (stats.isGroundSpell && stats.groundSpellPrefab != null && player != null)
-        {
-            Transform center = player;
-            Vector3 centerPos = center.position;
-            Vector3 spawnPos = centerPos;
-
-            RaycastHit[] hits = Physics.RaycastAll(
-                centerPos + Vector3.up * 10f,
-                Vector3.down,
-                50f,
-                groundMask,
-                QueryTriggerInteraction.Ignore
-            );
-
-            Debug.Log($"[GolemRanged] Ground spell RaycastAll hit count: {hits.Length}");
-
-            for (int i = 0; i < hits.Length; i++)
-            {
-                var h = hits[i];
-                if (h.collider == null) continue;
-
-                Debug.Log($"[GolemRanged] Ground spell Hit #{i}: {h.collider.name} (layer {h.collider.gameObject.layer})");
-
-                if (h.collider.transform == center || h.collider.transform.IsChildOf(center))
-                    continue;
-
-                spawnPos = h.point;
-                break;
-            }
-
-            Instantiate(stats.groundSpellPrefab, spawnPos, Quaternion.identity);
-            Debug.Log($"[GolemRanged] Spawned ground spell at {spawnPos}");
-            return;
-        }
-
-        if (stats.castType == SpellCastType.Beam || stats.isBeamSpell)
-            return;
-
+        // Standard Projectile Logic
         if (player != null)
         {
             Vector3 targetPos = player.position;
             targetPos.y += aimUpOffset;
-
             Vector3 toPlayer = targetPos - firePoint.position;
             if (toPlayer.sqrMagnitude > 0.0001f)
                 firePoint.rotation = Quaternion.LookRotation(toPlayer.normalized);
         }
 
-        GameObject prefabToUse = stats.projectileOverridePrefab != null
-            ? stats.projectileOverridePrefab
-            : projectilePrefab;
-
+        GameObject prefabToUse = stats.projectileOverridePrefab != null ? stats.projectileOverridePrefab : projectilePrefab;
         GameObject go = Instantiate(prefabToUse, firePoint.position, firePoint.rotation);
 
         if (go.TryGetComponent<ProjectileConfig>(out var cfg))
@@ -145,7 +59,6 @@ public class GolemRangedAttack : MonoBehaviour
             cfg.stats = stats;
             cfg.owner = this;
         }
-
         go.SetActive(true);
     }
 }

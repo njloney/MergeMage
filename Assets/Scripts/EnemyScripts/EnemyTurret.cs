@@ -1,67 +1,88 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+
 public class EnemyTurret : Enemy
 {
     [Header("Visuals")]
-    public Material HurtMat;                 // Material shown when the bag is hit
-    public Material IdleMat;                 // Default material when idle
-    private Renderer rend;    // Cached renderer for color/material changes
-    private Health health;    // Reference to the Health component
-    [Header("Crystal Drop")]
+    public Material HurtMat;
+    public Material IdleMat;
+    private Renderer rend;
+    private Health health;
     public GameObject itemDrop;
-    private ItemPickup itemScript;
     public Rigidbody itemRigid;
 
-    [Header("Movement")]
+    // Movement
     public Transform target;
     public float maxSpeed = 20f;
     public float moveSpeed = 0f;
+    private Coroutine currRoutine;
+
     private Rigidbody bodyRB;
     private Transform bodyT;
     private Transform armT;
-
-
-    private Coroutine currRoutine;
     private Component animScript;
+    private ItemPickup itemScript;
 
     private void Start()
     {
         rend = GetComponent<Renderer>();
         health = GetComponent<Health>();
         rend.material = IdleMat;
-        bodyT = transform;//.Find("Body");
+        bodyT = transform;
         bodyRB = bodyT.GetComponent<Rigidbody>();
         armT = transform.Find("Arm");
         target = GameObject.Find("Player").transform;
-        
 
-        // Listen for damage events from the Health script
         health.OnDamaged += HandleDamageTaken;
         health.OnDied += Die;
 
         GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
         itemDrop = null;
-        while (itemDrop == null)
+
+        int attempts = 0;
+        while (itemDrop == null && attempts < 100)
         {
-            itemDrop = Instantiate(base.getRandomCrystal());
-            itemScript = (ItemPickup)itemDrop.GetComponent("ItemPickup");
-            ItemData item = itemScript.itemToGive;
-            if (item == null || item.castType != SpellCastType.Projectile)
+            attempts++;
+            GameObject candidate = prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
+            ItemPickup pickup = candidate.GetComponent<ItemPickup>();
+
+            if (pickup != null)
             {
-                itemDrop = null;
+                ItemData data = pickup.itemToGive;
+
+                if (data.castType == SpellCastType.Projectile &&
+                   (data.crystalType == CrystalType.Fire ||
+                    data.crystalType == CrystalType.Ice ||
+                    data.crystalType == CrystalType.Wind ||
+                    data.crystalType == CrystalType.Earth ||
+                    data.crystalType == CrystalType.Lightning))
+                {
+                    itemDrop = Instantiate(candidate);
+                    itemScript = itemDrop.GetComponent<ItemPickup>();
+                }
             }
         }
+
+        if (itemDrop == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         itemDrop.transform.SetParent(armT);
         itemDrop.transform.localScale = new Vector3(.4f, .2f, .4f);
         itemDrop.transform.localPosition = new Vector3(0, 1, 0);
+
+        animScript = itemDrop.GetComponent("SimpleGemsAnim");
+        if (animScript != null) Destroy(animScript);
+
         itemRigid = itemDrop.GetComponent<Rigidbody>();
-        
-        Destroy(itemRigid);
+        if (itemRigid != null) Destroy(itemRigid);
 
         currRoutine = StartCoroutine(Move());
     }
-    // Move towards until within shooting range
+
     private IEnumerator Move()
     {
         Debug.Log("Move");
@@ -96,6 +117,7 @@ public class EnemyTurret : Enemy
 
     private IEnumerator Show()
     {
+        // ... (Keep existing Show logic) ...
         Vector3 startPos = armT.position;
         Vector3 endPos = bodyT.position + new Vector3(0, 0.5f, 0);
 
@@ -111,27 +133,10 @@ public class EnemyTurret : Enemy
         currRoutine = StartCoroutine(Attack());
     }
 
-    private IEnumerator Hide()
-    {
-        Vector3 startPos = armT.position;
-        Vector3 endPos = bodyT.position;
-        Debug.Log("hide");
-
-        while (armT.position.y > endPos.y)
-        {
-            // Move downward by riseSpeed * deltaTime
-            float newY = armT.position.y - 0.5f * Time.deltaTime;
-            armT.position = new Vector3(endPos.x, newY, endPos.z);
-            armT.rotation = Quaternion.identity;
-            yield return null;
-        }
-        armT.position = endPos;
-        currRoutine = StartCoroutine(Move());
-    }
-
     private float aimUpOffset = 1.0f;
     private IEnumerator Attack()
     {
+        // ... (Keep existing Attack logic) ...
         Debug.Log("Attack");
         float dist = Vector3.Distance(transform.position, target.position);
         while (dist > 2f && dist < 10f)
@@ -170,9 +175,30 @@ public class EnemyTurret : Enemy
         Debug.Log("check here");
         currRoutine = StartCoroutine(Hide());
     }
+
+    private IEnumerator Hide()
+    {
+        // ... (Keep existing Hide logic) ...
+        Vector3 startPos = armT.position;
+        Vector3 endPos = bodyT.position;
+        Debug.Log("hide");
+
+        while (armT.position.y > endPos.y)
+        {
+            // Move downward by riseSpeed * deltaTime
+            float newY = armT.position.y - 0.5f * Time.deltaTime;
+            armT.position = new Vector3(endPos.x, newY, endPos.z);
+            armT.rotation = Quaternion.identity;
+            yield return null;
+        }
+        armT.position = endPos;
+        currRoutine = StartCoroutine(Move());
+    }
+
     private Coroutine damageCoroutine;
     private IEnumerator DealDamage(Collision collision)
     {
+        // ... (Keep existing DealDamage logic) ...
         if (collision.gameObject.CompareTag("Player"))
         {
             Health playerHealth = collision.gameObject.GetComponent<Health>();
@@ -189,11 +215,14 @@ public class EnemyTurret : Enemy
 
     private void Update()
     {
-        if (itemDrop == null)
+        // [UPDATED] Use TakeDamage instead of Die() to trigger effects
+        if (itemDrop == null && health.currentHP > 0)
         {
-            Die();
+            health.TakeDamage(health.maxHP, DamageType.Physical, null);
         }
     }
+
+    // ... HandleDamageTaken, FlashRed, Die, dropItem (Keep unchanged) ...
 
     // Called whenever this object takes damage
     private void HandleDamageTaken(float amount, DamageType type, Object source)
@@ -217,7 +246,20 @@ public class EnemyTurret : Enemy
 
     private void Die()
     {
-        base.dropItem(itemDrop);
+        if (itemDrop != null) dropItem(itemDrop);
         Destroy(gameObject);
+    }
+    private void dropItem(GameObject itemDrop)
+    {
+        if (itemDrop == null)
+        {
+            Debug.LogError(itemDrop.name + " has no pickup prefab assigned!");
+            return;
+        }
+
+        // Spawn the item's specific prefab in place of slime
+        Vector3 dropPosition = transform.position;
+        itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
+        itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 }

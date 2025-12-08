@@ -32,8 +32,8 @@ Transform:
   m_GameObject: {fileID: 599919561828246438}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.423177, y: -0.8020894, z: -17.894588}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -103,14 +103,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20539c37dcad14e898c251cbce725ff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HurtMat: {fileID: 0}
-  IdleMat: {fileID: 2100000, guid: bf567e8b4d07d4e68a8972283aa9e35a, type: 2}
-  comboWindow: 3
-  itemDrop: {fileID: 0}
-  itemRigid: {fileID: 0}
-  target: {fileID: 0}
+  jumpForce: 1
+  forwardForce: 1
+  jumpInterval: 1
+  jumpChargeTime: 0.5
+  groundedDrag: 5
+  airDrag: 0
   maxSpeed: 5
-  moveSpeed: 0
+  HurtMat: {fileID: 2100000, guid: 224337e74b2237c4e845f50186cb3d5f, type: 2}
+  IdleMat: {fileID: 2100000, guid: bf567e8b4d07d4e68a8972283aa9e35a, type: 2}
+  modelTransform: {fileID: 0}
+  itemDrop: {fileID: 0}
+  target: {fileID: 0}
 --- !u!114 &133561839704818115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +128,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  ignoredSourceLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!54 &2628141601155224446
 Rigidbody:
   m_ObjectHideFlags: 0

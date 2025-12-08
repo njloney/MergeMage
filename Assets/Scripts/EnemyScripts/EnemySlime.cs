@@ -1,135 +1,221 @@
 using System.Collections;
 using UnityEngine;
-using TMPro;
+
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Health))]
 public class EnemySlime : Enemy
 {
+    [Header("Hopping Settings")]
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float forwardForce = 3f;
+    [SerializeField] private float jumpInterval = 2f;
+    [SerializeField] private float jumpChargeTime = 0.5f;
+    [SerializeField] private float groundedDrag = 5f;
+    [SerializeField] private float airDrag = 0f;
+
+    // [FIX 1] Re-added maxSpeed. 
+    // We treat 1.0 as "100% speed". Slow/Freeze scripts will modify this value.
+    [HideInInspector] public float maxSpeed = 1f;
+
     [Header("Visuals")]
-    public Material HurtMat;    // Material shown when the bag is hit
-    public Material IdleMat;    // Default material when idle
+    public Material HurtMat;
+    public Material IdleMat;
+    [SerializeField] private Transform modelTransform;
 
-    private Renderer rend;    // Cached renderer for color/material changes
-    private Health health;    // Reference to the Health component
+    [Header("Loot")]
     public GameObject itemDrop;
-    public Rigidbody itemRigid;
 
-    // Movement
+    // Components
     private Rigidbody rb;
+    private Health health;
+    private Renderer rend;
+
+    // [FIX 2] Changed from private to public so Blind.cs can access it
     public Transform target;
-    public float maxSpeed = 20f;
-    public float moveSpeed = 0f;
 
-    // Transparency
-    private Renderer objectRenderer;
-    private float transparencyValue;
+    // State
+    private float jumpTimer;
+    private bool isGrounded;
+    private bool isCharging;
 
-    private string Touching;
-
+    // Damage Flash
+    private Coroutine damageCoroutine;
 
     private void Start()
     {
-        objectRenderer = GetComponent<Renderer>();
-        transparencyValue = 1f;
-        rend = GetComponent<Renderer>();
-        health = GetComponent<Health>();
-        rend.material = IdleMat;
         rb = GetComponent<Rigidbody>();
-        target = GameObject.Find("Player").transform;
+        health = GetComponent<Health>();
+        rend = GetComponent<Renderer>();
 
-        // Listen for damage events from the Health script
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.useGravity = true;
+
+        if (IdleMat != null) rend.material = IdleMat;
+
+        GameObject playerObj = GameObject.Find("Player");
+        if (playerObj != null) target = playerObj.transform;
+
         health.OnDamaged += HandleDamageTaken;
         health.OnDied += Die;
-        
-        itemDrop = null;
-        if (Random.value <= 0.2f)
-        {
-            itemDrop = Instantiate(base.getRandomItem());
-            itemDrop.transform.SetParent(transform);
-            itemDrop.transform.localScale = Vector3.one;
-            itemRigid = itemDrop.GetComponent<Rigidbody>();
-            Destroy(itemRigid);
-        }
+
+        InitializeLoot();
+
+        jumpTimer = jumpInterval;
     }
 
-    private void move()
+    private void Update()
     {
-        if (!rb || !target) return;
-
-        float direction = 1f;
-        float dist = Vector3.Distance(transform.position, target.position);
-        moveSpeed = Mathf.Min(maxSpeed, dist + 0.1f);
-
-        Vector3 targetPosXZ = new Vector3(target.position.x, transform.position.y, target.position.z);
-        Vector3 nextPos = Vector3.MoveTowards(transform.position, targetPosXZ, direction * moveSpeed * Time.deltaTime);
-
-        rb.MovePosition(nextPos);
-        transform.LookAt(targetPosXZ);
+        UpdateTransparency();
     }
 
     private void FixedUpdate()
     {
-        move();
-        UpdateTransparency();
-    }
+        if (target == null) return;
 
-    // Called whenever this object takes damage
-    private void HandleDamageTaken(float amount, DamageType type, Object source)
-    {
-        // Flash red to show impact
-        StartCoroutine(FlashRed());
-    }
+        CheckGrounded();
 
-    private Coroutine damageCoroutine;
-
-    void OnCollisionEnter(Collision collision)
-    {
-        damageCoroutine = StartCoroutine(DealDamage(collision));
-    }
-    private IEnumerator DealDamage(Collision collision)
-    {
-        Touching = collision.gameObject.name;
-        if (collision.gameObject.CompareTag("Player"))
+        if (isGrounded && !isCharging)
         {
-            Health playerHealth = collision.gameObject.GetComponent<Health>();
-            while (Touching == "Player")
+            rb.linearDamping = groundedDrag;
+            RotateTowardsPlayer();
+
+            // Only countdown jump timer if we aren't frozen (maxSpeed > 0)
+            if (maxSpeed > 0.01f)
             {
-                if (playerHealth != null)
+                jumpTimer -= Time.fixedDeltaTime;
+                if (jumpTimer <= 0f)
                 {
-                    playerHealth.TakeDamage(10f, DamageType.Physical, null);
+                    StartCoroutine(PerformHop());
                 }
-                yield return new WaitForSeconds(1f);
             }
         }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        Touching = "";
-        if (damageCoroutine != null)
+        else
         {
-            StopCoroutine(damageCoroutine);
-            damageCoroutine = null;
+            rb.linearDamping = airDrag;
         }
     }
 
-    // Quick red flash when hit
+    private void RotateTowardsPlayer()
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        direction.y = 0;
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRot = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, 10f * Time.fixedDeltaTime);
+        }
+    }
+
+    private IEnumerator PerformHop()
+    {
+        isCharging = true;
+
+        // Squash Animation
+        Vector3 originalScale = transform.localScale;
+        Vector3 squashScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 0.7f, originalScale.z * 1.2f);
+
+        float elapsed = 0f;
+        while (elapsed < jumpChargeTime)
+        {
+            // If we get frozen mid-charge, stop
+            if (maxSpeed <= 0.01f)
+            {
+                transform.localScale = originalScale;
+                isCharging = false;
+                yield break;
+            }
+
+            transform.localScale = Vector3.Lerp(originalScale, squashScale, elapsed / jumpChargeTime);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localScale = originalScale;
+
+        Vector3 dir = (target.position - transform.position).normalized;
+
+        // [FIX 3] Apply maxSpeed as a multiplier. 
+        // If maxSpeed is 0.5 (Slowed), jump is weaker. If 0 (Frozen), jump force is 0.
+        Vector3 finalForce = (Vector3.up * jumpForce + dir * forwardForce) * maxSpeed;
+
+        rb.AddForce(finalForce, ForceMode.Impulse);
+
+        isCharging = false;
+        jumpTimer = jumpInterval;
+    }
+
+    private void CheckGrounded()
+    {
+        isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.5f);
+    }
+
+    private void HandleDamageTaken(float amount, DamageType type, Object source)
+    {
+        if (damageCoroutine != null) StopCoroutine(damageCoroutine);
+        damageCoroutine = StartCoroutine(FlashRed());
+    }
+
     private IEnumerator FlashRed()
     {
-        rend.material = HurtMat;
+        if (HurtMat != null) rend.material = HurtMat;
         yield return new WaitForSeconds(0.2f);
-        rend.material = IdleMat;
+        if (IdleMat != null) rend.material = IdleMat;
     }
 
     private void Die()
     {
-        base.dropItem(itemDrop);
+        if (itemDrop != null) DropItem();
         Destroy(gameObject);
+    }
+
+    private void InitializeLoot()
+    {
+        if (itemDrop == null)
+        {
+            GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
+            if (prefabs.Length > 0 && Random.value <= 0.25f)
+            {
+                itemDrop = prefabs[Random.Range(0, prefabs.Length)];
+            }
+        }
+    }
+
+    private void DropItem()
+    {
+        if (itemDrop == null) return;
+
+        GameObject dropped = Instantiate(itemDrop, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+        dropped.transform.localScale = Vector3.one * 0.5f;
+
+        if (!dropped.GetComponent<Rigidbody>()) dropped.AddComponent<Rigidbody>();
     }
 
     private void UpdateTransparency()
     {
-        transparencyValue = health.currentHP / health.maxHP;
-        Color currentColor = objectRenderer.material.color;
-        currentColor.a = transparencyValue; // Set the alpha channel
-        objectRenderer.material.color = currentColor; // Apply the new color
+        if (rend == null) return;
+
+        float alpha = Mathf.Clamp01(health.currentHP / health.maxHP);
+        Color c = rend.material.color;
+        c.a = Mathf.Max(0.3f, alpha);
+        rend.material.color = c;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Health playerHp = collision.gameObject.GetComponent<Health>();
+            if (playerHp != null)
+            {
+                playerHp.TakeDamage(10f, DamageType.Physical, this);
+
+                Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
+                if (playerRb != null)
+                {
+                    Vector3 pushDir = (collision.transform.position - transform.position).normalized;
+                    playerRb.AddForce(pushDir * 5f, ForceMode.Impulse);
+                }
+            }
+        }
     }
 }

@@ -2559,6 +2559,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   aimUpOffset: 1
+  castVFX: {fileID: 5752428439544320396, guid: 5aab9112c643687498f1009e6a5397a4, type: 3}
 --- !u!114 &7478545514406224708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2593,6 +2594,8 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 512
+  smashVFX: {fileID: 0}
+  hitPoint: {fileID: 0}
 --- !u!114 &1109900019931866779
 MonoBehaviour:
   m_ObjectHideFlags: 0

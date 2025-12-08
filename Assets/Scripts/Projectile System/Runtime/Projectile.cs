@@ -105,8 +105,11 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-            // We hit a wall or something without health
-            // You might want to play a "wall hit" sound/particle here
+        }
+
+        if (cfg.stats.impactVFX != null)
+        {
+            Instantiate(cfg.stats.impactVFX, transform.position, Quaternion.identity);
         }
 
         // EXPLOSION

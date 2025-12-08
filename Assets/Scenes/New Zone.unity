@@ -5684,6 +5684,11 @@ PrefabInstance:
       addedObject: {fileID: 491594512}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
+--- !u!4 &1584145191 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1838695900007441655, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
+  m_PrefabInstance: {fileID: 4826879338157778722}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1589857245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7626,6 +7631,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5046510649078509709, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
+      propertyPath: hitPoint
+      value: 
+      objectReference: {fileID: 1584145191}
+    - target: {fileID: 5046510649078509709, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
+      propertyPath: smashVFX
+      value: 
+      objectReference: {fileID: 4997674305252694184, guid: 1b7a3aba6840a6e4ca742c82af5abd53, type: 3}
     - target: {fileID: 5046510649078509709, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
       propertyPath: knockbackForce
       value: 25
