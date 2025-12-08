@@ -60,11 +60,11 @@ public class Projectile : MonoBehaviour
         if (cfg == null || cfg.stats == null)
             return;
 
-        // var impactAudio = GetComponent<SoundImpactAudio>();
-        // if (impactAudio != null)
-        // {
-        //     impactAudio.PlayImpactSound();
-        // }
+        var impactAudio = GetComponent<SpellImpactAudio>();
+        if (impactAudio != null)
+        {
+            impactAudio.PlayImpactSound();
+        }
 
         if (other.TryGetComponent<Projectile>(out _))
             return;
