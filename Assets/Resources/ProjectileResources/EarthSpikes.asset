@@ -60,5 +60,5 @@ MonoBehaviour:
   windPullPrefab: {fileID: 0}
   isEarthPathSpell: 1
   earthPathPrefab: {fileID: 394809402481324521, guid: d1c024f2375a5c340a7f52cf3da99e53, type: 3}
-  earthPathMaxLength: 300
+  earthPathMaxLength: 200
   earthPathWidth: 10

@@ -69,14 +69,20 @@ public class GolemRangedAttack : MonoBehaviour
         if (stats.isEarthPathSpell && stats.earthPathPrefab != null && player != null)
         {
             Transform bossBase = floorOfBoss != null ? floorOfBoss : transform;
-            GameObject pathObj = Instantiate(stats.earthPathPrefab, bossBase.position, Quaternion.identity);
+            Vector3 basePos = bossBase.position;
+            Vector3 spawnPos = basePos;
+
+            if (Physics.Raycast(basePos + Vector3.up * 10f, Vector3.down, out RaycastHit hit, 50f, groundMask, QueryTriggerInteraction.Ignore))
+                spawnPos = hit.point;
+
+            GameObject pathObj = Instantiate(stats.earthPathPrefab, spawnPos, Quaternion.identity);
 
             if (pathObj.TryGetComponent<EarthSpikeField>(out var path))
             {
                 path.Init(bossBase, player, stats.earthPathMaxLength, stats.earthPathWidth);
             }
 
-            Debug.Log("[GolemRanged] Spawned earth spike path");
+            Debug.Log($"[GolemRanged] Spawned earth spike path at {spawnPos}");
             return;
         }
 
@@ -142,9 +148,4 @@ public class GolemRangedAttack : MonoBehaviour
 
         go.SetActive(true);
     }
-
-
-
-
 }
-

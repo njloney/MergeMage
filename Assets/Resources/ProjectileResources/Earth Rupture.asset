@@ -36,6 +36,9 @@ MonoBehaviour:
   pierceCount: 0
   spawnObjectOnHit: 1
   onHitPrefab: {fileID: 3978694083657473365, guid: 6f43942b1ca8b894ab303d7872a8ffb2, type: 3}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 2048
   chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
@@ -47,3 +50,15 @@ MonoBehaviour:
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
   projectileOverridePrefab: {fileID: 997186534403776413, guid: dd5c695e44dc9bd40bc053adb9a5f7e6, type: 3}
+  isGroundSpell: 0
+  ghostIndicatorPrefab: {fileID: 0}
+  groundSpellPrefab: {fileID: 0}
+  maxCastDistance: 20
+  impactShakeMagnitude: 0.5
+  impactShakeDuration: 0.2
+  isWindPullSpell: 0
+  windPullPrefab: {fileID: 0}
+  isEarthPathSpell: 0
+  earthPathPrefab: {fileID: 0}
+  earthPathMaxLength: 12
+  earthPathWidth: 3

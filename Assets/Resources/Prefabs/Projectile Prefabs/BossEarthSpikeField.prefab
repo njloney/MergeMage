@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 394809402481324521}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -49.26221, y: -1.0000076, z: 32.135902}
+  m_LocalPosition: {x: -49.26221, y: 0, z: 32.135902}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -67,20 +67,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fe6d329c78d29c4e88fc50b25358ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultLength: 300
+  defaultLength: 100
   defaultWidth: 10
   segments: 40
   telegraphTime: 1
   segmentDelay: 0.1
-  lifeAfterLastSpike: 4
+  lifeAfterLastSpike: 0
   damagePerSegment: 40
   damageType: 5
-  segmentHitRadius: 10
+  segmentHitRadius: 5
   hitMask:
     serializedVersion: 2
     m_Bits: 512
   telegraphVisual: {fileID: 4663181248656414865}
   spikeSegmentPrefab: {fileID: 2218601618946806293, guid: d3e185c60487b4e498b8dfae8b3c0110, type: 3}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  groundRaycastUp: 5
+  groundRaycastDown: 20
 --- !u!1 &4663181248656414865
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 4663181248656414865}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 10, y: 300, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -158,7 +163,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.4056604, g: 0.16248727, b: 0.047837302, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

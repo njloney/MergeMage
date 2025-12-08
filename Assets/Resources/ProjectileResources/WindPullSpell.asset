@@ -38,7 +38,7 @@ MonoBehaviour:
   onHitPrefab: {fileID: 0}
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
@@ -58,3 +58,7 @@ MonoBehaviour:
   impactShakeDuration: 0.2
   isWindPullSpell: 1
   windPullPrefab: {fileID: 7178619102633124126, guid: ebd3edbc5d2324646b0369e653a4de89, type: 3}
+  isEarthPathSpell: 0
+  earthPathPrefab: {fileID: 0}
+  earthPathMaxLength: 12
+  earthPathWidth: 3

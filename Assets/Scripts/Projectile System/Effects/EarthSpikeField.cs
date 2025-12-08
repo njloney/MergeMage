@@ -24,6 +24,11 @@ public class EarthSpikeField : MonoBehaviour
     [SerializeField] private GameObject telegraphVisual;
     [SerializeField] private GameObject spikeSegmentPrefab;
 
+    [Header("Grounding")]
+    [SerializeField] private LayerMask groundMask = ~0;
+    [SerializeField] private float groundRaycastUp = 5f;
+    [SerializeField] private float groundRaycastDown = 20f;
+
     private BoxCollider boxCol;
     private float pathLength;
     private float pathWidth;
@@ -31,20 +36,26 @@ public class EarthSpikeField : MonoBehaviour
 
     public void Init(Transform boss, Transform target, float maxLength, float width)
     {
-        Vector3 a = boss.position;
-        Vector3 b = target.position;
-        a.y = b.y;
+        // Project only the boss to ground to get base height
+        Vector3 bossGround = ProjectToGround(boss.position);
 
-        Vector3 dir = b - a;
+        // Direction in XZ from boss to player, ignore Y entirely
+        Vector3 dir = target.position - boss.position;
+        dir.y = 0f;
         if (dir.sqrMagnitude < 0.01f)
+        {
             dir = boss.forward;
-        else
-            dir.Normalize();
+            dir.y = 0f;
+        }
+        dir.Normalize();
 
         pathLength = maxLength > 0f ? maxLength : defaultLength;
         pathWidth = width > 0f ? width : defaultWidth;
 
-        transform.position = a + dir * (pathLength * 0.5f);
+        // Center the box along this direction, at boss ground height
+        Vector3 center = bossGround + dir * (pathLength * 0.5f);
+
+        transform.position = center;
         transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
 
         UpdateColliderAndTelegraph();
@@ -78,7 +89,6 @@ public class EarthSpikeField : MonoBehaviour
         if (telegraphVisual != null)
         {
             var t = telegraphVisual.transform;
-
             t.localPosition = new Vector3(0f, t.localPosition.y, 0f);
 
             Vector3 s = t.localScale;
@@ -104,8 +114,11 @@ public class EarthSpikeField : MonoBehaviour
             Vector3 localPos = new Vector3(0f, 0f, localZ);
             Vector3 worldPos = transform.TransformPoint(localPos);
 
-            SpawnSpikeSegment(worldPos);
-            DoSegmentHit(worldPos);
+            // Snap spike and damage center to ground
+            Vector3 spikePos = ProjectToGround(worldPos);
+
+            SpawnSpikeSegment(spikePos);
+            DoSegmentHit(spikePos);
 
             yield return new WaitForSeconds(segmentDelay);
         }
@@ -136,6 +149,19 @@ public class EarthSpikeField : MonoBehaviour
                 hp.TakeDamage(damagePerSegment, damageType, this);
             }
         }
+    }
+
+    private Vector3 ProjectToGround(Vector3 pos)
+    {
+        Vector3 start = pos + Vector3.up * groundRaycastUp;
+        float dist = groundRaycastUp + groundRaycastDown;
+
+        if (Physics.Raycast(start, Vector3.down, out RaycastHit hit, dist, groundMask, QueryTriggerInteraction.Ignore))
+        {
+            return hit.point;
+        }
+
+        return pos;
     }
 
     private void OnDrawGizmosSelected()

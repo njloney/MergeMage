@@ -38,7 +38,7 @@ MonoBehaviour:
   onHitPrefab: {fileID: 0}
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
