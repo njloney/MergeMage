@@ -128,25 +128,16 @@ public class PlayerWandCast : MonoBehaviour
             if (validTargetFound)
             {
                 CastGroundSpell(stats, currentTargetPoint, currentTargetRotation);
-                ConsumeIfMerged();
             }
         }
         else if (stats.isBeamSpell || currentActive.castType == SpellCastType.Beam)
         {
             CastBeamSpell(stats);
-            ConsumeIfMerged();
         }
         else
         {
             CastProjectileSpell(stats);
-            ConsumeIfMerged();
         }
-    }
-
-    private void ConsumeIfMerged()
-    {
-        if (debugDisableConsumption) return;
-        if (mergeMode) inventoryManager.ConsumeMergeSpell();
     }
 
     // [UPDATED ARGUMENTS] Added rotation parameter
@@ -155,7 +146,7 @@ public class PlayerWandCast : MonoBehaviour
         if (manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            manaPool.useMana(stats.manaCost);
+            if(!mergeMode) manaPool.useMana(stats.manaCost);
         }
 
         if (stats.groundSpellPrefab != null)
@@ -170,7 +161,7 @@ public class PlayerWandCast : MonoBehaviour
         if (manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            manaPool.useMana(stats.manaCost);
+            if(!mergeMode) manaPool.useMana(stats.manaCost);
         }
 
         GameObject prefabToUse = stats.projectileOverridePrefab != null ? stats.projectileOverridePrefab : projectilePrefab;
@@ -192,7 +183,7 @@ public class PlayerWandCast : MonoBehaviour
         if (manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            manaPool.useMana(stats.manaCost);
+            if(!mergeMode) manaPool.useMana(stats.manaCost);
         }
 
         if (stats.beamPrefab != null && stats.beamConfig != null)

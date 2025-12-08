@@ -30,7 +30,7 @@ public class MergeMode : MonoBehaviour
         playerMana = GetComponent<Mana>();
         playerStats = GetComponent<RuntimePlayerStats>();
         manaRegenRate = playerStats.manaRecoveryRate;
-        inventory.OnMergeConsumed += exitMergeMode;
+        inventory.MergesConsumed += exitMergeMode;
 
     }
 
@@ -42,7 +42,7 @@ public class MergeMode : MonoBehaviour
         if (mergeMode)
         {
 
-           if (mergeRoutine == null) mergeRoutine = StartCoroutine(MergeModeEffects());
+           if (mergeRoutine == null) mergeRoutine = StartCoroutine(MergeModeRoutine());
         }
         else
         {
@@ -64,7 +64,7 @@ public class MergeMode : MonoBehaviour
 
     }
     
-    private IEnumerator MergeModeEffects()
+    private IEnumerator MergeModeRoutine()
     {
         timeInMode = 0f;
 
@@ -75,6 +75,11 @@ public class MergeMode : MonoBehaviour
             if (playerMana != null)
             {
                 playerMana.RestoreMana(manaRegenRate * Time.deltaTime);
+            }
+
+            if(Input.GetMouseButtonDown(0))
+            {
+                inventory.TryConsumeMergeSpell();
             }
 
              yield return null;
