@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 200
   lifetime: 2
-  manaCost: 25
+  useGravity: 0
+  manaCost: 50
   projectileMaterial: {fileID: 0}
+  impactVFX: {fileID: 0}
   baseDamage: 40
   damageType: 6
   destroyOnHit: 0
@@ -36,6 +38,9 @@ MonoBehaviour:
   pierceCount: 10
   spawnObjectOnHit: 0
   onHitPrefab: {fileID: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
   chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
@@ -51,3 +56,9 @@ MonoBehaviour:
   ghostIndicatorPrefab: {fileID: 0}
   groundSpellPrefab: {fileID: 0}
   maxCastDistance: 20
+  isWindPullSpell: 0
+  windPullPrefab: {fileID: 0}
+  isEarthPathSpell: 0
+  earthPathPrefab: {fileID: 0}
+  earthPathMaxLength: 12
+  earthPathWidth: 3
