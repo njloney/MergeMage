@@ -5297,6 +5297,10 @@ PrefabInstance:
       propertyPath: inventoryManager
       value: 
       objectReference: {fileID: 844875292}
+    - target: {fileID: 624982969292081216, guid: cec3597bab1925a44804434afffe40d1, type: 3}
+      propertyPath: debugDisableConsumption
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3073734884947430952, guid: cec3597bab1925a44804434afffe40d1, type: 3}
       propertyPath: m_Name
       value: Wand
