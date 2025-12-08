@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-// Stationary zone that applies damage while the player stays inside.
-[RequireComponent(typeof(Collider))]
+// Stationary zone that applies damage when the player stays inside.
 public class DamageOverTimeZone : MonoBehaviour
 {
     private float damagePerTick = 10f;
