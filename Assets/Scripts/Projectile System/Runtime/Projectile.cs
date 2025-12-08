@@ -60,21 +60,21 @@ public class Projectile : MonoBehaviour
         if (cfg == null || cfg.stats == null)
             return;
 
-        // 1. IGNORE OTHER PROJECTILES (Prevent bullets hitting bullets)
+        // var impactAudio = GetComponent<SoundImpactAudio>();
+        // if (impactAudio != null)
+        // {
+        //     impactAudio.PlayImpactSound();
+        // }
+
         if (other.TryGetComponent<Projectile>(out _))
             return;
 
-        // 2. IGNORE TRIGGERS (unless they are specifically Hitboxes with Health)
-        // If your enemies use Trigger colliders for damage, remove this check.
-        // Usually, environment triggers (like zones) should be ignored.
         if (other.isTrigger && other.GetComponentInParent<Health>() == null)
             return;
 
-        // 3. IGNORE OWNER (Prevent shooting yourself)
         if (IsOwner(other))
             return;
 
-        // Avoid double-processing the same collider in a single frame
         if (hitThisFrame.Contains(other))
             return;
         hitThisFrame.Add(other);
@@ -127,7 +127,6 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        // EXTRA BEHAVIOR
         Vector3 hitPoint = other.ClosestPoint(transform.position);
         TrySpawnOnHitObject(hitPoint);
         TryChainLightning(other);

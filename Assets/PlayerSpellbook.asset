@@ -46,20 +46,20 @@ MonoBehaviour:
   - element1: 1
     element2: 3
     mergedSpellStats: {fileID: 11400000, guid: 5092226910fcda54eb4f7d4f044e3cde, type: 2}
-    unstableDisplayName: Unstable Spell
-    unstableIcon: {fileID: 21300000, guid: 6918dc0b434c642eca217a98446c5d62, type: 3}
+    unstableDisplayName: IcePath
+    unstableIcon: {fileID: 21300000, guid: d6cad034b965e438494fbac0b7f85e0f, type: 3}
   - element1: 6
     element2: 3
     mergedSpellStats: {fileID: 11400000, guid: dac2971694c400941b185928dfa3af5d, type: 2}
-    unstableDisplayName: Unstable Spell
-    unstableIcon: {fileID: 21300000, guid: 6918dc0b434c642eca217a98446c5d62, type: 3}
+    unstableDisplayName: Blink
+    unstableIcon: {fileID: 21300000, guid: 22beff79ba8ed4b04bddfadb1e7aad30, type: 3}
   - element1: 2
     element2: 3
     mergedSpellStats: {fileID: 11400000, guid: 00ec6997a1f31114ea8fc407f8f5fc2a, type: 2}
-    unstableDisplayName: Unstable Spell
-    unstableIcon: {fileID: 21300000, guid: 6918dc0b434c642eca217a98446c5d62, type: 3}
+    unstableDisplayName: Shrapnel
+    unstableIcon: {fileID: 21300000, guid: ad00f2de1643943f597addd376085f2f, type: 3}
   - element1: 0
     element2: 3
     mergedSpellStats: {fileID: 11400000, guid: 67e07e3a704e59d42ba5ab0f6117b454, type: 2}
-    unstableDisplayName: Unstable Spell
-    unstableIcon: {fileID: 21300000, guid: 6918dc0b434c642eca217a98446c5d62, type: 3}
+    unstableDisplayName: Fireball
+    unstableIcon: {fileID: 21300000, guid: 640609014d7ec4737afdcfa189aac118, type: 3}

@@ -49,9 +49,6 @@ public class WandVisuals : MonoBehaviour
             var script = currentModel.GetComponent<ItemPickup>();
             if (script != null) Destroy(script);
 
-            Component animScript = currentModel.GetComponent("SimpleGemsAnim");
-            if (animScript != null) Destroy(animScript);
-
             currentModel.transform.localPosition = Vector3.zero;
             currentModel.transform.localRotation = Quaternion.identity;
             currentModel.transform.localScale = Vector3.one * 2;

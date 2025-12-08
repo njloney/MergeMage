@@ -5,6 +5,7 @@ public class PlayerWandCast : MonoBehaviour
     [Header("Casting")]
     [SerializeField] private Transform firePoint;
     [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private MergeMode mergeController;
     [SerializeField] private Mana manaPool;
 
     [Header("Targeting")]
@@ -16,6 +17,7 @@ public class PlayerWandCast : MonoBehaviour
     public bool debugDisableConsumption = false;
 
     private ItemData currentActive;
+    private bool mergeMode = false;
 
     // Ground Targeting State
     private GameObject currentGhost;
@@ -26,11 +28,18 @@ public class PlayerWandCast : MonoBehaviour
     private void Start()
     {
         if (inventoryManager != null) inventoryManager.OnActiveItemChanged += OnActiveItemChanged;
+        if (mergeController != null) mergeController.OnMergeModeChanged += OnMergeModeChanged;
     }
 
     private void OnDestroy()
     {
         if (inventoryManager != null) inventoryManager.OnActiveItemChanged -= OnActiveItemChanged;
+        if (mergeController != null) mergeController.OnMergeModeChanged -= OnMergeModeChanged;
+    }
+
+    private void OnMergeModeChanged(bool isMerge)
+    {
+        mergeMode = isMerge;
     }
 
     private void OnActiveItemChanged(ItemData item)
@@ -126,7 +135,7 @@ public class PlayerWandCast : MonoBehaviour
         if (!debugDisableConsumption && manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            manaPool.useMana(stats.manaCost);
+            if(!mergeMode) manaPool.useMana(stats.manaCost);
         }
 
         if (stats.groundSpellPrefab != null)
@@ -148,7 +157,7 @@ public class PlayerWandCast : MonoBehaviour
         if (!debugDisableConsumption && manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            manaPool.useMana(stats.manaCost);
+            if(!mergeMode) manaPool.useMana(stats.manaCost);
         }
 
         GameObject prefabToUse = stats.projectileOverridePrefab != null ? stats.projectileOverridePrefab : projectilePrefab;
@@ -170,7 +179,7 @@ public class PlayerWandCast : MonoBehaviour
         if (!debugDisableConsumption && manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            manaPool.useMana(stats.manaCost);
+            if(!mergeMode) manaPool.useMana(stats.manaCost);
         }
 
         if (stats.beamPrefab != null && stats.beamConfig != null)
