@@ -56,6 +56,5 @@ public abstract class Enemy : MonoBehaviour
         PassiveItemPickup script = itemDrop.GetComponent<PassiveItemPickup>();
         if (script != null) script.rotateItem = true;
         itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
-        itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 }
