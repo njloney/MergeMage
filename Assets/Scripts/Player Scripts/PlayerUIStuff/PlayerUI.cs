@@ -36,10 +36,6 @@ public class PlayerUI : MonoBehaviour
     {
         if (playerStats != null && playerHealth != null && playerMana != null && itemManager != null)
         {
-            //Update at the Start
-            updateHealthUI();
-            updateManaUI();
-
             //Connect when damaged
             playerHealth.OnDamaged += HandleDamage;
 

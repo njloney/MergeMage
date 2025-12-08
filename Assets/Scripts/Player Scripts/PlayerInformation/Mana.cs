@@ -19,7 +19,7 @@ public class Mana : MonoBehaviour
         }
 
         _mana = runtimeStats.maxMana;
-
+        OnManaChanged?.Invoke(_mana);
         // Subscribe to max mana changes from passive items
         runtimeStats.OnMaxManaChanged += RestoreMana;
     }

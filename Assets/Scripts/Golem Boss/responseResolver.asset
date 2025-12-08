@@ -25,3 +25,9 @@ MonoBehaviour:
   - incomingSpell: {fileID: 11400000, guid: a3167528103d14e42813528551cf7691, type: 2}
     optionA: {fileID: 11400000, guid: 4a050232b5c8072498781e285a5b3eb2, type: 2}
     optionB: {fileID: 11400000, guid: 4a050232b5c8072498781e285a5b3eb2, type: 2}
+  - incomingSpell: {fileID: 11400000, guid: a0942033e4667d546b0b74fe00394c88, type: 2}
+    optionA: {fileID: 11400000, guid: eae5eec4a681f8749b5e4c5bfc6f8240, type: 2}
+    optionB: {fileID: 11400000, guid: eae5eec4a681f8749b5e4c5bfc6f8240, type: 2}
+  - incomingSpell: {fileID: 11400000, guid: 720346ced65497f4da9f0ca1e5e291bb, type: 2}
+    optionA: {fileID: 11400000, guid: 37b9599ad532aa440908ceda677fde9c, type: 2}
+    optionB: {fileID: 11400000, guid: 37b9599ad532aa440908ceda677fde9c, type: 2}

@@ -23,8 +23,7 @@ public class Health : MonoBehaviour
             {
                 _hp = runtimeStats.maxHealth;
                 Debug.Log("Hp " + runtimeStats.maxHealth);
-
-                // Subscribe to max health changes from passive items
+                OnDamaged?.Invoke(_hp, DamageType.Physical, null);
                 runtimeStats.OnMaxHealthChanged += Heal;
             }
             else
