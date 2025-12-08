@@ -29,7 +29,6 @@ public class MergeMode : MonoBehaviour
         playerMana = GetComponent<Mana>();
         playerStats = GetComponent<RuntimePlayerStats>();
         manaRegenRate = playerStats.manaRecoveryRate;
-        inventory.MergesConsumed += exitMergeMode;
 
     }
 
@@ -49,18 +48,6 @@ public class MergeMode : MonoBehaviour
         }
 
         inventory.UpdateSlotHighlights();
-    }
-    
-    private void exitMergeMode()
-    {
-        ToggleMergeMode();
-        
-    }
-
-    private void TryEnterMergeMode()
-    {
-        ToggleMergeMode();
-
     }
     
     private IEnumerator MergeModeRoutine()
@@ -91,11 +78,7 @@ public class MergeMode : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            if (!mergeMode)
-            {
-                TryEnterMergeMode();
-            }
-
+            ToggleMergeMode();
         }
     }
 }
