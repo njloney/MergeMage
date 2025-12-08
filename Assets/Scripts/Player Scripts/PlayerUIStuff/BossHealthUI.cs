@@ -74,7 +74,11 @@ public class BossHealthUI : MonoBehaviour
         if (active)
         {
             c = shieldedBorderColor;
+<<<<<<< HEAD
             c.a = shieldAlpha;
+=======
+            c.a = 0.5f;
+>>>>>>> parent of 09f50e7 (;)
         }
         else
         {
@@ -83,4 +87,9 @@ public class BossHealthUI : MonoBehaviour
 
         borderImage.color = c;
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> parent of 09f50e7 (;)
 }
