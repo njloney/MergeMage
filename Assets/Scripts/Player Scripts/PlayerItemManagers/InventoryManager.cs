@@ -149,7 +149,7 @@ public class InventoryManager : MonoBehaviour
     }
 
 
-    private bool MergeSpellsLeft()
+    public bool MergeSpellsLeft()
     {
         for(int i = 0; i < mergeSlots.Count; i++)
         {
