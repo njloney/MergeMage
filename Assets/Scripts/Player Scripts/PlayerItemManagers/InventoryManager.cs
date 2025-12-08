@@ -20,10 +20,14 @@ public class InventoryManager : MonoBehaviour
     private MergeMode mergeController;
 
     private int activeSlotIndex = 0;
+
+    [Header("Passive Items")]
     private bool mergeMode = false;
+    private float breakChance = 0.20f;
+
 
     public event Action<ItemData> OnActiveItemChanged;
-    public event Action OnMergeConsumed;
+    public event Action MergesConsumed;
     public event Action<ItemData, ItemData> OnCrystalSlotsChanged;
 
 
@@ -113,8 +117,49 @@ public class InventoryManager : MonoBehaviour
         
     }
 
+    public void TryConsumeMergeSpell()
+    {
+        if(!mergeMode) return;
+
+        InventorySlot currentSlot = mergeSlots[activeSlotIndex];
+
+        if (currentSlot.currentItem == null) return;
+
+        //get random value between. 0 and 1
+        float roll = UnityEngine.Random.value;
+
+        //if roll is < break chance then we break this UnstableSpell
+        bool isBroken = roll < breakChance;
+
+        if (isBroken)
+        {
+            currentSlot.RemoveItemFromSlot();
+
+            StartCoroutine(AttemptAutoMergeRoutine());
 
 
+            if (!MergeSpellsLeft())
+            {
+                MergesConsumed?.Invoke();
+            }
+
+        }
+
+        sendUpdates();
+    }
+
+
+    private bool MergeSpellsLeft()
+    {
+        for(int i = 0; i < mergeSlots.Count; i++)
+        {
+            if(mergeSlots[i].currentItem != null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private IEnumerator AttemptAutoMergeRoutine()
     {
@@ -150,12 +195,6 @@ public class InventoryManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)) setActiveSlot(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) setActiveSlot(1);
-    }
-
-    public void ConsumeMergeSpell()
-    {
-        OnMergeConsumed?.Invoke();
-        sendUpdates();
     }
 
     public void addToMergeSlot(ItemData item)
