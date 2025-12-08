@@ -9,6 +9,8 @@ public class WindPullField : MonoBehaviour
     [SerializeField] private float warmupTime = 1f;
     [SerializeField] private float controllerPullSpeed = 10f;
     [SerializeField] private LayerMask playerMask = ~0;
+    [SerializeField] private float pullSoundInterval = 0.4f;
+    private float nextPullSoundTime;
 
     private Transform center;
     private SphereCollider col;
@@ -62,6 +64,8 @@ public class WindPullField : MonoBehaviour
             QueryTriggerInteraction.Ignore
         );
 
+        bool didPull = false;
+
         for (int i = 0; i < hits.Length; i++)
         {
             var h = hits[i];
@@ -78,6 +82,7 @@ public class WindPullField : MonoBehaviour
 
                 dir /= dist;
                 rb.AddForce(dir * pullForce, ForceMode.Acceleration);
+                didPull = true;
                 continue;
             }
 
@@ -93,7 +98,17 @@ public class WindPullField : MonoBehaviour
                 dir /= Mathf.Max(dist, 0.01f);
                 Vector3 move = dir * controllerPullSpeed * Time.deltaTime;
                 controller.Move(move);
+                didPull = true;
             }
+        }
+
+        if (didPull && Time.time >= nextPullSoundTime)
+        {
+            var audio = GetComponent<SpellImpactAudio>();
+            if (audio != null)
+                audio.PlayImpactSound();
+
+            nextPullSoundTime = Time.time + pullSoundInterval;
         }
     }
 

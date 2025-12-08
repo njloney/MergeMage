@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8388425615709573167}
   - component: {fileID: 5082559315392243226}
   - component: {fileID: 8537461294793222232}
+  - component: {fileID: 6303417534412855757}
   m_Layer: 6
   m_Name: WindPullField
   m_TagString: Untagged
@@ -53,7 +54,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 70
+  m_Radius: 35
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8537461294793222232
 MonoBehaviour:
@@ -67,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 565dbd5b7eba09843be990f1a5b38711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 70
+  radius: 35
   lifetime: 6
   pullForce: 40
   warmupTime: 4
@@ -75,6 +76,24 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 512
+  pullSoundInterval: 0.4
+--- !u!114 &6303417534412855757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7178619102633124126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a83b8fface4cd146bfd59a02f531c50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  impactClips:
+  - {fileID: 8300000, guid: 56c2f131969254341b3c76d04619295d, type: 3}
+  volume: 1
+  pitchRange: {x: 0.95, y: 1.05}
+  playOnlyOncePerInstance: 1
 --- !u!1 &7981693166183005713
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +121,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 140, y: 140, z: 140}
+  m_LocalScale: {x: 70, y: 70, z: 70}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8388425615709573167}

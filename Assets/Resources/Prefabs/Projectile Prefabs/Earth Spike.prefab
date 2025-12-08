@@ -79,6 +79,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7edf57c1ee7c11f46a754a62bf02643c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1350331807067077827}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7edf57c1ee7c11f46a754a62bf02643c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3048085459170432206}
   m_SourcePrefab: {fileID: 100100000, guid: 7edf57c1ee7c11f46a754a62bf02643c, type: 3}
 --- !u!1 &2218601618946806293 stripped
 GameObject:
@@ -98,3 +101,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifetime: 1.5
+--- !u!114 &3048085459170432206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2218601618946806293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a83b8fface4cd146bfd59a02f531c50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  impactClips:
+  - {fileID: 8300000, guid: 3e090807ce4a66a4195c5a98d972d652, type: 3}
+  volume: 0.5
+  pitchRange: {x: 0.95, y: 1.05}
+  playOnlyOncePerInstance: 1
