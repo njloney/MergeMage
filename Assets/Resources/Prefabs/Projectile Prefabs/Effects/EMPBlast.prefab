@@ -48,7 +48,7 @@ MonoBehaviour:
   blastRadius: 8
   knockbackForce: 1500
   damage: 20
-  upwardLift: 3
+  upwardLift: 2
   shockwaveParticles: {fileID: 5793546308152174248}
   sphereVisual: {fileID: 0}
   hitMask:

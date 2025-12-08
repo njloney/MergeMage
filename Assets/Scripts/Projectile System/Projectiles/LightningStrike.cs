@@ -4,18 +4,20 @@ public class LightningStrike : MonoBehaviour
 {
     [Header("Combat Settings")]
     [SerializeField] private float damage = 20f;
-    [SerializeField] private float radius = 3f;
-    [SerializeField] private float delay = 0.2f; // Short delay for impact feel, or set to 0
+    // [UPDATED] Replaced radius with box dimensions (Width, Height, Depth)
+    [Tooltip("Size of the hit box. Y is height.")]
+    [SerializeField] private Vector3 boxSize = new Vector3(2f, 10f, 2f);
+
+    [SerializeField] private float delay = 0.2f;
     [SerializeField] private float duration = 1.0f;
     [SerializeField] private LayerMask hitMask = ~0;
 
     [Header("Visual References")]
-    [SerializeField] private GameObject boltVisual;    // The actual lightning bolt
-    [SerializeField] private GameObject impactEffect;  // Sparks/Explosion prefab
+    [SerializeField] private GameObject boltVisual;
+    [SerializeField] private GameObject impactEffect;
 
     private void Start()
     {
-        // Hide bolt initially if there is a delay
         if (boltVisual) boltVisual.SetActive(false);
 
         Invoke(nameof(Strike), delay);
@@ -24,25 +26,38 @@ public class LightningStrike : MonoBehaviour
 
     private void Strike()
     {
-        // Show the bolt immediately when strike happens
         if (boltVisual) boltVisual.SetActive(true);
 
         var impactAudio = GetComponent<SpellImpactAudio>();
         if (impactAudio != null)
-            Debug.Log("Playing impact sound for LightningStrike.");
-        impactAudio.PlayImpactSound();
+            impactAudio.PlayImpactSound();
 
         if (impactEffect) Instantiate(impactEffect, transform.position, Quaternion.identity);
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, radius, hitMask);
+        Vector3 center = transform.position + (Vector3.up * boxSize.y * 0.5f);
+        Vector3 halfExtents = boxSize * 0.5f;
+
+        Collider[] hits = Physics.OverlapBox(center, halfExtents, transform.rotation, hitMask);
+
         foreach (var hit in hits)
         {
             if (hit.isTrigger) continue;
+
             if (hit.TryGetComponent<Health>(out var hp))
             {
                 hp.TakeDamage(damage, DamageType.Lightning, null);
             }
         }
+    }
 
+    // [NEW] Draw the box in the editor so you can see the hit zone
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.9f, 0f, 0.3f); // Transparent Yellow
+        Vector3 center = transform.position + (Vector3.up * boxSize.y * 0.5f);
+        Gizmos.matrix = Matrix4x4.TRS(center, transform.rotation, boxSize);
+        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
     }
 }

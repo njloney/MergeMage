@@ -72,7 +72,7 @@ MonoBehaviour:
   radius: 7
   damagePerTick: 5
   damageType: 2
-  tickInterval: 0.2
+  tickInterval: 0.5
   debuffEffect: {fileID: 11400000, guid: 552639c64c80af74e9fe5349ebf3e2fc, type: 2}
   debuffDuration: 0.5
   debuffMagnitude: 0.5

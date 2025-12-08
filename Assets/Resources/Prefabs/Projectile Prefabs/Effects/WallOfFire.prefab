@@ -151,7 +151,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10, y: 3, z: 2}
+  m_Size: {x: 10, y: 9, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1728586762712080504
 MonoBehaviour:
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifetime: 6
-  damagePerTick: 15
+  damagePerTick: 5
   damageType: 1
   tickInterval: 0.5
   debuffEffect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
