@@ -31,7 +31,7 @@ MonoBehaviour:
   onHitPrefab: {fileID: 0}
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   isGroundSpell: 0
   groundSpellPrefab: {fileID: 0}
   isEarthPathSpell: 0

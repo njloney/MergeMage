@@ -12,15 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
   m_Name: Wind Bullet
   m_EditorClassIdentifier: 
+  castType: 1
+  maxCastDistance: 30
+  ghostIndicatorPrefab: {fileID: 0}
   speed: 40
   lifetime: 10
   manaCost: 25
   projectileMaterial: {fileID: 2100000, guid: 3c9e88b993724a54abd631732e9e290c, type: 2}
+  projectileOverridePrefab: {fileID: 608184424722468891, guid: 0c125347a290f984a9609e8b9f15dfad, type: 3}
+  impactVFX: {fileID: 0}
   baseDamage: 10
   damageType: 0
-  destroyOnHit: 1
-  castType: 1
   effects: []
+  enablePierce: 1
+  pierceCount: 3
+  destroyOnHit: 1
+  spawnObjectOnHit: 0
+  onHitPrefab: {fileID: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  isGroundSpell: 0
+  groundSpellPrefab: {fileID: 0}
+  isEarthPathSpell: 0
+  earthPathPrefab: {fileID: 0}
+  earthPathMaxLength: 12
+  earthPathWidth: 3
   spawnExplosion: 0
   explosion:
     explosionPrefab: {fileID: 0}
@@ -32,10 +49,6 @@ MonoBehaviour:
     lifetime: 0
     startVisualScale: 0
     maxVisualScale: 0
-  enablePierce: 1
-  pierceCount: 3
-  spawnObjectOnHit: 0
-  onHitPrefab: {fileID: 0}
   chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
@@ -46,4 +59,10 @@ MonoBehaviour:
   isBeamSpell: 0
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
-  projectileOverridePrefab: {fileID: 608184424722468891, guid: 0c125347a290f984a9609e8b9f15dfad, type: 3}
+  isWindPullSpell: 0
+  windPullPrefab: {fileID: 0}
+  isEarthSpikeSpell: 0
+  earthSpikePrefab: {fileID: 0}
+  isLightningStrikeSpell: 0
+  lightningStrikePrefab: {fileID: 0}
+  spellName: 

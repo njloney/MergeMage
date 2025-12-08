@@ -2025,6 +2025,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ice Crystal Variant (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 9102773512926930864, guid: cb6f310632500406f86b6bb2eb9859c9, type: 3}
+      propertyPath: isRotating
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2260,6 +2264,10 @@ PrefabInstance:
     - target: {fileID: 3123354361349225840, guid: d8f17e3654ffe4eeaaae0e3c29223b6d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8110075050513334903, guid: d8f17e3654ffe4eeaaae0e3c29223b6d, type: 3}
+      propertyPath: isRotating
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

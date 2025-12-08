@@ -12,18 +12,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
+  castType: 1
+  maxCastDistance: 30
+  ghostIndicatorPrefab: {fileID: 0}
   speed: 20
   lifetime: 5
   manaCost: 25
   projectileMaterial: {fileID: 0}
+  projectileOverridePrefab: {fileID: 1301353255995590632, guid: 9d95788c36b90c541a080fe4edb6583f, type: 3}
+  impactVFX: {fileID: 0}
   baseDamage: 10
   damageType: 1
-  destroyOnHit: 1
-  castType: 1
   effects:
   - effect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
     duration: 4
     magnitude: 8
+  enablePierce: 0
+  pierceCount: 0
+  destroyOnHit: 1
+  spawnObjectOnHit: 0
+  onHitPrefab: {fileID: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  isGroundSpell: 0
+  groundSpellPrefab: {fileID: 0}
+  isEarthPathSpell: 0
+  earthPathPrefab: {fileID: 0}
+  earthPathMaxLength: 12
+  earthPathWidth: 3
   spawnExplosion: 1
   explosion:
     explosionPrefab: {fileID: 219149504652278787, guid: aa4b21a1906e51a41ad525e009a6ae4e, type: 3}
@@ -38,10 +55,6 @@ MonoBehaviour:
     lifetime: 0.15
     startVisualScale: 1
     maxVisualScale: 5
-  enablePierce: 0
-  pierceCount: 0
-  spawnObjectOnHit: 0
-  onHitPrefab: {fileID: 0}
   chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
@@ -52,4 +65,10 @@ MonoBehaviour:
   isBeamSpell: 0
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
-  projectileOverridePrefab: {fileID: 1301353255995590632, guid: 9d95788c36b90c541a080fe4edb6583f, type: 3}
+  isWindPullSpell: 0
+  windPullPrefab: {fileID: 0}
+  isEarthSpikeSpell: 0
+  earthSpikePrefab: {fileID: 0}
+  isLightningStrikeSpell: 0
+  lightningStrikePrefab: {fileID: 0}
+  spellName: 
