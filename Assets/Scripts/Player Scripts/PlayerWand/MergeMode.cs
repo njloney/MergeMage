@@ -35,15 +35,13 @@ public class MergeMode : MonoBehaviour
     private void ExitMerged()
     {
         ToggleMergeMode();
-        inventory.UpdateSlotHighlights();
-
     }
 
     public void ToggleMergeMode()
     {
-
+        Debug.Log("Start");
         if (!mergeMode && !inventory.MergeSpellsLeft()) return;
-
+        Debug.Log("Made it here");
         mergeMode = !mergeMode;
         OnMergeModeChanged?.Invoke(mergeMode);
 
@@ -54,7 +52,11 @@ public class MergeMode : MonoBehaviour
         }
         else
         {
-            if (mergeRoutine != null) StopCoroutine(mergeRoutine);
+            if (mergeRoutine != null) 
+            {
+                StopCoroutine(mergeRoutine);
+                mergeRoutine = null; 
+            }
         }
 
         inventory.UpdateSlotHighlights();

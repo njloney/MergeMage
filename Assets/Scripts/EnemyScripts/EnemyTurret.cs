@@ -8,21 +8,22 @@ public class EnemyTurret : Enemy
     public Material IdleMat;                 // Default material when idle
     private Renderer rend;    // Cached renderer for color/material changes
     private Health health;    // Reference to the Health component
+    [Header("Crystal Drop")]
     public GameObject itemDrop;
+    private ItemPickup itemScript;
     public Rigidbody itemRigid;
 
-    // Movement
+    [Header("Movement")]
     public Transform target;
     public float maxSpeed = 20f;
     public float moveSpeed = 0f;
-    private Coroutine currRoutine;
-
     private Rigidbody bodyRB;
-
     private Transform bodyT;
     private Transform armT;
+
+
+    private Coroutine currRoutine;
     private Component animScript;
-    private ItemPickup itemScript;
 
     private void Start()
     {
@@ -43,7 +44,7 @@ public class EnemyTurret : Enemy
         itemDrop = null;
         while (itemDrop == null)
         {
-            itemDrop = Instantiate(prefabs[UnityEngine.Random.Range(0, prefabs.Length)]);
+            itemDrop = Instantiate(base.getRandomCrystal());
             itemScript = (ItemPickup)itemDrop.GetComponent("ItemPickup");
             ItemData item = itemScript.itemToGive;
             if (item == null || item.castType != SpellCastType.Projectile)
@@ -54,8 +55,6 @@ public class EnemyTurret : Enemy
         itemDrop.transform.SetParent(armT);
         itemDrop.transform.localScale = new Vector3(.4f, .2f, .4f);
         itemDrop.transform.localPosition = new Vector3(0, 1, 0);
-        animScript = itemDrop.GetComponent("SimpleGemsAnim");
-        if (animScript != null) Destroy(animScript);
         itemRigid = itemDrop.GetComponent<Rigidbody>();
         
         Destroy(itemRigid);
@@ -111,14 +110,6 @@ public class EnemyTurret : Enemy
         armT.position = endPos;
         currRoutine = StartCoroutine(Attack());
     }
-
-    /*private void moveArm(float direction, Vector3 endPos)
-    {
-        // Move upward by riseSpeed * deltaTime
-        float newY = armT.position.y + direction * 0.5f * Time.deltaTime;
-        armT.position = new Vector3(endPos.x, newY, endPos.z);
-        armT.rotation = Quaternion.identity;
-    }*/
 
     private IEnumerator Hide()
     {
@@ -226,20 +217,7 @@ public class EnemyTurret : Enemy
 
     private void Die()
     {
-        if (itemDrop != null) dropItem(itemDrop);
+        base.dropItem(itemDrop);
         Destroy(gameObject);
-    }
-    private void dropItem(GameObject itemDrop)
-    {
-        if (itemDrop == null)
-        {
-            Debug.LogError(itemDrop.name + " has no pickup prefab assigned!");
-            return;
-        }
-
-        // Spawn the item's specific prefab in place of enemy
-        Vector3 dropPosition = transform.position;
-        itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
-        itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 }
