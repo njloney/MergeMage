@@ -5,17 +5,9 @@ public class CrosshairUI : MonoBehaviour
 {
     public static CrosshairUI Instance { get; private set; }
 
-    [Header("Images")]
     [SerializeField] private Image crosshairImage;
     [SerializeField] private Image hitmarkerImage;
-
-    [Header("Timing")]
     [SerializeField] private float hitmarkerDuration = 0.12f;
-
-    [Header("Sound")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip hitmarkerClip;
-    [SerializeField] private float hitmarkerVolume = 0.6f;
 
     float timer;
 
@@ -31,20 +23,10 @@ public class CrosshairUI : MonoBehaviour
 
         if (hitmarkerImage != null)
         {
-            Color c = hitmarkerImage.color;
+            var c = hitmarkerImage.color;
             c.a = 0f;
             hitmarkerImage.color = c;
         }
-
-        if (audioSource == null)
-        {
-            audioSource = GetComponent<AudioSource>();
-            if (audioSource == null)
-                audioSource = gameObject.AddComponent<AudioSource>();
-        }
-
-        audioSource.playOnAwake = false;
-        audioSource.spatialBlend = 0f; // 2D UI sound
     }
 
     void Update()
@@ -53,10 +35,9 @@ public class CrosshairUI : MonoBehaviour
             return;
 
         timer -= Time.deltaTime;
-
         if (timer <= 0f)
         {
-            Color c = hitmarkerImage.color;
+            var c = hitmarkerImage.color;
             c.a = 0f;
             hitmarkerImage.color = c;
         }
@@ -69,11 +50,8 @@ public class CrosshairUI : MonoBehaviour
 
         timer = hitmarkerDuration;
 
-        Color c = hitmarkerImage.color;
+        var c = hitmarkerImage.color;
         c.a = 1f;
         hitmarkerImage.color = c;
-
-        if (hitmarkerClip != null && audioSource != null)
-            audioSource.PlayOneShot(hitmarkerClip, hitmarkerVolume);
     }
 }
