@@ -2117,32 +2117,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
-      propertyPath: radius
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: bossShield
       value: 
       objectReference: {fileID: 4826879338157778723}
-    - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
-      propertyPath: channelTime
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7926325411927894037, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.04
-      objectReference: {fileID: 0}
-    - target: {fileID: 7926325411927894037, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.19999999
-      objectReference: {fileID: 0}
-    - target: {fileID: 7926325411927894037, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.04
-      objectReference: {fileID: 0}
     - target: {fileID: 7926325411927894037, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -54.24868
@@ -2183,10 +2163,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7926325411927894037, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2208,7 +2184,7 @@ GameObject:
   - component: {fileID: 761573379}
   - component: {fileID: 761573378}
   - component: {fileID: 761573377}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3860,7 +3836,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: radius
@@ -5394,7 +5370,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: radius
@@ -5540,7 +5516,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: radius

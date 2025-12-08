@@ -413,7 +413,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7926325411927894037
 Transform:
   m_ObjectHideFlags: 0
@@ -423,9 +423,9 @@ Transform:
   m_GameObject: {fileID: 4002561127642042150}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000037748947, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.4496355, y: -0.79, z: -2.771255}
-  m_LocalScale: {x: 0.01, y: 0.049999997, z: 0.01}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -54.24868, y: -1.0000038, z: -24.772644}
+  m_LocalScale: {x: 0.04, y: 0.19999999, z: 0.04}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1880745431015374951}
   m_Father: {fileID: 0}
@@ -496,8 +496,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossShield: {fileID: 0}
-  radius: 6
-  channelTime: 10
+  radius: 20
+  channelTime: 25
   playerMask:
     serializedVersion: 2
     m_Bits: 512
