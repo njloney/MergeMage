@@ -246,7 +246,20 @@ public class EnemyTurret : Enemy
 
     private void Die()
     {
-        base.dropItem(itemDrop);
+        if (itemDrop != null) dropItem(itemDrop);
         Destroy(gameObject);
+    }
+    private void dropItem(GameObject itemDrop)
+    {
+        if (itemDrop == null)
+        {
+            Debug.LogError(itemDrop.name + " has no pickup prefab assigned!");
+            return;
+        }
+
+        // Spawn the item's specific prefab in place of slime
+        Vector3 dropPosition = transform.position;
+        itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
+        itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 }

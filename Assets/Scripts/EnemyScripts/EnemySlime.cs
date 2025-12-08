@@ -164,7 +164,7 @@ public class EnemySlime : Enemy
 
     private void Die()
     {
-        base.dropItem(itemDrop);
+        if (itemDrop != null) DropItem();
         Destroy(gameObject);
     }
 
@@ -178,6 +178,16 @@ public class EnemySlime : Enemy
                 itemDrop = prefabs[Random.Range(0, prefabs.Length)];
             }
         }
+    }
+
+    private void DropItem()
+    {
+        if (itemDrop == null) return;
+
+        GameObject dropped = Instantiate(itemDrop, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+        dropped.transform.localScale = Vector3.one * 0.5f;
+
+        if (!dropped.GetComponent<Rigidbody>()) dropped.AddComponent<Rigidbody>();
     }
 
     private void UpdateTransparency()
