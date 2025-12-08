@@ -50,7 +50,6 @@ public class LightningStrike : MonoBehaviour
         }
     }
 
-    // [NEW] Draw the box in the editor so you can see the hit zone
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0.9f, 0f, 0.3f); // Transparent Yellow

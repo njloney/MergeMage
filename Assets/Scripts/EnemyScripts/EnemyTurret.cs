@@ -32,7 +32,10 @@ public class EnemyTurret : Enemy
         bodyT = transform;
         bodyRB = bodyT.GetComponent<Rigidbody>();
         armT = transform.Find("Arm");
-        target = GameObject.Find("Player").transform;
+
+        // Safely find player
+        GameObject playerObj = GameObject.Find("Player");
+        if (playerObj != null) target = playerObj.transform;
 
         health.OnDamaged += HandleDamageTaken;
         health.OnDied += Die;
@@ -83,47 +86,51 @@ public class EnemyTurret : Enemy
         currRoutine = StartCoroutine(Move());
     }
 
+    private void Update()
+    {
+        if (itemDrop == null && health.currentHP > 0)
+        {
+            health.TakeDamage(health.maxHP, DamageType.Physical, null);
+        }
+    }
+
     private IEnumerator Move()
     {
-        Debug.Log("Move");
-        if (!bodyRB || !target) Debug.LogError("Can't find rigidBody or Target");
+        if (!bodyRB || !target) yield break;
+
         bodyRB.constraints = RigidbodyConstraints.None;
         health.ignoredSourceLayers = ~0;
 
         float dist = Vector3.Distance(transform.position, target.position);
-        while (dist > 5f)
+        while (dist > 15f)
         {
+            if (target == null) yield break;
             dist = Vector3.Distance(transform.position, target.position);
+
+            // Calculate movement speed based on distance
             moveSpeed = Mathf.Min(maxSpeed, Mathf.Abs(dist - 7f) * 3f);
 
-            // Compute direction to player
+            // Torque Movement
             Vector3 direction = (target.position - bodyT.position).normalized;
-
-            // Compute torque axis (perpendicular to forward direction)
             Vector3 torqueAxis = Vector3.Cross(Vector3.up, direction);
-
-            // Apply torque
             bodyRB.AddTorque(torqueAxis * 10f);
-
 
             yield return new WaitForFixedUpdate();
         }
+
         bodyRB.angularVelocity = Vector3.zero;
         bodyRB.linearVelocity = Vector3.zero;
         bodyRB.constraints = RigidbodyConstraints.FreezeAll;
-        health.ignoredSourceLayers = 0;
+        health.ignoredSourceLayers = 0; // Vulnerable again
         currRoutine = StartCoroutine(Show());
     }
 
     private IEnumerator Show()
     {
-        // ... (Keep existing Show logic) ...
-        Vector3 startPos = armT.position;
         Vector3 endPos = bodyT.position + new Vector3(0, 0.5f, 0);
 
         while (armT.position.y < endPos.y)
         {
-            // Move upward by riseSpeed * deltaTime
             float newY = armT.position.y + 0.5f * Time.deltaTime;
             armT.position = new Vector3(endPos.x, newY, endPos.z);
             armT.rotation = Quaternion.identity;
@@ -136,12 +143,16 @@ public class EnemyTurret : Enemy
     private float aimUpOffset = 1.0f;
     private IEnumerator Attack()
     {
-        // ... (Keep existing Attack logic) ...
-        Debug.Log("Attack");
+        if (target == null) yield break;
+
         float dist = Vector3.Distance(transform.position, target.position);
-        while (dist > 2f && dist < 10f)
+
+        while (dist > 2f && dist < 20f)
         {
             yield return new WaitForSeconds(3f);
+
+            if (target == null || itemDrop == null) break;
+
             dist = Vector3.Distance(transform.position, target.position);
             ItemData item = itemScript.itemToGive;
             Transform firePoint = itemDrop.transform;
@@ -163,29 +174,23 @@ public class EnemyTurret : Enemy
             }
 
             GameObject go = Instantiate(item.spellPrefab, firePosition, firePoint.rotation);
-
             if (go.TryGetComponent<ProjectileConfig>(out var cfg))
             {
                 cfg.stats = stats;
                 cfg.owner = this;
             }
-
             go.SetActive(true);
         }
-        Debug.Log("check here");
+
         currRoutine = StartCoroutine(Hide());
     }
 
     private IEnumerator Hide()
     {
-        // ... (Keep existing Hide logic) ...
-        Vector3 startPos = armT.position;
         Vector3 endPos = bodyT.position;
-        Debug.Log("hide");
 
         while (armT.position.y > endPos.y)
         {
-            // Move downward by riseSpeed * deltaTime
             float newY = armT.position.y - 0.5f * Time.deltaTime;
             armT.position = new Vector3(endPos.x, newY, endPos.z);
             armT.rotation = Quaternion.identity;
@@ -196,9 +201,26 @@ public class EnemyTurret : Enemy
     }
 
     private Coroutine damageCoroutine;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (damageCoroutine == null)
+        {
+            damageCoroutine = StartCoroutine(DealDamage(collision));
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (damageCoroutine != null)
+        {
+            StopCoroutine(damageCoroutine);
+            damageCoroutine = null;
+        }
+    }
+
     private IEnumerator DealDamage(Collision collision)
     {
-        // ... (Keep existing DealDamage logic) ...
         if (collision.gameObject.CompareTag("Player"))
         {
             Health playerHealth = collision.gameObject.GetComponent<Health>();
@@ -213,22 +235,10 @@ public class EnemyTurret : Enemy
         }
     }
 
-    private void Update()
-    {
-        // [UPDATED] Use TakeDamage instead of Die() to trigger effects
-        if (itemDrop == null && health.currentHP > 0)
-        {
-            health.TakeDamage(health.maxHP, DamageType.Physical, null);
-        }
-    }
-
-    // ... HandleDamageTaken, FlashRed, Die, dropItem (Keep unchanged) ...
-
-    // Called whenever this object takes damage
     private void HandleDamageTaken(float amount, DamageType type, Object source)
     {
-        // Flash red to show impact
         StartCoroutine(FlashRed());
+        // Hide immediately when hit
         if (currRoutine != null)
         {
             StopCoroutine(currRoutine);
@@ -236,7 +246,6 @@ public class EnemyTurret : Enemy
         }
     }
 
-    // Quick red flash when hit
     private IEnumerator FlashRed()
     {
         rend.material = HurtMat;
@@ -249,17 +258,15 @@ public class EnemyTurret : Enemy
         if (itemDrop != null) dropItem(itemDrop);
         Destroy(gameObject);
     }
+
     private void dropItem(GameObject itemDrop)
     {
-        if (itemDrop == null)
-        {
-            Debug.LogError(itemDrop.name + " has no pickup prefab assigned!");
-            return;
-        }
+        if (itemDrop == null) return;
 
-        // Spawn the item's specific prefab in place of slime
         Vector3 dropPosition = transform.position;
-        itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
-        itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        GameObject dropped = Instantiate(itemDrop, dropPosition, Quaternion.identity);
+        dropped.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+        if (dropped.GetComponent<Rigidbody>() == null) dropped.AddComponent<Rigidbody>();
     }
 }
