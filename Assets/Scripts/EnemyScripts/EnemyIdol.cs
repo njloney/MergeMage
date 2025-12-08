@@ -37,7 +37,7 @@ public class EnemyIdol : Enemy
         health.OnDied += Die;
 
         itemDrop = null;
-        if (Random.value <= 0.3f)
+        if (Random.value <= 0.4f)
         {
             itemDrop = base.getRandomItem();
         }
@@ -100,7 +100,7 @@ public class EnemyIdol : Enemy
         if (Touching == "Player")
         {
             Health playerHealth = collision.gameObject.GetComponent<Health>();
-            while (true)
+            while (Touching == "Player")
             {
                 if (playerHealth != null)
                 {
@@ -118,6 +118,7 @@ public class EnemyIdol : Enemy
         if (damageCoroutine != null)
         {
             StopCoroutine(damageCoroutine);
+            damageCoroutine = null;
         }
     }
 
@@ -125,6 +126,7 @@ public class EnemyIdol : Enemy
     {
         if (direction == -1f)
         {
+            //
             transform.LookAt(2 * transform.position - target.position);
         } else
         {
@@ -170,20 +172,7 @@ public class EnemyIdol : Enemy
 
     private void Die()
     {
-        dropItem(itemDrop);
+        base.dropItem(itemDrop);
         Destroy(gameObject);
-    }
-    private void dropItem(GameObject itemDrop)
-    {
-        if (itemDrop == null)
-        {
-            Debug.Log(itemDrop.name + " has no pickup prefab assigned!");
-            return;
-        }
-
-        // Spawn the item's specific prefab in place of slime
-        Vector3 dropPosition = transform.position;
-        dropPosition.y += 0.3f;
-        Instantiate(itemDrop, dropPosition, Quaternion.identity);
     }
 }

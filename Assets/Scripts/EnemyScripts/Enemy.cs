@@ -12,8 +12,8 @@ public abstract class Enemy : MonoBehaviour
         GameObject retItem = prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
 
         // stop rotating animation
-        Component animScript = retItem.GetComponent("SimpleGemsAnim");
-        if (animScript != null) Destroy(animScript);
+        Benjathemaker.SimpleGemsAnim animScript = retItem.GetComponent<Benjathemaker.SimpleGemsAnim>();
+        animScript.isRotating = false;
         return retItem;
     }
     public GameObject getRandomItem()
@@ -32,9 +32,30 @@ public abstract class Enemy : MonoBehaviour
             retItem = items[UnityEngine.Random.Range(0, items.Length)];
             // no rotating
             PassiveItemPickup script = retItem.GetComponent<PassiveItemPickup>();
-            if (script.rotateItem != null) script.rotateItem = false;
+            script.rotateItem = false;
         }
         return retItem;
     }
 
+    public void dropItem(GameObject itemDrop)
+    {
+        if (itemDrop == null)
+        {
+            Debug.Log("No pickup prefab assigned!");
+            return;
+        }
+
+        Vector3 dropPosition = transform.position;
+        Vector3 rayStart = transform.position + Vector3.up * 1f;
+        if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, 10f))
+        {
+            dropPosition = hit.point;
+        }
+        Benjathemaker.SimpleGemsAnim animScript = itemDrop.GetComponent<Benjathemaker.SimpleGemsAnim>();
+        if (animScript != null) animScript.isRotating = true;
+        PassiveItemPickup script = itemDrop.GetComponent<PassiveItemPickup>();
+        if (script != null) script.rotateItem = true;
+        itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
+        itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+    }
 }
