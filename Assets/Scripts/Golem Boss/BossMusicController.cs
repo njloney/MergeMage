@@ -22,17 +22,14 @@ public class BossMusicController : MonoBehaviour
         source.playOnAwake = false;
         source.loop = false;
 
-        // IMPORTANT: Music should always be 2D
         source.spatialBlend = 0f;
         source.volume = volume;
     }
 
     private void Start()
     {
-        // Always start with music immediately
         PlayRandomMusic();
 
-        // Then continue at random intervals
         musicRoutine = StartCoroutine(MusicLoop());
     }
 
@@ -40,7 +37,6 @@ public class BossMusicController : MonoBehaviour
     {
         while (true)
         {
-            // Wait for current track to finish
             while (source.isPlaying)
                 yield return null;
 
