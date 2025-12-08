@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1880745431015374951}
   - component: {fileID: 8791706054995937311}
   - component: {fileID: 5612271163840345152}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: tower-round-crystals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 2340741737923290688}
   - component: {fileID: 7546665542376483722}
   - component: {fileID: 678247375289470794}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: crystal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 3370111408722703983}
   - component: {fileID: 8604854088535870116}
   - component: {fileID: 9020650066969170869}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: crystal-small_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 6818227244519523863}
   - component: {fileID: 8002268709036652100}
   - component: {fileID: 1174910084325566687}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: crystal-small_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -407,7 +407,7 @@ GameObject:
   - component: {fileID: 4513823976055146684}
   - component: {fileID: 4672033406118823145}
   - component: {fileID: 5973627968861762274}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Pylon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -496,11 +496,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossShield: {fileID: 0}
+  rayOrigin: {fileID: 0}
   radius: 20
-  channelTime: 25
+  channelTime: 10
   playerMask:
     serializedVersion: 2
     m_Bits: 512
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  maxRayDistance: 1000
+  beamWidth: 1
+  chargeStepClips:
+  - {fileID: 8300000, guid: 90f835ccdb663bd4393b04edf8e07e7e, type: 3}
+  chargeVolume: 1
+  baseChargePitch: 1
+  pitchIncreasePerStep: 0.1
+  destroyClip: {fileID: 8300000, guid: 6af0a528f23dcd540893b7bd3dd4da81, type: 3}
+  destroyVolume: 0.5
 --- !u!136 &5973627968861762274
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -535,7 +548,7 @@ GameObject:
   - component: {fileID: 8034682350922448273}
   - component: {fileID: 3982260848513309767}
   - component: {fileID: 7391797078811570353}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: crystal-small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -621,7 +634,7 @@ GameObject:
   - component: {fileID: 7180761739839653819}
   - component: {fileID: 5068693730038929525}
   - component: {fileID: 8990123063604716407}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: crystal-small_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}

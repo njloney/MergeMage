@@ -31,11 +31,8 @@ public class SpellImpactAudio : MonoBehaviour
 
         Debug.Log("[SpellImpactAudio] PlayImpactSound on " + name);
 
-        // Create a temporary audio object at this position
-        // This is independent of the projectile's own GameObject.
         float pitch = Random.Range(pitchRange.x, pitchRange.y);
 
-        // Use a helper coroutine runner
         PlayClipAtPointWithPitch(clip, transform.position, volume, pitch);
     }
 

@@ -10,13 +10,23 @@ public class BossShieldPylon : MonoBehaviour
 
     public LayerMask obstacleMask;
     public float maxRayDistance = 50f;
-
     public float beamWidth = 0.15f;
+
+    [SerializeField] AudioClip[] chargeStepClips;
+    [SerializeField] float chargeVolume = 0.9f;
+    [SerializeField] float baseChargePitch = 1f;
+    [SerializeField] float pitchIncreasePerStep = 0.05f;
+
+    [SerializeField] AudioClip destroyClip;
+    [SerializeField] float destroyVolume = 1f;
 
     public bool IsActive { get; private set; } = true;
 
     float progress;
     LineRenderer line;
+
+    int lastStep = -1;
+    int playCount = 0;
 
     void Awake()
     {
@@ -52,7 +62,10 @@ public class BossShieldPylon : MonoBehaviour
         {
             progress += Time.deltaTime;
             if (progress >= channelTime)
+            {
+                progress = channelTime;
                 Deactivate();
+            }
         }
         else if (progress > 0f)
         {
@@ -60,6 +73,52 @@ public class BossShieldPylon : MonoBehaviour
             if (progress < 0f)
                 progress = 0f;
         }
+
+        HandleChargeSound();
+    }
+
+    void HandleChargeSound()
+    {
+        if (channelTime <= 0f)
+            return;
+
+        float t = Mathf.Clamp01(progress / channelTime);
+
+        if (t <= 0f)
+        {
+            lastStep = -1;
+            playCount = 0;
+            return;
+        }
+
+        int step = Mathf.Clamp(Mathf.FloorToInt(t * 10f) - 1, -1, 9);
+
+        if (step <= lastStep)
+            return;
+
+        for (int i = lastStep + 1; i <= step; i++)
+        {
+            if (i >= 0)
+                PlayChargeStep(i);
+        }
+
+        lastStep = step;
+    }
+
+    void PlayChargeStep(int index)
+    {
+        if (chargeStepClips == null || chargeStepClips.Length == 0)
+            return;
+
+        int clipIndex = Mathf.Clamp(index, 0, chargeStepClips.Length - 1);
+        var clip = chargeStepClips[clipIndex];
+        if (clip == null)
+            return;
+
+        float pitch = baseChargePitch + playCount * pitchIncreasePerStep;
+        playCount++;
+
+        PlayClip(clip, chargeVolume, pitch);
     }
 
     void CastRayToBoss()
@@ -67,22 +126,19 @@ public class BossShieldPylon : MonoBehaviour
         if (bossShield == null)
             return;
 
-        Transform originTf = rayOrigin != null ? rayOrigin : transform;
+        Transform t = rayOrigin != null ? rayOrigin : transform;
 
-        Vector3 origin = originTf.position;
-        Vector3 target = bossShield.transform.position;
-        Vector3 direction = (target - origin).normalized;
-        float distance = Mathf.Min(Vector3.Distance(origin, target), maxRayDistance);
-
-        Ray ray = new Ray(origin, direction);
+        Vector3 o = t.position;
+        Vector3 d = (bossShield.transform.position - o).normalized;
+        float dist = Mathf.Min(Vector3.Distance(o, bossShield.transform.position), maxRayDistance);
 
         line.enabled = true;
-        line.SetPosition(0, origin);
+        line.SetPosition(0, o);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, distance, obstacleMask))
+        if (Physics.Raycast(o, d, out RaycastHit hit, dist, obstacleMask))
             line.SetPosition(1, hit.point);
         else
-            line.SetPosition(1, origin + direction * distance);
+            line.SetPosition(1, o + d * dist);
     }
 
     void Deactivate()
@@ -91,11 +147,28 @@ public class BossShieldPylon : MonoBehaviour
             return;
 
         IsActive = false;
-
         line.enabled = false;
+
+        if (destroyClip != null)
+            PlayClip(destroyClip, destroyVolume, 1f);
 
         if (bossShield != null)
             bossShield.UnregisterPylon(this);
+    }
+
+    void PlayClip(AudioClip clip, float volume, float pitch)
+    {
+        var go = new GameObject("PylonAudio");
+        go.transform.position = transform.position;
+        var src = go.AddComponent<AudioSource>();
+        src.clip = clip;
+        src.spatialBlend = 1f;
+        src.volume = volume;
+        src.pitch = pitch;
+        src.minDistance = 5f;
+        src.maxDistance = 40f;
+        src.Play();
+        Destroy(go, clip.length / Mathf.Max(0.1f, pitch));
     }
 
     void OnDrawGizmosSelected()
