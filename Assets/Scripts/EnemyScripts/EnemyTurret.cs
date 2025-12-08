@@ -46,7 +46,7 @@ public class EnemyTurret : Enemy
             itemDrop = Instantiate(prefabs[UnityEngine.Random.Range(0, prefabs.Length)]);
             itemScript = (ItemPickup)itemDrop.GetComponent("ItemPickup");
             ItemData item = itemScript.itemToGive;
-            if (item.castType != SpellCastType.Projectile)
+            if (item == null || item.castType != SpellCastType.Projectile)
             {
                 itemDrop = null;
             }
@@ -237,7 +237,7 @@ public class EnemyTurret : Enemy
             return;
         }
 
-        // Spawn the item's specific prefab in place of slime
+        // Spawn the item's specific prefab in place of enemy
         Vector3 dropPosition = transform.position;
         itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
         itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);

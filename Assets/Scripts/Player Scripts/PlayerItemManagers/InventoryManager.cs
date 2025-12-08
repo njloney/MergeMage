@@ -23,7 +23,7 @@ public class InventoryManager : MonoBehaviour
 
     [Header("Passive Items")]
     private bool mergeMode = false;
-    private float breakChance = 0.20f;
+    [SerializeField] private float breakChance = 0.20f;
 
 
     public event Action<ItemData> OnActiveItemChanged;
@@ -83,6 +83,8 @@ public class InventoryManager : MonoBehaviour
             crystalSlots[i].setSlotHighLight(i == activeSlotIndex);
             }
         }
+
+        sendUpdates();
     }
     private void setActiveSlot(int index)
     {
@@ -127,9 +129,10 @@ public class InventoryManager : MonoBehaviour
 
         //get random value between. 0 and 1
         float roll = UnityEngine.Random.value;
-
+        Debug.Log("Current Roll " + roll.ToString());
         //if roll is < break chance then we break this UnstableSpell
         bool isBroken = roll < breakChance;
+        Debug.Log("Is Broken? " + isBroken.ToString());
 
         if (isBroken)
         {

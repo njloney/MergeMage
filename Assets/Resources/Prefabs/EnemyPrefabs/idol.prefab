@@ -153,6 +153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  ignoredSourceLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &4030935690160031170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,9 +168,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dcf744289f794308af828f51dacce13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HurtMat: {fileID: 0}
+  HurtMat: {fileID: 2100000, guid: 1fb523fdbe7c94613a2832e1d4852741, type: 2}
   IdleMat: {fileID: 2100000, guid: 07ada43b026b31942913b96ffee570e1, type: 2}
-  comboWindow: 3
+  itemDrop: {fileID: 0}
+  itemRigid: {fileID: 0}
   target: {fileID: 0}
   maxSpeed: 20
   moveSpeed: 0

@@ -36,12 +36,10 @@ public class EnemyIdol : Enemy
         health.OnDamaged += HandleDamageTaken;
         health.OnDied += Die;
 
-        GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
-        Debug.Log(prefabs.Length);
         itemDrop = null;
         if (Random.value <= 0.3f)
         {
-            itemDrop = prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
+            itemDrop = base.getRandomItem();
         }
     
         //start Movement
