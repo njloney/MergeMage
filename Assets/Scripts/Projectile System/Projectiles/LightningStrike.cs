@@ -27,6 +27,10 @@ public class LightningStrike : MonoBehaviour
         // Show the bolt immediately when strike happens
         if (boltVisual) boltVisual.SetActive(true);
 
+        var impactAudio = GetComponent<SpellImpactAudio>();
+        if (impactAudio != null)
+            impactAudio.PlayImpactSound();
+
         if (impactEffect) Instantiate(impactEffect, transform.position, Quaternion.identity);
 
         Collider[] hits = Physics.OverlapSphere(transform.position, radius, hitMask);
@@ -38,5 +42,6 @@ public class LightningStrike : MonoBehaviour
                 hp.TakeDamage(damage, DamageType.Lightning, null);
             }
         }
+
     }
 }

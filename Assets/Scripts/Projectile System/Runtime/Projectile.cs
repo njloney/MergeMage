@@ -61,6 +61,13 @@ public class Projectile : MonoBehaviour
         if (cfg == null || cfg.stats == null)
             return;
 
+        var impactAudio = GetComponent<SpellImpactAudio>();
+        if (impactAudio != null)
+        {
+            impactAudio.PlayImpactSound();
+        }
+
+
         // Avoid double-processing the same collider in a single frame
         if (hitThisFrame.Contains(other))
             return;
