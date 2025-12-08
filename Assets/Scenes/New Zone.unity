@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactDistance: 3
-  pickupHint: {fileID: 1425506856}
+  pickupHintText: {fileID: 0}
 --- !u!114 &198710219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4483,6 +4483,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5180773143411867347, guid: 9649f6663d4ac4835b412b6c84b13863, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5378159803679425295, guid: 9649f6663d4ac4835b412b6c84b13863, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -4651,11 +4655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00234c5126f84eb6b2c9c1d330234ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1425506856 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9934463919329631, guid: 9649f6663d4ac4835b412b6c84b13863, type: 3}
-  m_PrefabInstance: {fileID: 1425506854}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1425506857 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1739287715096457525, guid: 9649f6663d4ac4835b412b6c84b13863, type: 3}

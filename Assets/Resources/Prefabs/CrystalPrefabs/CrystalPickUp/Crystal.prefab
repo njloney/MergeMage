@@ -80,7 +80,7 @@ PrefabInstance:
       addedObject: {fileID: -7194915668699890110}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7d7b6793cdd278a4084fd1e487655b7e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2414644812199627968}
+      addedObject: {fileID: 233395169256300455}
   m_SourcePrefab: {fileID: 100100000, guid: 7d7b6793cdd278a4084fd1e487655b7e, type: 3}
 --- !u!1 &6026479803959884314 stripped
 GameObject:
@@ -122,7 +122,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.7619607, y: 2.420081, z: 2.626781}
   m_Center: {x: -0.025934635, y: -0.22451471, z: -0.13865815}
---- !u!114 &2414644812199627968
+--- !u!114 &233395169256300455
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,10 +131,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 6026479803959884314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c943763fd7fd35449ab0e51c9286368, type: 3}
+  m_Script: {fileID: 11500000, guid: 845c415f3181b4840ab566c40e714752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinSpeed: 75
-  spinAxis: {x: 0, y: 1, z: 0}
-  bobAmplitude: 0.05
-  bobFrequency: 1.5
+  isRotating: 1
+  rotateX: 0
+  rotateY: 1
+  rotateZ: 0
+  rotationSpeed: 90
+  isFloating: 0
+  useEasingForFloating: 0
+  floatHeight: 1
+  floatSpeed: 1
+  startScale: {x: 0, y: 0, z: 0}
+  endScale: {x: 0, y: 0, z: 0}
+  isScaling: 0
+  useEasingForScaling: 0
+  scaleLerpSpeed: 1
