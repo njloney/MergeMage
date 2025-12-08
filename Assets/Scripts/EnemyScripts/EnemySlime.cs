@@ -172,7 +172,7 @@ public class EnemySlime : Enemy
     {
         if (itemDrop == null)
         {
-            GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
+            GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs/CrystalPickUp");
             if (prefabs.Length > 0 && Random.value <= 0.25f)
             {
                 itemDrop = prefabs[Random.Range(0, prefabs.Length)];
