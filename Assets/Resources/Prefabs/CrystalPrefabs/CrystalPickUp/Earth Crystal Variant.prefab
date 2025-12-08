@@ -64,29 +64,5 @@ PrefabInstance:
     - {fileID: 2414644812199627968, guid: 151b6a2ddad034ba6bab24f6f1130ea1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6026479803959884314, guid: 151b6a2ddad034ba6bab24f6f1130ea1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -1094769452040283559}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 151b6a2ddad034ba6bab24f6f1130ea1, type: 3}
---- !u!1 &2311387377485178826 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6026479803959884314, guid: 151b6a2ddad034ba6bab24f6f1130ea1, type: 3}
-  m_PrefabInstance: {fileID: 8336701539633290704}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &-1094769452040283559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2311387377485178826}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c943763fd7fd35449ab0e51c9286368, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spinSpeed: 50
-  spinAxis: {x: 0, y: 1, z: 0}
-  bobAmplitude: 0.05
-  bobFrequency: 1.5

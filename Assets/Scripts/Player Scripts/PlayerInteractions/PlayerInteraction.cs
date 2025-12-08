@@ -14,7 +14,7 @@ public class PlayerInteraction : MonoBehaviour
 
     [SerializeField] private float interactDistance = 3f;
 
-    [SerializeField] private GameObject pickupHint;
+    [SerializeField] private TextMeshProUGUI pickupHintText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private bool mergeMode;
@@ -23,12 +23,6 @@ public class PlayerInteraction : MonoBehaviour
         inventoryManager = transform.parent.gameObject.GetComponent<InventoryManager>();
         mergeController = transform.parent.gameObject.GetComponent<MergeMode>();
         mergeController.OnMergeModeChanged += checkMergeMode;
-
-
-        if (pickupHint != null)
-        {
-            pickupHint.SetActive(false);
-        }
     }
 
     void checkMergeMode(bool isMerge)
@@ -42,7 +36,8 @@ public class PlayerInteraction : MonoBehaviour
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
         if (!mergeMode && Physics.Raycast(transform.position, fwd, out RaycastHit hit, interactDistance) && hit.collider.TryGetComponent<ItemPickup>(out ItemPickup script))
         {
-            pickupHint.SetActive(true);
+            pickupHintText.text = "[E] to pick up " + "\n" + script.itemToGive.itemName;
+            pickupHintText.gameObject.SetActive(true);
             Debug.Log("Looking at: " + script.itemToGive.itemName);
 
             if (Input.GetKeyDown(KeyCode.E))
@@ -51,14 +46,14 @@ public class PlayerInteraction : MonoBehaviour
                 if (success)
                 {
                     Destroy(hit.collider.gameObject);
-                    pickupHint.SetActive(false);
+                    pickupHintText.gameObject.SetActive(false);
                 }
             }
             
         }
         else
         {
-            pickupHint.SetActive(false);
+            pickupHintText.gameObject.SetActive(false);
         }
     }
 }
