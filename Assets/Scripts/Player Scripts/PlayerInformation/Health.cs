@@ -103,12 +103,26 @@ public class Health : MonoBehaviour
 
         OnDamaged?.Invoke(amount, type, source);
 
+        int layer = gameObject.layer;
+
+        if (layer == LayerMask.NameToLayer("Enemy"))
+        {
+            if (CrosshairUI.Instance != null)
+                CrosshairUI.Instance.ShowHitmarker();
+        }
+        else if (layer == LayerMask.NameToLayer("Player"))
+        {
+            if (ScreenDamageFlashUI.Instance != null)
+                ScreenDamageFlashUI.Instance.Flash();
+        }
+
         if (_hp == 0f)
         {
             Debug.Log($"[Health] {name} DIED");
             Die();
         }
     }
+
 
     public void Heal(float amount)
     {
