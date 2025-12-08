@@ -307,7 +307,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a83b8fface4cd146bfd59a02f531c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactClips: []
+  impactClips:
+  - {fileID: 8300000, guid: cd4250bd3e64d7c46b3edb0c9ac22eb6, type: 3}
   volume: 0.5
   pitchRange: {x: 0.95, y: 1.05}
   playOnlyOncePerInstance: 1
