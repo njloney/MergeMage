@@ -36,13 +36,13 @@ public class EarthSpikeField : MonoBehaviour
         a.y = b.y;
 
         Vector3 dir = b - a;
-        float dist = dir.magnitude;
-        if (dist < 0.01f)
+        if (dir.sqrMagnitude < 0.01f)
             dir = boss.forward;
         else
-            dir /= dist;
+            dir.Normalize();
 
-        pathLength = Mathf.Min(maxLength, dist);
+        // IMPORTANT: always use the full maxLength, not clamped to distance to player
+        pathLength = maxLength > 0f ? maxLength : defaultLength;
         pathWidth = width > 0f ? width : defaultWidth;
 
         transform.position = a + dir * (pathLength * 0.5f);
@@ -80,8 +80,6 @@ public class EarthSpikeField : MonoBehaviour
         {
             var t = telegraphVisual.transform;
 
-            // Keep whatever local rotation the prefab has (so the quad stays flat).
-            // Just recenter XZ and rescale to match width/length.
             t.localPosition = new Vector3(0f, t.localPosition.y, 0f);
 
             Vector3 s = t.localScale;

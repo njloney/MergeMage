@@ -3,12 +3,12 @@ using System;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 100f;   // For non-player entities
+    [SerializeField] private float maxHealth = 100f;
     private float _hp;
     private RuntimePlayerStats runtimeStats;
 
     [Header("Damage Filtering")]
-    [SerializeField] public LayerMask ignoredSourceLayers; // sources on these layers won't deal damage
+    [SerializeField] public LayerMask ignoredSourceLayers;
 
     public event Action<float, DamageType, UnityEngine.Object> OnDamaged;
     public event Action OnDied;
@@ -22,26 +22,25 @@ public class Health : MonoBehaviour
             if (runtimeStats != null)
             {
                 _hp = runtimeStats.maxHealth;
-                Debug.Log("Hp " + runtimeStats.maxHealth);
+                Debug.Log($"[Health] {name} initialized with HP: {_hp}");
                 OnDamaged?.Invoke(_hp, DamageType.Physical, null);
                 runtimeStats.OnMaxHealthChanged += Heal;
             }
             else
             {
-                Debug.LogError("Health script on Player is missing RuntimePlayerStats component!");
+                Debug.LogError("[Health] Player missing RuntimePlayerStats!");
                 _hp = maxHealth;
             }
         }
         else
         {
-            // Non-player entities use local maxHealth
             _hp = maxHealth;
+            Debug.Log($"[Health] {name} initialized with HP: {_hp}");
         }
     }
 
     private void OnDestroy()
     {
-        // Unsubscribe to prevent memory leaks
         if (runtimeStats != null)
         {
             runtimeStats.OnMaxHealthChanged -= Heal;
@@ -55,16 +54,15 @@ public class Health : MonoBehaviour
         get
         {
             if (gameObject.CompareTag("Player") && runtimeStats != null)
-            {
                 return runtimeStats.maxHealth;
-            }
             return maxHealth;
         }
     }
 
     public void TakeDamage(float amount, DamageType type = DamageType.Physical, UnityEngine.Object source = null)
     {
-        // Ignore damage from certain sources / layers
+        bool isPlayer = gameObject.CompareTag("Player");
+
         if (source != null)
         {
             Transform srcTransform = null;
@@ -76,16 +74,20 @@ public class Health : MonoBehaviour
 
             if (srcTransform != null)
             {
-                // Ignore self or any of our own children (e.g. our own hitboxes / attacks)
                 if (srcTransform == transform || srcTransform.IsChildOf(transform))
+                {
+                    Debug.Log($"[Health] {name} ignored self-damage from {srcTransform.name}");
                     return;
+                }
 
-                // Ignore if the source (or any of its parents) is on an ignored layer
                 Transform t = srcTransform;
                 while (t != null)
                 {
-                    if (((1 << t.gameObject.layer) & ignoredSourceLayers) != 0)
+                    if (!isPlayer && ((1 << t.gameObject.layer) & ignoredSourceLayers) != 0)
+                    {
+                        Debug.Log($"[Health] {name} ignored damage from layer {LayerMask.LayerToName(t.gameObject.layer)}");
                         return;
+                    }
 
                     t = t.parent;
                 }
@@ -93,27 +95,35 @@ public class Health : MonoBehaviour
         }
 
         float damageToTake = Mathf.Max(0f, amount);
+        float before = _hp;
 
         _hp = Mathf.Max(0f, _hp - damageToTake);
 
+        Debug.Log($"[Health] {name} took {damageToTake} {type} damage from {(source ? source.name : "Unknown")}. HP: {before} -> {_hp}");
+
         OnDamaged?.Invoke(amount, type, source);
 
-        if (_hp == 0f) Die();
+        if (_hp == 0f)
+        {
+            Debug.Log($"[Health] {name} DIED");
+            Die();
+        }
     }
 
     public void Heal(float amount)
     {
         if (amount <= 0) return;
 
+        float before = _hp;
         _hp += amount;
-        _hp = Mathf.Min(_hp, maxHP); // Cap at max health
+        _hp = Mathf.Min(_hp, maxHP);
 
-        Debug.Log($"Healed {amount} HP. Current: {_hp}/{maxHP}");
+        Debug.Log($"[Health] {name} healed {amount}. HP: {before} -> {_hp}");
     }
 
     private void Die()
     {
+        Debug.Log($"[Health] {name} OnDied event invoked");
         OnDied?.Invoke();
-        // Placeholder for death/reset logic
     }
 }
