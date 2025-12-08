@@ -39,7 +39,7 @@ public class EnemyIdol : Enemy
         itemDrop = null;
         if (Random.value <= 0.3f)
         {
-            itemDrop = base.getRandomItem;
+            itemDrop = base.getRandomItem();
         }
     
         //start Movement
