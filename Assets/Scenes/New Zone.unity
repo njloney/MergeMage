@@ -8270,8 +8270,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-<<<<<<< HEAD
-=======
     - target: {fileID: 4599778378443105047, guid: 560f9a28e73614da996bf8977d399139, type: 3}
       propertyPath: isRotating
       value: 1
@@ -8320,7 +8318,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wind Crystal Variant (1)
       objectReference: {fileID: 0}
->>>>>>> b6634df6a51c5c2f5d66e86ab78df157afc2daa4
     - target: {fileID: 845731965430775724, guid: 672ba0b95a3f4fc45a8bc1a60b9ad9b5, type: 3}
       propertyPath: m_Name
       value: CrystalLightning Variant
