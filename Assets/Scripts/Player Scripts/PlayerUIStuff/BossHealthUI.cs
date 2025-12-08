@@ -68,12 +68,20 @@ public class BossHealthUI : MonoBehaviour
         if (borderImage == null)
             return;
 
-        Color c = active ? shieldedBorderColor : normalBorderColor;
+        Color c = borderImage.color;
 
-        // Clamp alpha so it never exceeds 0.5
-        c.a = Mathf.Min(c.a, 0.5f);
+        if (active)
+        {
+            c = shieldedBorderColor;
+            c.a = 0.5f;
+        }
+        else
+        {
+            c.a = 0f;
+        }
 
         borderImage.color = c;
     }
+
 
 }
