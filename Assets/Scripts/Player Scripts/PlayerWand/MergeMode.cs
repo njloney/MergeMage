@@ -34,6 +34,9 @@ public class MergeMode : MonoBehaviour
 
     public void ToggleMergeMode()
     {
+
+        if (!mergeMode && !inventory.MergeSpellsLeft()) return;
+
         mergeMode = !mergeMode;
         OnMergeModeChanged?.Invoke(mergeMode);
 
