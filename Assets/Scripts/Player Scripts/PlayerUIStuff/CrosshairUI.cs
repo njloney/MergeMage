@@ -44,7 +44,7 @@ public class CrosshairUI : MonoBehaviour
         }
 
         audioSource.playOnAwake = false;
-        audioSource.spatialBlend = 0f; // 2D UI sound
+        audioSource.spatialBlend = 0f;
     }
 
     void Update()
