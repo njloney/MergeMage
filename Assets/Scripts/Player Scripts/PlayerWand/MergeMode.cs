@@ -29,6 +29,13 @@ public class MergeMode : MonoBehaviour
         playerMana = GetComponent<Mana>();
         playerStats = GetComponent<RuntimePlayerStats>();
         manaRegenRate = playerStats.manaRecoveryRate;
+        inventory.MergesConsumed += ExitMerged;
+    }
+
+    private void ExitMerged()
+    {
+        ToggleMergeMode();
+        inventory.UpdateSlotHighlights();
 
     }
 
