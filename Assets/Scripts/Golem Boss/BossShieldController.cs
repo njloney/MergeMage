@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Health))]
 public class BossShieldController : MonoBehaviour
@@ -7,6 +8,7 @@ public class BossShieldController : MonoBehaviour
     int activePylons;
 
     public bool IsShieldActive => activePylons > 0;
+    public event Action<bool> OnShieldStateChanged;
 
     void Awake()
     {
@@ -25,7 +27,7 @@ public class BossShieldController : MonoBehaviour
             health.OnDamaged -= HandleDamaged;
     }
 
-    void HandleDamaged(float amount, DamageType type, Object source)
+    void HandleDamaged(float amount, DamageType type, UnityEngine.Object source)
     {
         if (!IsShieldActive)
             return;
@@ -36,13 +38,21 @@ public class BossShieldController : MonoBehaviour
 
     public void RegisterPylon(BossShieldPylon pylon)
     {
+        bool wasActive = IsShieldActive;
         activePylons++;
         Debug.Log($"[BossShield] Pylon registered. Active count: {activePylons}");
+
+        if (wasActive != IsShieldActive)
+            OnShieldStateChanged?.Invoke(IsShieldActive);
     }
 
     public void UnregisterPylon(BossShieldPylon pylon)
     {
+        bool wasActive = IsShieldActive;
         activePylons = Mathf.Max(0, activePylons - 1);
         Debug.Log($"[BossShield] Pylon unregistered. Active count: {activePylons}");
+
+        if (wasActive != IsShieldActive)
+            OnShieldStateChanged?.Invoke(IsShieldActive);
     }
 }
