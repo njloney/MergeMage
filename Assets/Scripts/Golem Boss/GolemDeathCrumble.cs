@@ -29,6 +29,10 @@ public class GolemDeathCrumble : MonoBehaviour
     [SerializeField] private float explosionForce = 200f;
     [SerializeField] private float explosionRadius = 5f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip deathStartClip;
+    [SerializeField] private float deathVolume = 1f;
+
     [Header("Cleanup")]
     [SerializeField] private float destroyBossDelay = 1.0f;
 
@@ -51,7 +55,8 @@ public class GolemDeathCrumble : MonoBehaviour
 
     private void OnDied()
     {
-        Debug.Log("[GolemDeathSpawnChunks] OnDied for " + name);
+        if (deathStartClip)
+            PlayClip(deathStartClip, deathVolume);
 
         if (animator) animator.enabled = false;
 
@@ -61,16 +66,10 @@ public class GolemDeathCrumble : MonoBehaviour
         }
 
         if ((chunkPrefabs == null || chunkPrefabs.Length == 0) && fallbackChunkPrefab == null)
-        {
-            Debug.LogWarning("[GolemDeathSpawnChunks] No chunk prefabs assigned.");
             return;
-        }
 
         if (rockParts == null || rockParts.Length == 0)
-        {
-            Debug.LogWarning("[GolemDeathSpawnChunks] No rockParts assigned.");
             return;
-        }
 
         int spawned = 0;
 
@@ -85,11 +84,10 @@ public class GolemDeathCrumble : MonoBehaviour
             for (int i = 0; i < chunksPerPoint && spawned < maxChunks; i++)
             {
                 GameObject prefab = PickChunkPrefab();
-                if (prefab == null) break;
+                if (!prefab) break;
 
-                Vector3 basePos = part.position;
-                Vector2 jitter2D = Random.insideUnitCircle * spawnJitterRadius;
-                Vector3 spawnPos = basePos + new Vector3(jitter2D.x, 0f, jitter2D.y);
+                Vector2 jitter = Random.insideUnitCircle * spawnJitterRadius;
+                Vector3 spawnPos = part.position + new Vector3(jitter.x, 0f, jitter.y);
 
                 var chunk = Instantiate(prefab, spawnPos, Random.rotation);
 
@@ -98,13 +96,7 @@ public class GolemDeathCrumble : MonoBehaviour
 
                 var rb = chunk.GetComponent<Rigidbody>();
                 if (rb)
-                {
-                    rb.AddExplosionForce(
-                        explosionForce,
-                        transform.position + Vector3.up,
-                        explosionRadius
-                    );
-                }
+                    rb.AddExplosionForce(explosionForce, transform.position + Vector3.up, explosionRadius);
 
                 if (chunkLifetime > 0f)
                     Destroy(chunk, chunkLifetime);
@@ -112,8 +104,6 @@ public class GolemDeathCrumble : MonoBehaviour
                 spawned++;
             }
         }
-
-        Debug.Log($"[GolemDeathSpawnChunks] Spawned {spawned} chunks");
 
         if (destroyBossDelay >= 0f)
             Destroy(gameObject, destroyBossDelay);
@@ -127,28 +117,42 @@ public class GolemDeathCrumble : MonoBehaviour
         float total = 0f;
         for (int i = 0; i < chunkPrefabs.Length; i++)
         {
-            var entry = chunkPrefabs[i];
-            if (entry != null && entry.prefab != null && entry.weight > 0f)
-                total += entry.weight;
+            var e = chunkPrefabs[i];
+            if (e != null && e.prefab && e.weight > 0f)
+                total += e.weight;
         }
 
         if (total <= 0f)
             return fallbackChunkPrefab;
 
         float r = Random.value * total;
-        float accum = 0f;
+        float acc = 0f;
 
         for (int i = 0; i < chunkPrefabs.Length; i++)
         {
-            var entry = chunkPrefabs[i];
-            if (entry == null || entry.prefab == null || entry.weight <= 0f)
+            var e = chunkPrefabs[i];
+            if (e == null || !e.prefab || e.weight <= 0f)
                 continue;
 
-            accum += entry.weight;
-            if (r <= accum)
-                return entry.prefab;
+            acc += e.weight;
+            if (r <= acc)
+                return e.prefab;
         }
 
         return fallbackChunkPrefab;
+    }
+
+    void PlayClip(AudioClip clip, float volume)
+    {
+        var go = new GameObject("GolemDeathAudio");
+        go.transform.position = transform.position;
+        var src = go.AddComponent<AudioSource>();
+        src.clip = clip;
+        src.spatialBlend = 1f;
+        src.volume = volume;
+        src.minDistance = 6f;
+        src.maxDistance = 50f;
+        src.Play();
+        Destroy(go, clip.length);
     }
 }

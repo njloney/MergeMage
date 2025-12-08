@@ -2569,7 +2569,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: beamWidth
@@ -4455,7 +4455,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: radius
@@ -6168,7 +6168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: radius
@@ -6338,7 +6338,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: radius
@@ -8305,7 +8305,7 @@ PrefabInstance:
       objectReference: {fileID: 844875300}
     - target: {fileID: 1109900019931866779, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
       propertyPath: maxHealth
-      value: 500
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1916666700126636105, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8315,6 +8315,10 @@ PrefabInstance:
       propertyPath: chunkLifetime
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 2502072799148247507, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
+      propertyPath: deathStartClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3144ccc350bfadc4cba1eb1acd8170bf, type: 3}
     - target: {fileID: 2502072799148247507, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
       propertyPath: chunkPrefabs.Array.data[0].weight
       value: 0.1
