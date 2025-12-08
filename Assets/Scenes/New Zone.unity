@@ -7681,7 +7681,7 @@ PrefabInstance:
       objectReference: {fileID: 844875300}
     - target: {fileID: 1109900019931866779, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
       propertyPath: maxHealth
-      value: 10
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2502072799148247507, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
       propertyPath: chunkLifetime

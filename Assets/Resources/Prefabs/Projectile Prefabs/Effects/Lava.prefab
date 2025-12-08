@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 759203459793321430}
   - component: {fileID: 1612441267047566663}
   - component: {fileID: -2198994189749952293}
+  - component: {fileID: 7522760499211694890}
   m_Layer: 0
   m_Name: Lava
   m_TagString: Untagged
@@ -108,3 +109,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7522760499211694890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3978694083657473365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe97813739f7aee4ca99373151390a29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifetime: 5
+  damagePerTick: 10
+  damageType: 1
+  tickInterval: 0.5
+  debuffEffect: {fileID: 11400000, guid: fe1a784ddae44e24683cb4dafa8048c9, type: 2}
+  debuffDuration: 3
+  debuffMagnitude: 1
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 512

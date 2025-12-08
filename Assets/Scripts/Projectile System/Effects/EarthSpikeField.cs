@@ -132,8 +132,15 @@ public class EarthSpikeField : MonoBehaviour
         if (spikeSegmentPrefab == null)
             return;
 
-        Instantiate(spikeSegmentPrefab, worldPos, transform.rotation);
+        var spike = Instantiate(spikeSegmentPrefab, worldPos, transform.rotation);
+
+        var impactAudio = spike.GetComponent<SpellImpactAudio>();
+        if (impactAudio != null)
+        {
+            impactAudio.PlayImpactSound();
+        }
     }
+
 
     private void DoSegmentHit(Vector3 worldPos)
     {
