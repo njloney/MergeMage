@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3798775759271261616}
   - component: {fileID: 6138070880600828845}
   - component: {fileID: 7488972513302200938}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 5032814472458494308}
   - component: {fileID: 7727610171273819417}
   - component: {fileID: 1266832291039194198}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,6 +235,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  ignoredSourceLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &7727610171273819417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,13 +252,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HurtMat: {fileID: 2100000, guid: 1c17f44ef295d4cc8b18e91730bcff2a, type: 2}
   IdleMat: {fileID: 2100000, guid: 5f73475cf0cad364b9800b85c2a229fc, type: 2}
-  comboWindow: 3
   itemDrop: {fileID: 0}
   itemRigid: {fileID: 0}
   target: {fileID: 0}
   maxSpeed: 20
   moveSpeed: 0
-  moveTorque: 10
 --- !u!54 &1266832291039194198
 Rigidbody:
   m_ObjectHideFlags: 0

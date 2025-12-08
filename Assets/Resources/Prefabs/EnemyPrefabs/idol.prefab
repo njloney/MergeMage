@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2194187069618783863}
   - component: {fileID: 4030935690160031170}
   - component: {fileID: -8929044141888161613}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: idol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,6 +153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  ignoredSourceLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &4030935690160031170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,7 +170,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HurtMat: {fileID: 0}
   IdleMat: {fileID: 2100000, guid: 07ada43b026b31942913b96ffee570e1, type: 2}
-  comboWindow: 3
+  itemDrop: {fileID: 0}
+  itemRigid: {fileID: 0}
   target: {fileID: 0}
   maxSpeed: 20
   moveSpeed: 0
