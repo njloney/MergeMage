@@ -8,23 +8,16 @@ public class BossHealthUI : MonoBehaviour
     [SerializeField] private Image borderImage;
     [SerializeField] private BossShieldController shieldController;
 
-    [SerializeField] private Color normalBorderColor = Color.white;
     [SerializeField] private Color shieldedBorderColor = new Color(0.6f, 0f, 1f);
+    [SerializeField] private float shieldAlpha = 0.5f;
 
     void Awake()
     {
-        if (bossHealth == null)
-        {
-            var shield = FindObjectOfType<BossShieldController>();
-            if (shield != null)
-            {
-                shieldController = shield;
-                bossHealth = shield.GetComponent<Health>();
-            }
-        }
-
         if (shieldController == null && bossHealth != null)
             shieldController = bossHealth.GetComponent<BossShieldController>();
+
+        if (bossHealth == null && shieldController != null)
+            bossHealth = shieldController.GetComponent<Health>();
     }
 
     void OnEnable()
@@ -35,7 +28,15 @@ public class BossHealthUI : MonoBehaviour
         if (shieldController != null)
             shieldController.OnShieldStateChanged += OnShieldStateChanged;
 
+        if (borderImage != null)
+        {
+            Color c = borderImage.color;
+            c.a = 0f;
+            borderImage.color = c;
+        }
+
         RefreshHealth();
+
         if (shieldController != null)
             OnShieldStateChanged(shieldController.IsShieldActive);
     }
@@ -49,7 +50,7 @@ public class BossHealthUI : MonoBehaviour
             shieldController.OnShieldStateChanged -= OnShieldStateChanged;
     }
 
-    void OnBossDamaged(float amount, DamageType type, Object source)
+    void OnBossDamaged(float amount, DamageType type, UnityEngine.Object source)
     {
         RefreshHealth();
     }
@@ -68,12 +69,18 @@ public class BossHealthUI : MonoBehaviour
         if (borderImage == null)
             return;
 
-        Color c = active ? shieldedBorderColor : normalBorderColor;
+        Color c = borderImage.color;
 
-        // Clamp alpha so it never exceeds 0.5
-        c.a = Mathf.Min(c.a, 0.5f);
+        if (active)
+        {
+            c = shieldedBorderColor;
+            c.a = shieldAlpha;
+        }
+        else
+        {
+            c.a = 0f;
+        }
 
         borderImage.color = c;
     }
-
 }

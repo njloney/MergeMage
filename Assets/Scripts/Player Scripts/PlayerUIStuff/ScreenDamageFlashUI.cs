@@ -23,7 +23,7 @@ public class ScreenDamageFlashUI : MonoBehaviour
 
         if (overlayImage != null)
         {
-            var c = overlayImage.color;
+            Color c = overlayImage.color;
             c.a = 0f;
             overlayImage.color = c;
         }
@@ -37,7 +37,7 @@ public class ScreenDamageFlashUI : MonoBehaviour
         timer -= Time.deltaTime;
         float t = Mathf.Clamp01(timer / flashDuration);
 
-        var c = overlayImage.color;
+        Color c = overlayImage.color;
         c.a = t * maxAlpha;
         overlayImage.color = c;
     }
@@ -49,7 +49,7 @@ public class ScreenDamageFlashUI : MonoBehaviour
 
         timer = flashDuration;
 
-        var c = overlayImage.color;
+        Color c = overlayImage.color;
         c.a = maxAlpha;
         overlayImage.color = c;
     }
