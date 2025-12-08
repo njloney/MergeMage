@@ -50,9 +50,9 @@ MonoBehaviour:
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
   projectileOverridePrefab: {fileID: 0}
-  isGroundSpell: 0
-  ghostIndicatorPrefab: {fileID: 0}
-  groundSpellPrefab: {fileID: 0}
+  isGroundSpell: 1
+  ghostIndicatorPrefab: {fileID: 944379309884587168, guid: 8a6c9c3f5e3c4a5408558042539bf4e3, type: 3}
+  groundSpellPrefab: {fileID: 1680143550996250965, guid: c48bc14d74a82204286db3e68d51e970, type: 3}
   maxCastDistance: 20
   impactShakeMagnitude: 0.5
   impactShakeDuration: 0.2

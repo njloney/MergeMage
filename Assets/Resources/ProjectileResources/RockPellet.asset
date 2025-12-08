@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
   m_Name: RockPellet
   m_EditorClassIdentifier: 
-  speed: 40
+  speed: 25
   lifetime: 2
   manaCost: 25
   projectileMaterial: {fileID: 0}
