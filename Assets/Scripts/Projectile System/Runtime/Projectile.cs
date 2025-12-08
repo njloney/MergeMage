@@ -103,6 +103,14 @@ public class Projectile : MonoBehaviour
                 }
             }
         }
+        else
+        {
+        }
+
+        if (cfg.stats.impactVFX != null)
+        {
+            Instantiate(cfg.stats.impactVFX, transform.position, Quaternion.identity);
+        }
 
         // EXPLOSION
         if (cfg.stats.spawnExplosion)

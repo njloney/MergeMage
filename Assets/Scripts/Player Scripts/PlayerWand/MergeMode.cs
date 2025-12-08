@@ -4,17 +4,17 @@ using System.Collections;
 
 public class MergeMode : MonoBehaviour
 {
-     private InventoryManager inventory;
+    private InventoryManager inventory;
 
 
     [Header("Player Components")]
-     private Health playerHealth;
-     private Mana playerMana;
-     private RuntimePlayerStats playerStats;
+    private Health playerHealth;
+    private Mana playerMana;
+    private RuntimePlayerStats playerStats;
 
     [Header("Settings")]
-    [SerializeField] private float manaRegenRate;      
-    
+    [SerializeField] private float manaRegenRate;
+
     private Coroutine mergeRoutine;
 
     public event Action<bool> OnMergeModeChanged;
@@ -48,20 +48,20 @@ public class MergeMode : MonoBehaviour
         if (mergeMode)
         {
 
-           if (mergeRoutine == null) mergeRoutine = StartCoroutine(MergeModeRoutine());
+            if (mergeRoutine == null) mergeRoutine = StartCoroutine(MergeModeRoutine());
         }
         else
         {
-            if (mergeRoutine != null) 
+            if (mergeRoutine != null)
             {
                 StopCoroutine(mergeRoutine);
-                mergeRoutine = null; 
+                mergeRoutine = null;
             }
         }
 
         inventory.UpdateSlotHighlights();
     }
-    
+
     private IEnumerator MergeModeRoutine()
     {
         timeInMode = 0f;
@@ -75,20 +75,20 @@ public class MergeMode : MonoBehaviour
                 playerMana.RestoreMana(manaRegenRate * Time.deltaTime);
             }
 
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 inventory.TryConsumeMergeSpell();
             }
 
-             yield return null;
+            yield return null;
         }
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             ToggleMergeMode();
         }

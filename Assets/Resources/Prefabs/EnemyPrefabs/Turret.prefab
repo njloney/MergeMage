@@ -125,7 +125,12 @@ GameObject:
   - component: {fileID: 5032814472458494308}
   - component: {fileID: 7727610171273819417}
   - component: {fileID: 1266832291039194198}
+<<<<<<< HEAD
+  - component: {fileID: 260038129360184499}
+  m_Layer: 0
+=======
   m_Layer: 8
+>>>>>>> f2b7b459ac44afcbfc9ef9715222eafe09600076
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,3 +289,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &260038129360184499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5562201814567796402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da6eae8038fbe02419320968b27ab6d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathVFX: {fileID: 4997674305252694184, guid: b11d27e536b42f64289ea0733c3bf9aa, type: 3}
+  spawnOffset: {x: 0, y: 0.5, z: 0}
+  deathSound: {fileID: 0}
+  volume: 1
