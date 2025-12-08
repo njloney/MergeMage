@@ -21,7 +21,6 @@ public class WandVisuals : MonoBehaviour
     {
         inventoryManager.OnCrystalSlotsChanged += updateVisuals;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void updateVisuals(ItemData crystal1, ItemData crystal2)
     {
         Debug.Log("updating visuals");

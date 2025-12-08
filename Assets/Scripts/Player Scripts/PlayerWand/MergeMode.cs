@@ -22,7 +22,6 @@ public class MergeMode : MonoBehaviour
     private bool mergeMode = false;
 
     private float timeInMode = 0f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         inventory = GetComponent<InventoryManager>();

@@ -41,7 +41,6 @@ public class EarthSpikeField : MonoBehaviour
         else
             dir.Normalize();
 
-        // IMPORTANT: always use the full maxLength, not clamped to distance to player
         pathLength = maxLength > 0f ? maxLength : defaultLength;
         pathWidth = width > 0f ? width : defaultWidth;
 

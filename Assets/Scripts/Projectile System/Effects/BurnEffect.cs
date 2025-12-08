@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Deals damage on a fixed interval (e.g., every 1s).
+// Deals damage on a fixed interval.
 [CreateAssetMenu(menuName = "Combat/Effects/Burn")]
 public class BurnEffect : StatusEffect
 {
@@ -27,7 +27,7 @@ public class BurnEffect : StatusEffect
             // Compute damage for this tick.
             float amount = magnitudeIsDamagePerTick
                 ? runtime.magnitude                         // already per-tick
-                : runtime.magnitude * tickInterval;         // DPS → per-tick
+                : runtime.magnitude * tickInterval;
 
             if (scaleDamageWithStacks) amount *= runtime.stacks;
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Stationary AoE that applies damage + slow each tick (BOX VERSION).
+// Stationary AoE that applies damage + slow each tick.
 [RequireComponent(typeof(BoxCollider))]
 public class GroundSpikeField : MonoBehaviour
 {

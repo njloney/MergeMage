@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GolemDeathSpawnChunks : MonoBehaviour
+public class GolemDeathCrumble : MonoBehaviour
 {
     [System.Serializable]
     public class ChunkEntry

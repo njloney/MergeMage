@@ -1,5 +1,3 @@
-// AttackPlaceholder.cs
-// Placeholder: stand-in for your real combat/attack script
 using UnityEngine;
 
 public class AttackPlaceholder : MonoBehaviour

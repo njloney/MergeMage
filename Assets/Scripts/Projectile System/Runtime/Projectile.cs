@@ -90,7 +90,7 @@ public class Projectile : MonoBehaviour
         }
 
 
-        // 2. EXPLOSION
+        // EXPLOSION
         if (cfg.stats.spawnExplosion)
         {
             var data = cfg.stats.explosion;
@@ -113,18 +113,17 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        // 3. PIERCE LOGIC
+        // PIERCE LOGIC
         if (cfg.stats.enablePierce)
         {
             hitsSoFar++;
             if (hitsSoFar >= cfg.stats.pierceCount)
                 Despawn();
 
-            // NOTE: we still damage this target, then continue flying
             return;
         }
 
-        // 4. EXTRA BEHAVIOR (EARTH SPIKES / CHAIN LIGHTNING / ETC.)
+        // EXTRA BEHAVIOR (EARTH SPIKES / CHAIN LIGHTNING / ETC.)
         Vector3 hitPoint = other.ClosestPoint(transform.position);
 
         TrySpawnOnHitObject(hitPoint);

@@ -84,15 +84,10 @@ public class PlayerWandCast : MonoBehaviour
             validTargetFound = true;
             currentTargetPoint = hit.point;
 
-            // [UPDATED ROTATION LOGIC]
-            // 1. Calculate the direction from the player to the hit point
             Vector3 forward = hit.point - transform.position;
 
-            // 2. Flatten it so we don't tilt weirdly if aiming up/down a hill
-            //    (Project the direction onto the ground plane defined by the normal)
             Vector3 forwardOnGround = Vector3.ProjectOnPlane(forward, hit.normal).normalized;
 
-            // 3. Create a rotation that looks in that direction, with Up aligned to ground normal
             if (forwardOnGround != Vector3.zero)
             {
                 currentTargetRotation = Quaternion.LookRotation(forwardOnGround, hit.normal);
