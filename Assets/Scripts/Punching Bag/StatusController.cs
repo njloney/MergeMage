@@ -11,7 +11,7 @@ public class StatusController : MonoBehaviour
     private Health _health;
     private void Awake() => _health = GetComponent<Health>();
 
-    // Expose Health so effects can deal damage, heal, etc.
+    // Expose Health so effects can deal damage, heal
     public Health Health => _health;
 
     public void ApplyEffect(StatusEffect effect, float duration, float magnitude, Object source = null)
@@ -22,7 +22,7 @@ public class StatusController : MonoBehaviour
             int i = _active.FindIndex(r => r.effect == effect);
             if (i >= 0)
             {
-                // We already have this effect; handle how it stacks/reapplies
+                // already have this effect; handle how it stacks/reapplies
                 var rt = _active[i];
                 switch (effect.StackingMode)
                 {
@@ -63,10 +63,8 @@ public class StatusController : MonoBehaviour
             source = source
         };
 
-        // One-time setup hook for the effect (e.g., spawn VFX)
         effect.OnApply(this, ref runtime);
 
-        // Track it as active
         _active.Add(runtime);
     }
 
@@ -79,7 +77,7 @@ public class StatusController : MonoBehaviour
         {
             var rt = _active[i];
 
-            // Per-frame/tick logic (e.g., apply DoT, slow decay, etc.)
+            // Per-frame/tick logic
             rt.effect.OnTick(this, ref rt, dt);
 
             // Countdown the remaining time
@@ -95,7 +93,7 @@ public class StatusController : MonoBehaviour
             }
             else
             {
-                // Write back updated runtime (struct copy)
+                // Write back updated runtime
                 _active[i] = rt;
             }
         }

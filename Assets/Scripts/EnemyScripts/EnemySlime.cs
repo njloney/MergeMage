@@ -13,8 +13,6 @@ public class EnemySlime : Enemy
     [SerializeField] private float groundedDrag = 5f;
     [SerializeField] private float airDrag = 0f;
 
-    // [FIX 1] Re-added maxSpeed. 
-    // We treat 1.0 as "100% speed". Slow/Freeze scripts will modify this value.
     [HideInInspector] public float maxSpeed = 1f;
 
     [Header("Visuals")]
@@ -30,7 +28,6 @@ public class EnemySlime : Enemy
     private Health health;
     private Renderer rend;
 
-    // [FIX 2] Changed from private to public so Blind.cs can access it
     public Transform target;
 
     // State
@@ -79,7 +76,6 @@ public class EnemySlime : Enemy
             rb.linearDamping = groundedDrag;
             RotateTowardsPlayer();
 
-            // Only countdown jump timer if we aren't frozen (maxSpeed > 0)
             if (maxSpeed > 0.01f)
             {
                 jumpTimer -= Time.fixedDeltaTime;
@@ -134,7 +130,6 @@ public class EnemySlime : Enemy
 
         Vector3 dir = (target.position - transform.position).normalized;
 
-        // [FIX 3] Apply maxSpeed as a multiplier. 
         // If maxSpeed is 0.5 (Slowed), jump is weaker. If 0 (Frozen), jump force is 0.
         Vector3 finalForce = (Vector3.up * jumpForce + dir * forwardForce) * maxSpeed;
 

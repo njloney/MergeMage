@@ -4,7 +4,6 @@ public class LightningStrike : MonoBehaviour
 {
     [Header("Combat Settings")]
     [SerializeField] private float damage = 20f;
-    // [UPDATED] Replaced radius with box dimensions (Width, Height, Depth)
     [Tooltip("Size of the hit box. Y is height.")]
     [SerializeField] private Vector3 boxSize = new Vector3(2f, 10f, 2f);
 

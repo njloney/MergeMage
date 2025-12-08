@@ -79,8 +79,6 @@ public class Projectile : MonoBehaviour
             return;
         hitThisFrame.Add(other);
 
-        // --- IMPACT LOGIC ---
-
         // Check for specific Golem Boss reaction
         var responder = other.GetComponentInParent<GolemSpellResponder>();
         if (responder != null)
@@ -146,13 +144,10 @@ public class Projectile : MonoBehaviour
 
         if (ownerTransform == null) return false;
 
-        // Did we hit the exact owner object?
         if (other.transform == ownerTransform) return true;
 
-        // Did we hit a child of the owner? (e.g. hit the player's arm collider)
         if (other.transform.IsChildOf(ownerTransform)) return true;
 
-        // Did we hit the parent of the owner? (e.g. Owner is the Wand, Other is the Player)
         if (ownerTransform.IsChildOf(other.transform)) return true;
 
         return false;

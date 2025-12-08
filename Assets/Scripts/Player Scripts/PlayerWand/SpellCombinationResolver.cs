@@ -98,8 +98,8 @@ public class SpellCombinationResolver : ScriptableObject
             : recipe.unstableDisplayName;
 
         unstable.itemIcon = recipe.unstableIcon;
-        unstable.itemType = ItemType.Crystal; // or a dedicated Spell type if you add one
-        unstable.crystalType = item1.crystalType; // arbitrary, main thing is isSpellItem + spellPrefab
+        unstable.itemType = ItemType.Crystal;
+        unstable.crystalType = item1.crystalType;
 
         unstable.isSpellItem = true;
 
@@ -119,7 +119,7 @@ public class SpellCombinationResolver : ScriptableObject
             unstable.spellPrefab = recipe.mergedSpellStats.projectileOverridePrefab;
         }
 
-        unstable.pickupPrefab = null; // you don't drop this as a world pickup
+        unstable.pickupPrefab = null;
 
         Debug.Log($"[Resolver] Built unstable combo item for {item1.crystalType}+{item2.crystalType} using stats '{recipe.mergedSpellStats}'");
 

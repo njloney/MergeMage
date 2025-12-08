@@ -19,7 +19,6 @@ public class PlayerWandCast : MonoBehaviour
     private ItemData currentActive;
     private bool mergeMode = false;
 
-    // Ground Targeting State
     private GameObject currentGhost;
     private bool validTargetFound;
     private Vector3 currentTargetPoint;
@@ -140,14 +139,12 @@ public class PlayerWandCast : MonoBehaviour
 
         if (stats.groundSpellPrefab != null)
         {
-            // Instantiate the spell
             GameObject spellObj = Instantiate(stats.groundSpellPrefab, location, rotation);
 
-            // [NEW] Configure the owner so BlinkSpell can find the player
             if (spellObj.TryGetComponent<ProjectileConfig>(out var cfg))
             {
                 cfg.stats = stats;
-                cfg.owner = this; // 'this' is the PlayerWandCast component on the player
+                cfg.owner = this;
             }
         }
     }

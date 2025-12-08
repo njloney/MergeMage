@@ -24,7 +24,6 @@ public class GolemRangedAttack : MonoBehaviour
         if (firePoint == null || projectilePrefab == null || responder == null)
             return;
 
-        // [NEW] Play Cast Effect
         if (castVFX != null)
         {
             Instantiate(castVFX, firePoint.position, firePoint.rotation);
@@ -33,15 +32,11 @@ public class GolemRangedAttack : MonoBehaviour
         var stats = responder.GetCurrentRangedSpell();
         if (stats == null) return;
 
-        // ... Existing Logic for Wind/Earth/Ground spells ...
-
-        // (Keep all your existing logic below unchanged)
         if (stats.isWindPullSpell && stats.windPullPrefab != null) { /*...*/ return; }
         if (stats.isEarthPathSpell && stats.earthPathPrefab != null) { /*...*/ return; }
         if (stats.isGroundSpell && stats.groundSpellPrefab != null) { /*...*/ return; }
         if (stats.castType == SpellCastType.Beam || stats.isBeamSpell) return;
 
-        // Standard Projectile Logic
         if (player != null)
         {
             Vector3 targetPos = player.position;

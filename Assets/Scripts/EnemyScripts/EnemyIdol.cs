@@ -126,7 +126,6 @@ public class EnemyIdol : Enemy
     {
         if (direction == -1f)
         {
-            //
             transform.LookAt(2 * transform.position - target.position);
         } else
         {

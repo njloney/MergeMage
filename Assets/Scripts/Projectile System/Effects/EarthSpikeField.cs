@@ -36,10 +36,8 @@ public class EarthSpikeField : MonoBehaviour
 
     public void Init(Transform boss, Transform target, float maxLength, float width)
     {
-        // Project only the boss to ground to get base height
         Vector3 bossGround = ProjectToGround(boss.position);
 
-        // Direction in XZ from boss to player, ignore Y entirely
         Vector3 dir = target.position - boss.position;
         dir.y = 0f;
         if (dir.sqrMagnitude < 0.01f)
@@ -52,7 +50,6 @@ public class EarthSpikeField : MonoBehaviour
         pathLength = maxLength > 0f ? maxLength : defaultLength;
         pathWidth = width > 0f ? width : defaultWidth;
 
-        // Center the box along this direction, at boss ground height
         Vector3 center = bossGround + dir * (pathLength * 0.5f);
 
         transform.position = center;
@@ -114,7 +111,6 @@ public class EarthSpikeField : MonoBehaviour
             Vector3 localPos = new Vector3(0f, 0f, localZ);
             Vector3 worldPos = transform.TransformPoint(localPos);
 
-            // Snap spike and damage center to ground
             Vector3 spikePos = ProjectToGround(worldPos);
 
             SpawnSpikeSegment(spikePos);

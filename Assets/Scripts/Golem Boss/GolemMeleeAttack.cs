@@ -18,16 +18,13 @@ public class GolemMeleeAttack : MonoBehaviour
 
     public void DoMelee()
     {
-        // 1. Spawn Visuals
         if (smashVFX != null)
         {
             Vector3 spawnPos = hitPoint != null ? hitPoint.position : transform.position + transform.forward * 2f;
-            // Ensure it's on the ground
             spawnPos.y = transform.position.y;
             Instantiate(smashVFX, spawnPos, Quaternion.identity);
         }
 
-        // 2. Detect & Damage
         var hits = Physics.OverlapSphere(transform.position, attackRadius, playerMask);
 
         foreach (var h in hits)

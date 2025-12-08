@@ -22,7 +22,6 @@ public class GolemAudio : MonoBehaviour
         source = GetComponent<AudioSource>();
         source.playOnAwake = false;
         source.loop = false;
-        // Do not modify spatialBlend / rolloff / distances here.
     }
 
     public void PlayWalkStep()

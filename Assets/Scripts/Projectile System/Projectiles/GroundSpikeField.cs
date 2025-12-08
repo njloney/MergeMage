@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// Stationary AoE that applies damage + slow each tick.
 [RequireComponent(typeof(BoxCollider))]
 public class GroundSpikeField : MonoBehaviour
 {
@@ -13,9 +12,9 @@ public class GroundSpikeField : MonoBehaviour
     [SerializeField] private float tickInterval = 1f;
 
     [Header("Effects")]
-    [SerializeField] private StatusEffect slowEffect; // assign SlowEffect asset
+    [SerializeField] private StatusEffect slowEffect;
     [SerializeField] private float slowDuration = 1.2f;
-    [SerializeField] private float slowMagnitude = 0f; // unused; kept for consistency
+    [SerializeField] private float slowMagnitude = 0f;
 
     [SerializeField] private LayerMask hitMask = ~0;
 
@@ -50,7 +49,6 @@ public class GroundSpikeField : MonoBehaviour
 
     private void DoTick()
     {
-        // Use OverlapBox so scale + rotation are respected
         Collider[] hits = Physics.OverlapBox(
             boxCol.bounds.center,
             boxCol.bounds.extents,
