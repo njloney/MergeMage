@@ -44,12 +44,11 @@ public class EnemySlime : Enemy
         // Listen for damage events from the Health script
         health.OnDamaged += HandleDamageTaken;
         health.OnDied += Die;
-        GameObject[] prefabs = Resources.LoadAll<GameObject>("Prefabs/CrystalPrefabs");
-        Debug.Log(prefabs.Length);
+        
         itemDrop = null;
         if (Random.value <= 0.1f)
         {
-            itemDrop = Instantiate(prefabs[UnityEngine.Random.Range(0, prefabs.Length)]);
+            itemDrop = Instantiate(base.getRandomItem());
             itemDrop.transform.SetParent(transform);
             itemDrop.transform.localScale = Vector3.one;
             itemRigid = itemDrop.GetComponent<Rigidbody>();
@@ -122,7 +121,7 @@ public class EnemySlime : Enemy
         if (collision.gameObject.CompareTag("Player"))
         {
             Health playerHealth = collision.gameObject.GetComponent<Health>();
-            while (true)
+            while (Touching == "Player")
             {
                 if (playerHealth != null)
                 {
