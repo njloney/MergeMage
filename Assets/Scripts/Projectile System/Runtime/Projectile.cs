@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -15,16 +14,16 @@ public class Projectile : MonoBehaviour
     private float elapsed;
     private int hitsSoFar;
     private readonly HashSet<Collider> hitThisFrame = new();
+    public bool useGravity = false;
 
     private void Awake()
     {
         cfg = GetComponent<ProjectileConfig>();
         if (!rb) rb = GetComponent<Rigidbody>();
 
-        // Make sure collider + rigidbody are configured correctly
         var col = GetComponent<Collider>();
         col.isTrigger = true;
-        rb.useGravity = false;
+        rb.useGravity = useGravity;
         rb.isKinematic = false;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
@@ -67,18 +66,33 @@ public class Projectile : MonoBehaviour
             impactAudio.PlayImpactSound();
         }
 
+        // 1. IGNORE OTHER PROJECTILES (Prevent bullets hitting bullets)
+        if (other.TryGetComponent<Projectile>(out _))
+            return;
+
+        // 2. IGNORE TRIGGERS (unless they are specifically Hitboxes with Health)
+        // If your enemies use Trigger colliders for damage, remove this check.
+        // Usually, environment triggers (like zones) should be ignored.
+        if (other.isTrigger && other.GetComponentInParent<Health>() == null)
+            return;
+
+        // 3. IGNORE OWNER (Prevent shooting yourself)
+        if (IsOwner(other))
+            return;
 
         // Avoid double-processing the same collider in a single frame
         if (hitThisFrame.Contains(other))
             return;
         hitThisFrame.Add(other);
 
-        Debug.Log($"[Projectile] Trigger hit: {other.name} (Layer: {LayerMask.LayerToName(other.gameObject.layer)})", this);
+        // --- IMPACT LOGIC ---
 
+        // Check for specific Golem Boss reaction
         var responder = other.GetComponentInParent<GolemSpellResponder>();
         if (responder != null)
             responder.OnHitBySpell(cfg.stats, cfg.owner);
 
+        // Apply Damage / Status
         var hp = other.GetComponentInParent<Health>();
         var status = other.GetComponentInParent<StatusController>();
 
@@ -95,29 +109,16 @@ public class Projectile : MonoBehaviour
                 }
             }
         }
-
+        else
+        {
+            // We hit a wall or something without health
+            // You might want to play a "wall hit" sound/particle here
+        }
 
         // EXPLOSION
         if (cfg.stats.spawnExplosion)
         {
-            var data = cfg.stats.explosion;
-
-            if (data.explosionPrefab != null)
-            {
-                var exp = Instantiate(data.explosionPrefab, transform.position, Quaternion.identity);
-                exp.Init(
-                    data.damage,
-                    cfg.stats.damageType,
-                    data.effects,
-                    cfg.owner,
-                    data.startRadius,
-                    data.maxRadius,
-                    data.expandSpeed,
-                    data.lifetime,
-                    data.startVisualScale,
-                    data.maxVisualScale
-                );
-            }
+            SpawnExplosion();
         }
 
         // PIERCE LOGIC
@@ -126,18 +127,60 @@ public class Projectile : MonoBehaviour
             hitsSoFar++;
             if (hitsSoFar >= cfg.stats.pierceCount)
                 Despawn();
-
             return;
         }
 
-        // EXTRA BEHAVIOR (EARTH SPIKES / CHAIN LIGHTNING / ETC.)
+        // EXTRA BEHAVIOR
         Vector3 hitPoint = other.ClosestPoint(transform.position);
-
         TrySpawnOnHitObject(hitPoint);
         TryChainLightning(other);
 
+        // Finally, destroy the projectile
         if (cfg.stats.destroyOnHit)
             Despawn();
+    }
+
+    private bool IsOwner(Collider other)
+    {
+        if (cfg.owner == null) return false;
+
+        Transform ownerTransform = null;
+        if (cfg.owner is Component c) ownerTransform = c.transform;
+        else if (cfg.owner is GameObject g) ownerTransform = g.transform;
+
+        if (ownerTransform == null) return false;
+
+        // Did we hit the exact owner object?
+        if (other.transform == ownerTransform) return true;
+
+        // Did we hit a child of the owner? (e.g. hit the player's arm collider)
+        if (other.transform.IsChildOf(ownerTransform)) return true;
+
+        // Did we hit the parent of the owner? (e.g. Owner is the Wand, Other is the Player)
+        if (ownerTransform.IsChildOf(other.transform)) return true;
+
+        return false;
+    }
+
+    void SpawnExplosion()
+    {
+        var data = cfg.stats.explosion;
+        if (data.explosionPrefab != null)
+        {
+            var exp = Instantiate(data.explosionPrefab, transform.position, Quaternion.identity);
+            exp.Init(
+                data.damage,
+                cfg.stats.damageType,
+                data.effects,
+                cfg.owner,
+                data.startRadius,
+                data.maxRadius,
+                data.expandSpeed,
+                data.lifetime,
+                data.startVisualScale,
+                data.maxVisualScale
+            );
+        }
     }
 
     void TrySpawnOnHitObject(Vector3 hitPoint)
@@ -205,7 +248,6 @@ public class Projectile : MonoBehaviour
 
     private void Despawn()
     {
-        // Check if we have a trail that needs to finish fading
         if (trail != null && trail.enabled)
         {
             StartCoroutine(SoftDespawn());
@@ -213,6 +255,7 @@ public class Projectile : MonoBehaviour
         else
         {
             gameObject.SetActive(false);
+            Destroy(gameObject, 0.1f); // Ensure it cleans up
         }
     }
 
@@ -225,10 +268,15 @@ public class Projectile : MonoBehaviour
         if (visualRenderer != null) visualRenderer.enabled = false;
 
         yield return new WaitForSeconds(trail.time);
+
+        // Safety check if object was destroyed mid-wait
+        if (this == null) yield break;
+
         if (col != null) col.enabled = true;
         if (visualRenderer != null) visualRenderer.enabled = true;
         trail.Clear();
 
         gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }

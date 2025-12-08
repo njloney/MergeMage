@@ -4,17 +4,11 @@ using TMPro;
 public class EnemySlime : Enemy
 {
     [Header("Visuals")]
-    public Material HurtMat;                 // Material shown when the bag is hit
-    public Material IdleMat;                 // Default material when idle
-
-    [Header("Combo Settings")]
-    [SerializeField] private float comboWindow = 3.0f; // Time before combo resets
+    public Material HurtMat;    // Material shown when the bag is hit
+    public Material IdleMat;    // Default material when idle
 
     private Renderer rend;    // Cached renderer for color/material changes
     private Health health;    // Reference to the Health component
-
-    private int totalDamageTaken = 0; // Tracks running total of recent hits
-    private bool resetDamage;         // Flag for manual reset (unused but left in)
     public GameObject itemDrop;
     public Rigidbody itemRigid;
 
@@ -46,14 +40,12 @@ public class EnemySlime : Enemy
         health.OnDied += Die;
         
         itemDrop = null;
-        if (Random.value <= 0.1f)
+        if (Random.value <= 0.2f)
         {
             itemDrop = Instantiate(base.getRandomItem());
             itemDrop.transform.SetParent(transform);
             itemDrop.transform.localScale = Vector3.one;
             itemRigid = itemDrop.GetComponent<Rigidbody>();
-            Component animScript = itemDrop.GetComponent("SimpleGemsAnim");
-            if (animScript != null) Destroy(animScript);
             Destroy(itemRigid);
         }
     }
@@ -73,38 +65,15 @@ public class EnemySlime : Enemy
         transform.LookAt(targetPosXZ);
     }
 
-    private void OnDisable()
-    {
-        // Stop timers and unsubscribe when disabled
-        CancelInvoke();
-        if (health != null)
-            health.OnDamaged -= HandleDamageTaken;
-    }
-
     private void FixedUpdate()
     {
         move();
         UpdateTransparency();
-
-        // Manual reset if flag is triggered (optional feature)
-        if (resetDamage)
-        {
-            totalDamageTaken = 0;
-            resetDamage = false;
-        }
-        itemDrop.transform.localPosition = Vector3.zero;
     }
 
     // Called whenever this object takes damage
     private void HandleDamageTaken(float amount, DamageType type, Object source)
     {
-        // Add this hit’s damage to the running total
-        totalDamageTaken += Mathf.RoundToInt(amount);
-
-        // Restart combo reset timer
-        CancelInvoke(nameof(ResetCombo));
-        Invoke(nameof(ResetCombo), comboWindow);
-
         // Flash red to show impact
         StartCoroutine(FlashRed());
     }
@@ -150,29 +119,10 @@ public class EnemySlime : Enemy
         rend.material = IdleMat;
     }
 
-    // Resets the combo damage total after time runs out
-    private void ResetCombo()
-    {
-        totalDamageTaken = 0;
-    }
-
     private void Die()
     {
-        dropItem(itemDrop);
+        base.dropItem(itemDrop);
         Destroy(gameObject);
-    }
-    private void dropItem(GameObject itemDrop)
-    {
-        if (itemDrop == null)
-        {
-            Debug.LogError("No pickup prefab assigned!");
-            return;
-        }
-
-        // Spawn the item's specific prefab in place of slime
-        Vector3 dropPosition = transform.position;
-        itemDrop = Instantiate(itemDrop, dropPosition, Quaternion.identity);
-        itemDrop.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 
     private void UpdateTransparency()

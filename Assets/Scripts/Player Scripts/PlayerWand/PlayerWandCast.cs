@@ -5,7 +5,6 @@ public class PlayerWandCast : MonoBehaviour
     [Header("Casting")]
     [SerializeField] private Transform firePoint;
     [SerializeField] private InventoryManager inventoryManager;
-    [SerializeField] private MergeMode mergeController;
     [SerializeField] private Mana manaPool;
 
     [Header("Targeting")]
@@ -17,7 +16,6 @@ public class PlayerWandCast : MonoBehaviour
     public bool debugDisableConsumption = false;
 
     private ItemData currentActive;
-    private bool mergeMode = false;
 
     // Ground Targeting State
     private GameObject currentGhost;
@@ -25,17 +23,14 @@ public class PlayerWandCast : MonoBehaviour
     private Vector3 currentTargetPoint;
     private Quaternion currentTargetRotation;
 
-
     private void Start()
     {
         if (inventoryManager != null) inventoryManager.OnActiveItemChanged += OnActiveItemChanged;
-        if (mergeController != null) mergeController.OnMergeModeChanged += OnMergeModeChanged;
     }
 
     private void OnDestroy()
     {
         if (inventoryManager != null) inventoryManager.OnActiveItemChanged -= OnActiveItemChanged;
-        if (mergeController != null) mergeController.OnMergeModeChanged -= OnMergeModeChanged;
     }
 
     private void OnActiveItemChanged(ItemData item)
@@ -48,14 +43,10 @@ public class PlayerWandCast : MonoBehaviour
         currentActive = item;
     }
 
-    private void OnMergeModeChanged(bool isMerge)
-    {
-        mergeMode = isMerge;
-    }
-
     private void Update()
     {
         HandleGroundTargeting();
+
         if (Input.GetMouseButtonDown(0))
         {
             TryCast();
@@ -85,23 +76,18 @@ public class PlayerWandCast : MonoBehaviour
             currentTargetPoint = hit.point;
 
             Vector3 forward = hit.point - transform.position;
-
             Vector3 forwardOnGround = Vector3.ProjectOnPlane(forward, hit.normal).normalized;
 
             if (forwardOnGround != Vector3.zero)
-            {
                 currentTargetRotation = Quaternion.LookRotation(forwardOnGround, hit.normal);
-            }
             else
-            {
                 currentTargetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            }
 
             if (currentGhost != null)
             {
                 currentGhost.SetActive(true);
                 currentGhost.transform.position = hit.point + Vector3.up * 0.1f;
-                currentGhost.transform.rotation = currentTargetRotation; // Apply calculation
+                currentGhost.transform.rotation = currentTargetRotation;
             }
         }
         else
@@ -113,7 +99,9 @@ public class PlayerWandCast : MonoBehaviour
 
     private void TryCast()
     {
-        if (firePoint == null || currentActive == null || !currentActive.isSpellItem) return;
+        if (firePoint == null || currentActive == null) return;
+
+        if (!currentActive.isSpellItem && currentActive.itemType != ItemType.Crystal && currentActive.itemType != ItemType.UnstableCombinationSpell) return;
 
         ProjectileStats stats = currentActive.projectileStats;
         if (stats == null) return;
@@ -121,9 +109,7 @@ public class PlayerWandCast : MonoBehaviour
         if (stats.isGroundSpell || currentActive.castType == SpellCastType.Ground)
         {
             if (validTargetFound)
-            {
                 CastGroundSpell(stats, currentTargetPoint, currentTargetRotation);
-            }
         }
         else if (stats.isBeamSpell || currentActive.castType == SpellCastType.Beam)
         {
@@ -135,28 +121,34 @@ public class PlayerWandCast : MonoBehaviour
         }
     }
 
-    // [UPDATED ARGUMENTS] Added rotation parameter
     private void CastGroundSpell(ProjectileStats stats, Vector3 location, Quaternion rotation)
     {
-        if (manaPool != null)
+        if (!debugDisableConsumption && manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            if(!mergeMode) manaPool.useMana(stats.manaCost);
+            manaPool.useMana(stats.manaCost);
         }
 
         if (stats.groundSpellPrefab != null)
         {
-            // Use the rotation we calculated
-            Instantiate(stats.groundSpellPrefab, location, rotation);
+            // Instantiate the spell
+            GameObject spellObj = Instantiate(stats.groundSpellPrefab, location, rotation);
+
+            // [NEW] Configure the owner so BlinkSpell can find the player
+            if (spellObj.TryGetComponent<ProjectileConfig>(out var cfg))
+            {
+                cfg.stats = stats;
+                cfg.owner = this; // 'this' is the PlayerWandCast component on the player
+            }
         }
     }
 
     private void CastProjectileSpell(ProjectileStats stats)
     {
-        if (manaPool != null)
+        if (!debugDisableConsumption && manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            if(!mergeMode) manaPool.useMana(stats.manaCost);
+            manaPool.useMana(stats.manaCost);
         }
 
         GameObject prefabToUse = stats.projectileOverridePrefab != null ? stats.projectileOverridePrefab : projectilePrefab;
@@ -175,10 +167,10 @@ public class PlayerWandCast : MonoBehaviour
 
     private void CastBeamSpell(ProjectileStats stats)
     {
-        if (manaPool != null)
+        if (!debugDisableConsumption && manaPool != null)
         {
             if (!manaPool.hasMana(stats.manaCost)) return;
-            if(!mergeMode) manaPool.useMana(stats.manaCost);
+            manaPool.useMana(stats.manaCost);
         }
 
         if (stats.beamPrefab != null && stats.beamConfig != null)
