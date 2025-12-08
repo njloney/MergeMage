@@ -3099,12 +3099,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: chargeStepClips.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: 'chargeStepClips.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: 90f835ccdb663bd4393b04edf8e07e7e, type: 3}
     - target: {fileID: 7926325411927894037, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -54.24868
