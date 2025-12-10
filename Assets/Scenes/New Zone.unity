@@ -5302,7 +5302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7451,6 +7451,9 @@ MonoBehaviour:
   crosshairImage: {fileID: 628086289}
   hitmarkerImage: {fileID: 2036283747}
   hitmarkerDuration: 0.12
+  audioSource: {fileID: 0}
+  hitmarkerClip: {fileID: 0}
+  hitmarkerVolume: 0.6
 --- !u!4 &1991992404 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2cf98b9480e03cb4c8e8d0933d878f7d, type: 3}
