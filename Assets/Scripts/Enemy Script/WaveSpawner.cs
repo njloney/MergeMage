@@ -10,6 +10,9 @@ public class EnemySpawnEntry
 
 public class WaveSpawner : MonoBehaviour
 {
+    [Header("Toggle")]
+    [SerializeField] private KeyCode toggleKey = KeyCode.P;
+
     public Transform player;
     public EnemySpawnEntry[] enemies;
 
@@ -27,6 +30,14 @@ public class WaveSpawner : MonoBehaviour
     float waveTimer;
     int waveIndex;
 
+    // static so it still works when this object is disabled
+    static WaveSpawner instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         waveTimer = waveInterval;
@@ -34,6 +45,13 @@ public class WaveSpawner : MonoBehaviour
 
     void Update()
     {
+        // Toggle check
+        if (Input.GetKeyDown(toggleKey))
+        {
+            ToggleSpawner();
+            return;
+        }
+
         if (player == null)
             return;
 
@@ -46,6 +64,14 @@ public class WaveSpawner : MonoBehaviour
             waveTimer = waveInterval;
             SpawnWave();
         }
+    }
+
+    void ToggleSpawner()
+    {
+        bool newState = !gameObject.activeSelf;
+        gameObject.SetActive(newState);
+
+        Debug.Log($"[WaveSpawner] {(newState ? "Enabled" : "Disabled")}");
     }
 
     void SpawnWave()

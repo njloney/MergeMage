@@ -2503,6 +2503,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3484688756522979560}
+  - component: {fileID: 28578938998433238}
   - component: {fileID: 6365025994680180027}
   - component: {fileID: 7478545514406224708}
   - component: {fileID: 5046510649078509709}
@@ -2510,7 +2511,6 @@ GameObject:
   - component: {fileID: 631001409433585021}
   - component: {fileID: 8691879266116758418}
   - component: {fileID: 2559360555377813316}
-  - component: {fileID: 28578938998433238}
   - component: {fileID: 5002262435979402752}
   - component: {fileID: 2152587538685239566}
   - component: {fileID: 2502072799148247507}
@@ -2538,6 +2538,44 @@ Transform:
   - {fileID: 8605950445024985556}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &28578938998433238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066981396523459569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9941eb284986721449f15797da64ea99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  melee: {fileID: 5046510649078509709}
+  ranged: {fileID: 6365025994680180027}
+  responder: {fileID: 7478545514406224708}
+  meleeRange: 15
+  stopMovingDistance: 5
+  detectionRange: 100
+  losMask:
+    serializedVersion: 2
+    m_Bits: 513
+  losLoseDelay: 0.2
+  losGainDelay: 0.05
+  moveSpeed: 4
+  rotationSpeed: 7
+  meleeCooldown: 5
+  rangedCooldown: 5
+  wanderRadius: 100
+  wanderMoveSpeed: 8
+  wanderMinPause: 5
+  wanderMaxPause: 10
+  animator: {fileID: 5510561933794972211}
+  walkBoolName: IsWalking
+  meleeTriggerName: Melee
+  castTriggerName: Cast
+  meleeAttackDelay: 1.8
+  rangedAttackDelay: 1.4
 --- !u!114 &6365025994680180027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2651,44 +2689,6 @@ MonoBehaviour:
   speedMultiplier: 1
   attackMultiplier: 1
   isBlinded: 0
---- !u!114 &28578938998433238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6066981396523459569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9941eb284986721449f15797da64ea99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  melee: {fileID: 5046510649078509709}
-  ranged: {fileID: 6365025994680180027}
-  responder: {fileID: 7478545514406224708}
-  meleeRange: 15
-  stopMovingDistance: 5
-  detectionRange: 100
-  losMask:
-    serializedVersion: 2
-    m_Bits: 513
-  losLoseDelay: 0.2
-  losGainDelay: 0.05
-  moveSpeed: 4
-  rotationSpeed: 7
-  meleeCooldown: 5
-  rangedCooldown: 5
-  wanderRadius: 100
-  wanderMoveSpeed: 8
-  wanderMinPause: 5
-  wanderMaxPause: 10
-  animator: {fileID: 5510561933794972211}
-  walkBoolName: IsWalking
-  meleeTriggerName: Melee
-  castTriggerName: Cast
-  meleeAttackDelay: 1.8
-  rangedAttackDelay: 1.4
 --- !u!114 &5002262435979402752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2778,6 +2778,8 @@ MonoBehaviour:
   chunkLifetime: 8
   explosionForce: 200.4
   explosionRadius: 250
+  deathStartClip: {fileID: 0}
+  deathVolume: 1
   destroyBossDelay: 1
 --- !u!1 &6221158021509505197
 GameObject:
