@@ -7133,6 +7133,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 1215938747292340699, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -4528719527234066744, guid: c7084d150edd1db44b2f6e8fae401640, type: 3}
     - target: {fileID: 3032316123536705570, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_Layer
       value: 12
@@ -7141,6 +7145,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 3982260848513309767, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 8932711023719160361, guid: c7084d150edd1db44b2f6e8fae401640, type: 3}
     - target: {fileID: 4002561127642042150, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_Name
       value: Pylon (1)
@@ -7153,6 +7161,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4513823976055146684, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 6674323220211641260, guid: c7084d150edd1db44b2f6e8fae401640, type: 3}
     - target: {fileID: 4672033406118823145, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: radius
       value: 20
@@ -7185,6 +7197,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 7391797078811570353, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 3894168416230844106, guid: c7084d150edd1db44b2f6e8fae401640, type: 3}
     - target: {fileID: 7470861633934330345, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
       propertyPath: m_Layer
       value: 12
@@ -7245,6 +7261,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8002268709036652100, guid: af3be03ae01255e4e91a34c930a2d7fb, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 8932711023719160361, guid: c7084d150edd1db44b2f6e8fae401640, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
