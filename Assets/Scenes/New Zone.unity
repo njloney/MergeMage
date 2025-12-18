@@ -4256,7 +4256,7 @@ MonoBehaviour:
   minSpawnRadius: 10
   maxSpawnRadius: 40
   firstWaveDelay: 5
-  waveInterval: 5
+  waveInterval: 20
   baseBudget: 5
   budgetGrowthPerSecond: 0.25
   spawnBlockingMask:
