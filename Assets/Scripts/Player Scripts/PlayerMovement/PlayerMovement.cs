@@ -74,16 +74,14 @@ public class FirstPersonController : MonoBehaviour
         wasGrounded = isGrounded;
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        
+
         if (!wasGrounded && isGrounded)
         {
             PlayLandingSound();
         }
 
-        // 1. Vertical Logic
         HandleVerticalMovement();
 
-        // 2. Horizontal Logic
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
@@ -92,8 +90,7 @@ public class FirstPersonController : MonoBehaviour
 
         if (isGrounded)
         {
-            // Determine if we are accelerating (inputting) or stopping (no input)
-            // If inputting, use high acceleration (snappy). If stopping, use deceleration (slide).
+            // if inputting
             float speedChangeRate = (inputDir.magnitude > 0.1f) ? groundAcceleration : groundDeceleration;
 
             horizontalVelocity = Vector3.MoveTowards(
@@ -112,13 +109,11 @@ public class FirstPersonController : MonoBehaviour
             );
         }
 
-        // 3. Respawn Check
         if (transform.position.y < playerStats.respawnHeight)
         {
             Respawn();
         }
 
-        // 4. Apply Final Move
         Vector3 finalMovement = horizontalVelocity + verticalVelocity;
         controller.Move(finalMovement * Time.deltaTime);
     }
@@ -165,7 +160,7 @@ public class FirstPersonController : MonoBehaviour
     private void PlayLandingSound()
     {
         if (landingSound != null && audioSource != null)
-        {          
+        {
             audioSource.PlayOneShot(landingSound);
         }
     }
