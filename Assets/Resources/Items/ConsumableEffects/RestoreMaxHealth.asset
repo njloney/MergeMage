@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectName: Restore Max Health
   amount: 0
-  cooldown: 120
+  cooldown: 30
   type: 2
