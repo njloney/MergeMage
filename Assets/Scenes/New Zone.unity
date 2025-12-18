@@ -830,6 +830,11 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &269863332 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5510561933794972211, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
+  m_PrefabInstance: {fileID: 4826879338157778722}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &290374811
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2198,9 +2203,11 @@ MonoBehaviour:
   bossHealth: {fileID: 4826879338157778725}
   menuSceneName: Menu
   bossWinDelaySeconds: 5
-  disableKey: 107
+  disableKey: 290
   scriptsToDisable:
   - {fileID: 4826879338157778731}
+  bossAnimator: {fileID: 269863332}
+  walkingBoolName: IsWalking
 --- !u!1 &568696304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 05288627649fe07429ffff4dbc896dd7, type: 3}
@@ -4326,6 +4333,7 @@ GameObject:
   m_Component:
   - component: {fileID: 912905741}
   - component: {fileID: 912905740}
+  - component: {fileID: 912905742}
   m_Layer: 0
   m_Name: WaveSpawner
   m_TagString: Untagged
@@ -4355,7 +4363,8 @@ MonoBehaviour:
     cost: 5
   minSpawnRadius: 10
   maxSpawnRadius: 40
-  waveInterval: 5
+  firstWaveDelay: 5
+  waveInterval: 20
   baseBudget: 5
   budgetGrowthPerSecond: 0.25
   spawnBlockingMask:
@@ -4377,6 +4386,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &912905742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912905739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58c2edd4183a7044584fc8958fb00f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleKey: 289
+  waveSpawner: {fileID: 912905740}
 --- !u!1 &948063808 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6b9485c670d3a3545a32e248d85b869f, type: 3}
@@ -9976,7 +9999,7 @@ PrefabInstance:
       objectReference: {fileID: 844875300}
     - target: {fileID: 1109900019931866779, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
       propertyPath: maxHealth
-      value: 1
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1916666700126636105, guid: 97fdba2b64bf3654db08be1c451339b7, type: 3}
       propertyPath: m_LocalPosition.y

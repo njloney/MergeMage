@@ -10,15 +10,14 @@ public class EnemySpawnEntry
 
 public class WaveSpawner : MonoBehaviour
 {
-    [Header("Toggle")]
-    [SerializeField] private KeyCode toggleKey = KeyCode.P;
-
     public Transform player;
     public EnemySpawnEntry[] enemies;
 
     public float minSpawnRadius = 10f;
     public float maxSpawnRadius = 40f;
 
+    [Header("Wave Timing")]
+    public float firstWaveDelay = 5f;
     public float waveInterval = 10f;
     public int baseBudget = 5;
     public float budgetGrowthPerSecond = 1f;
@@ -30,28 +29,18 @@ public class WaveSpawner : MonoBehaviour
     float waveTimer;
     int waveIndex;
 
-    // static so it still works when this object is disabled
-    static WaveSpawner instance;
-
-    void Awake()
-    {
-        instance = this;
-    }
-
     void Start()
     {
-        waveTimer = waveInterval;
+        waveTimer = firstWaveDelay;
+    }
+
+    void OnEnable()
+    {
+        waveTimer = firstWaveDelay;
     }
 
     void Update()
     {
-        // Toggle check
-        if (Input.GetKeyDown(toggleKey))
-        {
-            ToggleSpawner();
-            return;
-        }
-
         if (player == null)
             return;
 
@@ -61,17 +50,10 @@ public class WaveSpawner : MonoBehaviour
 
         if (waveTimer <= 0f)
         {
-            waveTimer = waveInterval;
             SpawnWave();
+
+            waveTimer = waveInterval;
         }
-    }
-
-    void ToggleSpawner()
-    {
-        bool newState = !gameObject.activeSelf;
-        gameObject.SetActive(newState);
-
-        Debug.Log($"[WaveSpawner] {(newState ? "Enabled" : "Disabled")}");
     }
 
     void SpawnWave()
@@ -94,8 +76,6 @@ public class WaveSpawner : MonoBehaviour
         if (minCost == int.MaxValue)
             return;
 
-        Debug.Log($"[WaveSpawner] Wave {waveIndex} start, budget {budget}");
-
         int safety = 1000;
         while (budget >= minCost && safety-- > 0)
         {
@@ -105,14 +85,10 @@ public class WaveSpawner : MonoBehaviour
 
             Vector3 pos;
             if (!TryGetSpawnPosition(out pos))
-            {
-                Debug.LogWarning("[WaveSpawner] Failed to find spawn position; stopping wave");
                 break;
-            }
 
             Instantiate(entry.prefab, pos, Quaternion.identity);
             budget -= entry.cost;
-            Debug.Log($"[WaveSpawner] Spawned {entry.prefab.name}, cost {entry.cost}, remaining {budget}");
         }
     }
 
@@ -128,8 +104,7 @@ public class WaveSpawner : MonoBehaviour
         if (list.Count == 0)
             return null;
 
-        int idx = Random.Range(0, list.Count);
-        return list[idx];
+        return list[Random.Range(0, list.Count)];
     }
 
     bool TryGetSpawnPosition(out Vector3 pos)
