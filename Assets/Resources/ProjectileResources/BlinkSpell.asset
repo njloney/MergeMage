@@ -12,15 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3f5615bd5419f4b92089a0c9022a60, type: 3}
   m_Name: BlinkSpell
   m_EditorClassIdentifier: 
+  castType: 0
+  maxCastDistance: 15
+  ghostIndicatorPrefab: {fileID: 8882628009094469821, guid: ddbae81480f1e2645995d07aef4364ae, type: 3}
   speed: 20
   lifetime: 5
   manaCost: 25
   projectileMaterial: {fileID: 0}
+  projectileOverridePrefab: {fileID: 0}
+  impactVFX: {fileID: 0}
   baseDamage: 10
   damageType: 0
-  destroyOnHit: 1
-  castType: 0
   effects: []
+  enablePierce: 0
+  pierceCount: 0
+  destroyOnHit: 1
+  spawnObjectOnHit: 0
+  onHitPrefab: {fileID: 0}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  isGroundSpell: 1
+  groundSpellPrefab: {fileID: 9038886923745238823, guid: e374a54b27382cc4a8ace9a1b8472392, type: 3}
+  isEarthPathSpell: 0
+  earthPathPrefab: {fileID: 0}
+  earthPathMaxLength: 12
+  earthPathWidth: 3
   spawnExplosion: 0
   explosion:
     explosionPrefab: {fileID: 0}
@@ -32,13 +49,6 @@ MonoBehaviour:
     lifetime: 0
     startVisualScale: 0
     maxVisualScale: 0
-  enablePierce: 0
-  pierceCount: 0
-  spawnObjectOnHit: 0
-  onHitPrefab: {fileID: 0}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 0
   chainOnHit: 0
   chainMaxJumps: 3
   chainRadius: 6
@@ -49,16 +59,10 @@ MonoBehaviour:
   isBeamSpell: 0
   beamPrefab: {fileID: 0}
   beamConfig: {fileID: 0}
-  projectileOverridePrefab: {fileID: 0}
-  isGroundSpell: 1
-  ghostIndicatorPrefab: {fileID: 8882628009094469821, guid: ddbae81480f1e2645995d07aef4364ae, type: 3}
-  groundSpellPrefab: {fileID: 9038886923745238823, guid: e374a54b27382cc4a8ace9a1b8472392, type: 3}
-  maxCastDistance: 15
-  impactShakeMagnitude: 0.5
-  impactShakeDuration: 0.2
   isWindPullSpell: 0
   windPullPrefab: {fileID: 0}
-  isEarthPathSpell: 0
-  earthPathPrefab: {fileID: 0}
-  earthPathMaxLength: 12
-  earthPathWidth: 3
+  isEarthSpikeSpell: 0
+  earthSpikePrefab: {fileID: 0}
+  isLightningStrikeSpell: 0
+  lightningStrikePrefab: {fileID: 0}
+  spellName: 
