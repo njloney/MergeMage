@@ -21,6 +21,8 @@ public class MergeMode : MonoBehaviour
 
     private bool mergeMode = false;
 
+    private float healRate = 5f;
+
     private float timeInMode = 0f;
     void Start()
     {
@@ -73,6 +75,11 @@ public class MergeMode : MonoBehaviour
             if (playerMana != null)
             {
                 playerMana.RestoreMana(manaRegenRate * Time.deltaTime);
+            }
+
+            if (playerHealth != null)
+            {
+                playerHealth.Heal(healRate * Time.deltaTime);
             }
 
             if (Input.GetMouseButtonDown(0))
