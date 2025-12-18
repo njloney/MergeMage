@@ -6,7 +6,6 @@ public class RuntimePlayerStats : MonoBehaviour
     [Header("Base Stats Reference")]
     [SerializeField] private Stats baseStats;
 
-    // Runtime modifiable stats (start with base values, then get modified)
     private float _speed;
     private float _jump;
     private float _gravity;
@@ -16,15 +15,15 @@ public class RuntimePlayerStats : MonoBehaviour
     private float _meleeAttackDamage;
     private float _rangeAttackDamage;
 
-    // Stat multipliers (for percentage-based modifiers)
     private float _speedMultiplier = 1f;
     private float _damageMultiplier = 1f;
     private float _manaRegenMultiplier = 1f;
 
-    // Events for when stats change
     public event Action OnStatsChanged;
     public event Action<float> OnMaxHealthChanged;
-    public event Action<float> OnMaxManaChanged;
+    public event Action<float> OnMaxManaChanged;   
+
+    private bool _suppressMaxEvents;
 
     private void Awake()
     {
@@ -85,7 +84,10 @@ public class RuntimePlayerStats : MonoBehaviour
     {
         float oldMax = _maxHealth;
         _maxHealth += amount;
-        OnMaxHealthChanged?.Invoke(_maxHealth - oldMax);
+
+        if (!_suppressMaxEvents)
+            OnMaxHealthChanged?.Invoke(_maxHealth - oldMax);
+
         OnStatsChanged?.Invoke();
     }
 
@@ -93,7 +95,10 @@ public class RuntimePlayerStats : MonoBehaviour
     {
         float oldMax = _maxHealth;
         _maxHealth *= (1f + percent);
-        OnMaxHealthChanged?.Invoke(_maxHealth - oldMax);
+
+        if (!_suppressMaxEvents)
+            OnMaxHealthChanged?.Invoke(_maxHealth - oldMax);
+
         OnStatsChanged?.Invoke();
     }
 
@@ -101,7 +106,10 @@ public class RuntimePlayerStats : MonoBehaviour
     {
         float oldMax = _maxMana;
         _maxMana += amount;
-        OnMaxManaChanged?.Invoke(_maxMana - oldMax);
+
+        if (!_suppressMaxEvents)
+            OnMaxManaChanged?.Invoke(_maxMana - oldMax);
+
         OnStatsChanged?.Invoke();
     }
 
@@ -109,7 +117,10 @@ public class RuntimePlayerStats : MonoBehaviour
     {
         float oldMax = _maxMana;
         _maxMana *= (1f + percent);
-        OnMaxManaChanged?.Invoke(_maxMana - oldMax);
+
+        if (!_suppressMaxEvents)
+            OnMaxManaChanged?.Invoke(_maxMana - oldMax);
+
         OnStatsChanged?.Invoke();
     }
 
@@ -151,10 +162,13 @@ public class RuntimePlayerStats : MonoBehaviour
 
     public void RecalculateAllStats(PassiveItemManager passiveManager)
     {
-        // Reset to base
+        float oldMaxHP = _maxHealth;
+        float oldMaxMana = _maxMana;
+
+        _suppressMaxEvents = true;
+
         ResetToBaseStats();
 
-        // Reapply all passive item effects
         var allItems = passiveManager.GetAllPassiveItems();
         foreach (var kvp in allItems)
         {
@@ -162,10 +176,16 @@ public class RuntimePlayerStats : MonoBehaviour
             int stackCount = kvp.Value;
 
             if (item.passiveEffect != null)
-            {
                 item.passiveEffect.OnAcquire(gameObject, stackCount);
-            }
         }
+
+        _suppressMaxEvents = false;
+
+        float hpDelta = _maxHealth - oldMaxHP;
+        float manaDelta = _maxMana - oldMaxMana;
+
+        if (Mathf.Abs(hpDelta) > 0.0001f) OnMaxHealthChanged?.Invoke(hpDelta);
+        if (Mathf.Abs(manaDelta) > 0.0001f) OnMaxManaChanged?.Invoke(manaDelta);
 
         OnStatsChanged?.Invoke();
     }
