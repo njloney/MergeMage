@@ -12,6 +12,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 233395169256300455, guid: 151b6a2ddad034ba6bab24f6f1130ea1, type: 3}
+      propertyPath: isFloating
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 233395169256300455, guid: 151b6a2ddad034ba6bab24f6f1130ea1, type: 3}
+      propertyPath: isRotating
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 233395169256300455, guid: 151b6a2ddad034ba6bab24f6f1130ea1, type: 3}
+      propertyPath: floatHeight
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 2414644812199627968, guid: 151b6a2ddad034ba6bab24f6f1130ea1, type: 3}
       propertyPath: spinSpeed
       value: 50

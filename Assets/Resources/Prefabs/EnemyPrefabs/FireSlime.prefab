@@ -109,11 +109,6 @@ MonoBehaviour:
   jumpChargeTime: 0.5
   groundedDrag: 5
   airDrag: 0
-  HurtMat: {fileID: 0}
-  IdleMat: {fileID: 2100000, guid: bf567e8b4d07d4e68a8972283aa9e35a, type: 2}
-  itemDrop: {fileID: 0}
-  itemRigid: {fileID: 0}
-  target: {fileID: 0}
   maxSpeed: 5
   HurtMat: {fileID: 2100000, guid: 224337e74b2237c4e845f50186cb3d5f, type: 2}
   IdleMat: {fileID: 2100000, guid: bf567e8b4d07d4e68a8972283aa9e35a, type: 2}
@@ -132,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1522c8d636f26d14c8659773752407a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 20
   ignoredSourceLayers:
     serializedVersion: 2
     m_Bits: 0
