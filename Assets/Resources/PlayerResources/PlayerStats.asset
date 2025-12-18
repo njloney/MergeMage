@@ -17,7 +17,7 @@ MonoBehaviour:
   gravity: -9.81
   maxHealth: 500
   maxMana: 500
-  manaRecoveryRate: 5
+  manaRecoveryRate: 7
   meleeAttackDamage: 50
   rangeAttackDamage: 25
   respawnHeight: -10
