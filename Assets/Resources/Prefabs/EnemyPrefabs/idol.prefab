@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -8929044141888161613}
   - component: {fileID: 864189391935500772}
   - component: {fileID: 2462607863032550710}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: idol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
