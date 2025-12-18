@@ -132,7 +132,7 @@ public class Health : MonoBehaviour
         float before = _hp;
         _hp += amount;
         _hp = Mathf.Min(_hp, maxHP);
-        OnDamaged?.Invoke(amount, DamageType.Physical, null);
+        OnDamaged?.Invoke(0, DamageType.Physical, null);
         Debug.Log($"[Health] {name} healed {amount}. HP: {before} -> {_hp}");
     }
 

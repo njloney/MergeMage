@@ -32,7 +32,8 @@ public class BossShieldController : MonoBehaviour
         if (!IsShieldActive)
             return;
 
-        health.Heal(amount);
+        if (amount >= 1)
+            health.Heal(amount);
         Debug.Log($"[BossShield] Blocked {amount} damage while shield active");
     }
 
