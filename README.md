@@ -1,43 +1,60 @@
-Merge Mage
+# Merge Mage
 
-First-person spell-combat prototype focused on automatic crystal merging and a pylon-gated boss encounter.
+First-person spell-combat prototype focused on automatic crystal merging and a multi-phase boss encounter.
 
-Core Systems Implemented
+## Overview
 
-Modular item and spell-casting systems
+Merge Mage is a systems-driven gameplay prototype built in Unity. The project focuses on first-person combat, modular gameplay systems, and encounter design rather than content scale.
 
-Unified hit registration pipeline
+Core gameplay revolves around merging spell crystals to create stronger abilities while navigating a boss encounter gated by player-activated pylons and wave-based pressure.
 
-Compatibility-based automatic merge system
+## Core Systems
 
-Enemy AI and boss encounter logic
+- **Item & Spell System**  
+  Modular system supporting spell crystals, consumables, cooldowns, and scaling values.
 
-Proximity-based pylon shield mechanic
+- **Hit Registration**  
+  Unified system handling projectile and area-of-effect damage across enemies and boss entities.
 
-Wave spawning and pacing control
+- **Merge System**  
+  Compatibility-based automatic merging of crystals when in merge mode.
 
-Architecture Overview
+- **Enemy AI**  
+  Behavior-driven enemy system supporting combat states and crowd-control responses.
 
-Gameplay logic is separated from tuning data using ScriptableObjects.
-Combat resolution is unified across enemies and boss entities.
-Encounter state is controlled through decoupled systems (boss logic does not directly manage waves or pylons).
+- **Boss Encounter**  
+  Multi-phase encounter featuring a shield gated by proximity-based pylons and wave pressure.
 
-Key Design Decisions
+- **Pylon System**  
+  Player proximity charges pylons, disabling boss shields and driving encounter flow.
 
-Merge compatibility evaluated independently of player timing
+- **Wave Spawner**  
+  Controls enemy spawn timing, pacing, and escalation during encounters.
 
-Boss shield state controlled via external pylon system
+- **Audio & UI Integration**  
+  Gameplay-driven audio triggers and UI updates reflecting player state and actions.
 
-Hit registration shared across all damage sources
+## Project Structure
 
-Known Limitations
+## Key Design Decisions
 
-(Short version of what we wrote earlier)
+- Gameplay systems are modular and designed for extensibility
+- Merge compatibility is evaluated independently of player timing
+- Boss shield state is controlled through pylons rather than health thresholds
+- Hit registration is shared across all damage sources
 
-What I’d Improve
+## Known Limitations
 
-Expand pylon system into reusable encounter framework
+- Single-level prototype focused on system development
+- Turret enemies may float due to grounding edge cases
+- Environmental colliders are not fully aligned with visual geometry
+- Dungeon areas lack unique mechanics beyond consumable rewards
+- Minor mesh artifacts present in boss model
 
-Improve turret grounding via refined surface detection
+## What I’d Improve
 
-Add deterministic combat replay tools
+- Expand pylon system into reusable encounter mechanics
+- Add multi-encounter level progression
+- Improve turret grounding using better surface detection
+- Introduce more complex merge compatibility rules
+- Add debugging tools for combat interactions
